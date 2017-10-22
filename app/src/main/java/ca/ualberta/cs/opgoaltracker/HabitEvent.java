@@ -9,16 +9,22 @@ import java.util.Date;
  */
 
 public class HabitEvent {
+
     private String habitType;
     private String comment;
     private Date date;
-    private Image picture;
+    private Photograph photo;
     private String location;
+    private int maxPhotoSize = 65536;
 
-    public HabitEvent(String habitType, String comment, Date date){
+    public HabitEvent(String habitType, String comment, Date date) throws CommentTooLongException{
+        if(comment.length() > 20) {
+            throw new CommentTooLongException();
+        }
+
         this.habitType = habitType;
-        this.comment = comment;
         this.date = date;
+        this.comment = comment;
     }
 
     public String getHabitType() {
@@ -33,8 +39,8 @@ public class HabitEvent {
         return date;
     }
 
-    public Image getPicture() {
-        return picture;
+    public Photograph getPhoto() {
+        return photo;
     }
 
     public String getLocation() {
@@ -45,7 +51,10 @@ public class HabitEvent {
         this.habitType = habitType;
     }
 
-    public void setComment(String comment) {
+    public void setComment(String comment) throws CommentTooLongException {
+        if(comment.length() > 20) {
+            throw new CommentTooLongException();
+        }
         this.comment = comment;
     }
 
@@ -53,8 +62,13 @@ public class HabitEvent {
         this.date = date;
     }
 
-    public void setPicture(Image picture) {
-        this.picture = picture;
+    public void setPhoto(Photograph photo) throws ImageTooLargeException{
+        // Assuming 24bits/pixel. Note that 8bits/byte.
+        int photoSize = photo.getHeight() * photo.getWidth() * 24 / 8;
+        if( photoSize > this.maxPhotoSize){
+            throw new ImageTooLargeException();
+        }
+        this.photo = photo;
     }
 
     public void setLocation(String location) {

@@ -22,16 +22,18 @@ public class HabitEventList {
         return this.aHabitEventList.get(index);
     }
 
-    public void addHabitEvent(HabitEvent habitEvent){
-        if (habitEvent.getHabitType().equals(this.habitType)){
-            this.aHabitEventList.add(habitEvent);
+    public void addHabitEvent(HabitEvent habitEvent) throws MismatchedHabitTypeException{
+        if (!habitEvent.getHabitType().equals(this.habitType)){
+            throw new MismatchedHabitTypeException();
         }
+        this.aHabitEventList.add(habitEvent);
     }
 
-    public void deleteHabitEvent(int index){
+    public void deleteHabitEvent(int index) throws IndexOutOfBoundsException{
         if (index<this.aHabitEventList.size()) {
-            this.aHabitEventList.remove(index);
+            throw new IndexOutOfBoundsException();
         }
+        this.aHabitEventList.remove(index);
     }
 
     public ArrayList<HabitEvent> search(String keyword) {
