@@ -1,6 +1,5 @@
 package ca.ualberta.cs.opgoaltracker;
 
-import android.media.Image;
 import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
@@ -32,15 +31,15 @@ public class HabitEventUnitTest extends ActivityInstrumentationTestCase2 {
 
     }
 
-    @Test(expected = CommentTooLongException.class)
-    public void testTooLongComment() throws CommentTooLongException{
+    @Test(expected = StringTooLongException.class)
+    public void testTooLongComment() throws StringTooLongException {
         String habitType = "";
         String comment = "hellooooooooooooimmmmmmmmmmmmmmmmmmdoneeeeeeeeeeeeeeeeeeeeeeeeeeee";
         Date date = new java.util.Date();
         HabitEvent habitEvent = new HabitEvent(habitType, comment, date);
     }
 
-    public void testNormalComment() throws CommentTooLongException{
+    public void testNormalComment() throws StringTooLongException {
         String habitType = "";
         String comment = "hello";
         Date date = new java.util.Date();
@@ -49,7 +48,7 @@ public class HabitEventUnitTest extends ActivityInstrumentationTestCase2 {
     }
 
     @Test(expected = ImageTooLargeException.class)
-    public void testTooLargeImage() throws CommentTooLongException, ImageTooLargeException{
+    public void testTooLargeImage() throws StringTooLongException, ImageTooLargeException{
         String habitType = "";
         String comment = "";
         Date date = new java.util.Date();
@@ -58,7 +57,7 @@ public class HabitEventUnitTest extends ActivityInstrumentationTestCase2 {
         habitEvent.setPhoto(photo);
     }
 
-    public void testNormalImage() throws CommentTooLongException, ImageTooLargeException{
+    public void testNormalImage() throws StringTooLongException, ImageTooLargeException{
         String habitType = "";
         String comment = "";
         Date date = new java.util.Date();
