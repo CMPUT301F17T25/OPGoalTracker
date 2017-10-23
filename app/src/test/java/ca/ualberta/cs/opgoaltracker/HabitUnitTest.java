@@ -1,0 +1,115 @@
+package ca.ualberta.cs.opgoaltracker;
+
+import android.test.ActivityInstrumentationTestCase2;
+
+import org.junit.Test;
+
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * Created by song on 2017/10/23.
+ */
+
+public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
+    public HabitUnitTest() {
+        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+    }
+
+    @Override
+    public void setUp() throws Exception {}
+
+    @Override
+    public void tearDown() throws Exception {}
+
+    @Override
+    public void runTest() throws Exception {}
+
+    public void testNormalHabit() throws StringTooLongException,NoTitleException {
+        String habitType = "run";
+        String reason = "i like it";
+        Date date = new java.util.Date();
+        Calendar calendar= Calendar.getInstance();
+        long startTime = calendar.getTimeInMillis();
+        long intervalTime = 36000;
+        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+
+        assertEquals(habit.getHabitType(), habitType);
+        assertEquals(habit.getReason(), reason);
+        assertEquals(habit.getDate(), date);
+
+        intervalTime = 72000;
+        habit.setPeriod(startTime, intervalTime);
+        assertEquals(habit.getStartTime(), startTime);
+        assertEquals(habit.getIntervalTime(), intervalTime);
+
+        habitType = "swim";
+        habit.setHabitType(habitType);
+        assertEquals(habit.getHabitType(), habitType);
+
+        reason = "no reason";
+        habit.setReason(reason);
+        assertEquals(habit.getReason(), reason);
+    }
+
+    @Test(expected = NoTitleException.class)
+    public void testNoTitle() throws StringTooLongException,NoTitleException {
+        String habitType = "";
+        String reason = "i like it";
+        Date date = new java.util.Date();
+        Calendar calendar= Calendar.getInstance();
+        long startTime = calendar.getTimeInMillis();
+        long intervalTime = 36000;
+        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+    }
+
+    @Test(expected = NoTitleException.class)
+    public void testSetNoTitle() throws StringTooLongException,NoTitleException {
+        String habitType = "run";
+        String reason = "i like it";
+        Date date = new java.util.Date();
+        Calendar calendar= Calendar.getInstance();
+        long startTime = calendar.getTimeInMillis();
+        long intervalTime = 36000;
+        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+
+        habitType="";
+        habit.setHabitType(habitType);
+    }
+
+    @Test(expected = StringTooLongException.class)
+    public void testTooLongTitle() throws StringTooLongException,NoTitleException {
+        String habitType = "111111111111111111111111111111";
+        String reason = "i like it";
+        Date date = new java.util.Date();
+        Calendar calendar= Calendar.getInstance();
+        long startTime = calendar.getTimeInMillis();
+        long intervalTime = 36000;
+        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+    }
+
+    @Test(expected = StringTooLongException.class)
+    public void testTooLongReason() throws StringTooLongException,NoTitleException {
+        String habitType = "run";
+        String reason =  "11111111111111111111111111111111111111111111111111111";
+        Date date = new java.util.Date();
+        Calendar calendar= Calendar.getInstance();
+        long startTime = calendar.getTimeInMillis();
+        long intervalTime = 36000;
+        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+    }
+
+    @Test(expected = StringTooLongException.class)
+    public void testSetLongReason() throws StringTooLongException,NoTitleException {
+        String habitType = "runrun";
+        String reason = "i like it";
+        Date date = new java.util.Date();
+        Calendar calendar= Calendar.getInstance();
+        long startTime = calendar.getTimeInMillis();
+        long intervalTime = 36000;
+        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+
+        reason = "111111111111111111111111111111";
+        habit.setReason(reason);
+    }
+}
