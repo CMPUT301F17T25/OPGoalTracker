@@ -33,7 +33,7 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
     }
 
     @Test(expected = MismatchedHabitTypeException.class)
-    public void testAddHabitEventWithMismatchedType() throws CommentTooLongException, MismatchedHabitTypeException{
+    public void testAddHabitEventWithMismatchedType() throws StringTooLongException, MismatchedHabitTypeException{
         String habitTypeA = "typeA";
         String comment = "hello";
         Date date = new java.util.Date();
@@ -44,7 +44,7 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
         habitEventList.addHabitEvent(habitEvent);
     }
 
-    public void testAddHabitEventWithMatchedType() throws CommentTooLongException, MismatchedHabitTypeException{
+    public void testAddHabitEventWithMatchedType() throws StringTooLongException, MismatchedHabitTypeException{
         String habitTypeA = "typeA";
         String comment = "hello";
         Date date = new java.util.Date();
@@ -56,13 +56,13 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
-    public void testDeleteNonExistentHabitEvent() throws CommentTooLongException, MismatchedHabitTypeException, IndexOutOfBoundsException{
+    public void testDeleteNonExistentHabitEvent() throws StringTooLongException, MismatchedHabitTypeException, IndexOutOfBoundsException{
         String habitTypeB = "typeB";
         HabitEventList habitEventList = new HabitEventList(habitTypeB);
         habitEventList.deleteHabitEvent(0);
     }
 
-    public void testSearchHabitEventWithMatchedKeyword() throws CommentTooLongException, MismatchedHabitTypeException{
+    public void testSearchHabitEventWithMatchedKeyword() throws StringTooLongException, MismatchedHabitTypeException{
         String habitTypeA = "typeA";
         String keyword = "hello";
         String comment = "hello world";
@@ -76,7 +76,7 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
         assertEquals(habitEventWithKeywordList.get(0), habitEvent);
     }
 
-    public void testSearchHabitEventWithMismatchedKeyword() throws CommentTooLongException, MismatchedHabitTypeException{
+    public void testSearchHabitEventWithMismatchedKeyword() throws StringTooLongException, MismatchedHabitTypeException{
         String habitTypeA = "typeA";
         String keyword = "nihao";
         String comment = "hello world";

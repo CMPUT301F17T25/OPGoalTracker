@@ -1,7 +1,5 @@
 package ca.ualberta.cs.opgoaltracker;
 
-import android.media.Image;
-
 import java.util.Date;
 
 /**
@@ -15,11 +13,11 @@ public class HabitEvent {
     private Date date;
     private Photograph photo;
     private String location;
-    private int maxPhotoSize = 65536;
+    Admin admin = new Admin("admin");
 
-    public HabitEvent(String habitType, String comment, Date date) throws CommentTooLongException{
-        if(comment.length() > 20) {
-            throw new CommentTooLongException();
+    public HabitEvent(String habitType, String comment, Date date) throws StringTooLongException {
+        if(comment.length() > admin.getCommentLength()) {
+            throw new StringTooLongException();
         }
 
         this.habitType = habitType;
@@ -51,9 +49,9 @@ public class HabitEvent {
         this.habitType = habitType;
     }
 
-    public void setComment(String comment) throws CommentTooLongException {
-        if(comment.length() > 20) {
-            throw new CommentTooLongException();
+    public void setComment(String comment) throws StringTooLongException {
+        if(comment.length() > admin.getCommentLength()) {
+            throw new StringTooLongException();
         }
         this.comment = comment;
     }
@@ -65,7 +63,7 @@ public class HabitEvent {
     public void setPhoto(Photograph photo) throws ImageTooLargeException{
         // Assuming 24bits/pixel. Note that 8bits/byte.
         int photoSize = photo.getHeight() * photo.getWidth() * 24 / 8;
-        if( photoSize > this.maxPhotoSize){
+        if( photoSize > admin.getPicSize()){
             throw new ImageTooLargeException();
         }
         this.photo = photo;
