@@ -1,0 +1,93 @@
+package ca.ualberta.cs.opgoaltracker;
+
+import android.test.ActivityInstrumentationTestCase2;
+
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+/**
+ * Created by donglin3 on 10/22/17.
+ */
+
+public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
+
+    public HabitEventListUnitTest(){
+        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+    }
+
+    @Override
+    public void setUp() throws Exception{
+
+    }
+
+    @Override
+    public void tearDown() throws Exception {
+
+    }
+
+    @Override
+    public void runTest() throws Exception {
+
+    }
+
+    @Test(expected = MismatchedHabitTypeException.class)
+    public void testAddHabitEventWithMismatchedType() throws StringTooLongException, MismatchedHabitTypeException{
+        String habitTypeA = "typeA";
+        String comment = "hello";
+        Date date = new java.util.Date();
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+
+        String habitTypeB = "typeB";
+        HabitEventList habitEventList = new HabitEventList(habitTypeB);
+        habitEventList.addHabitEvent(habitEvent);
+    }
+
+    public void testAddHabitEventWithMatchedType() throws StringTooLongException, MismatchedHabitTypeException{
+        String habitTypeA = "typeA";
+        String comment = "hello";
+        Date date = new java.util.Date();
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+
+        HabitEventList habitEventList = new HabitEventList(habitTypeA);
+        habitEventList.addHabitEvent(habitEvent);
+        assertEquals(habitEventList.getaHabitEvent(0), habitEvent);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void testDeleteNonExistentHabitEvent() throws StringTooLongException, MismatchedHabitTypeException, IndexOutOfBoundsException{
+        String habitTypeB = "typeB";
+        HabitEventList habitEventList = new HabitEventList(habitTypeB);
+        habitEventList.deleteHabitEvent(0);
+    }
+
+    public void testSearchHabitEventWithMatchedKeyword() throws StringTooLongException, MismatchedHabitTypeException{
+        String habitTypeA = "typeA";
+        String keyword = "hello";
+        String comment = "hello world";
+        Date date = new java.util.Date();
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+
+        HabitEventList habitEventList = new HabitEventList(habitTypeA);
+        habitEventList.addHabitEvent(habitEvent);
+
+        ArrayList<HabitEvent> habitEventWithKeywordList = habitEventList.search(keyword);
+        assertEquals(habitEventWithKeywordList.get(0), habitEvent);
+    }
+
+    public void testSearchHabitEventWithMismatchedKeyword() throws StringTooLongException, MismatchedHabitTypeException{
+        String habitTypeA = "typeA";
+        String keyword = "nihao";
+        String comment = "hello world";
+        Date date = new java.util.Date();
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+
+        HabitEventList habitEventList = new HabitEventList(habitTypeA);
+        habitEventList.addHabitEvent(habitEvent);
+
+        ArrayList<HabitEvent> habitEventWithKeywordList = habitEventList.search(keyword);
+        assertTrue(habitEventWithKeywordList.isEmpty());
+    }
+
+}
