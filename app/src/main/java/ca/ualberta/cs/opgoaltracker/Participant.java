@@ -6,7 +6,7 @@ package ca.ualberta.cs.opgoaltracker;
 
 public class Participant extends User {
     private Photograph avatar;
-    //private HabitList habitList;
+    private HabitList habitList;
     private FriendList followerList;
     private FriendList followeeList;
     private FriendList requestList;
