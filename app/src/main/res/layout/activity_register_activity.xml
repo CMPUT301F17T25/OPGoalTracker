@@ -51,7 +51,7 @@
         android:layout_height="48dp"
         android:background="#00f7fafb"
         android:fontFamily="cursive"
-        android:text="Sign Up"
+        android:text="Try SignIn?"
         android:textColor="#8b8bcf"
         android:textSize="20sp"
         android:textStyle="bold|italic"
@@ -64,10 +64,21 @@
         android:layout_height="48dp"
         android:background="#00f7fafb"
         android:fontFamily="cursive"
-        android:text="Sign In"
+        android:text="Register"
         android:textColor="#8b8bcf"
         android:textSize="20sp"
         android:textStyle="bold|italic"
         tools:layout_editor_absoluteX="121dp"
         tools:layout_editor_absoluteY="345dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="63dp"
+        android:layout_height="43dp"
+        android:fontFamily="cursive"
+        android:textColor="#8b8bcf"
+        android:text="Check"
+        android:background="#00f7fafb"
+        tools:layout_editor_absoluteX="223dp"
+        tools:layout_editor_absoluteY="258dp" />
 </android.support.constraint.ConstraintLayout>
