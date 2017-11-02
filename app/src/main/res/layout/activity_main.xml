@@ -6,13 +6,68 @@
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cs.opgoaltracker.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="410dp"
+        android:layout_height="676dp"
+        app:srcCompat="@drawable/login"
+        tools:layout_editor_absoluteX="-13dp"
+        tools:layout_editor_absoluteY="5dp" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="240dp"
+        android:layout_height="64dp"
+        android:fontFamily="cursive"
+        android:text="OPGoalTracker"
+        android:textAppearance="@android:style/TextAppearance.WindowTitle"
+        android:textColor="#7676b3"
+        android:textSize="40sp"
+        tools:layout_editor_absoluteX="82dp"
+        tools:layout_editor_absoluteY="124dp" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="178dp"
+        android:layout_height="42dp"
+        android:background="#33f7fafb"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:lineSpacingExtra="8sp"
+        android:singleLine="true"
+        android:text="User name"
+        android:textAlignment="viewStart"
+
+
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="104dp"
+        tools:layout_editor_absoluteY="258dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="142dp"
+        android:layout_height="48dp"
+        android:background="#00f7fafb"
+        android:fontFamily="cursive"
+        android:text="Sign Up"
+        android:textColor="#8b8bcf"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        tools:layout_editor_absoluteX="121dp"
+        tools:layout_editor_absoluteY="401dp" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="142dp"
+        android:layout_height="48dp"
+        android:background="#00f7fafb"
+        android:fontFamily="cursive"
+        android:text="Sign In"
+        android:textColor="#8b8bcf"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        tools:layout_editor_absoluteX="121dp"
+        tools:layout_editor_absoluteY="345dp" />
 </android.support.constraint.ConstraintLayout>
