@@ -7,7 +7,7 @@
     tools:context="ca.ualberta.cs.opgoaltracker.HabitActivity">
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/add_habit"
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginBottom="32dp"

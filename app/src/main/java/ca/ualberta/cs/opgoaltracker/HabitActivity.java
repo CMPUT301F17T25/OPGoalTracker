@@ -1,12 +1,15 @@
 package ca.ualberta.cs.opgoaltracker;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class HabitActivity extends AppCompatActivity {
 
@@ -17,7 +20,19 @@ public class HabitActivity extends AppCompatActivity {
 
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar1);
         setSupportActionBar(myToolbar);
+
+        FloatingActionButton add_habit = (FloatingActionButton) findViewById(R.id.add_habit);
+        add_habit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                Intent intent = new Intent(HabitActivity.this, HabitAddActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater myMenuInflater = getMenuInflater();
