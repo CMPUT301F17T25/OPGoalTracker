@@ -26,5 +26,6 @@
     <string name="action_goto_habit">Habit</string>
     <string name="menu_action_habit">Habit</string>
     <string name="menu_action_habitEvent">HabitEvent</string>
+    <string name="action_delete">Delete</string>
     <string name="action_goto_news">News</string>
 </resources>
