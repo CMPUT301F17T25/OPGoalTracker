@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Created by malon_000 on 2017-11-03.
- */
+     */
 
 class NewsAdapter extends ArrayAdapter<HabitEvent> {
     public NewsAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<HabitEvent> objects) {
