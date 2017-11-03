@@ -23,13 +23,9 @@
         <activity
             android:name=".HabitAddActivity"
             android:label="@string/title_activity_habit_add" />
-        <activity android:name=".HabitDetailActivity" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+        <activity android:name=".HabitDetailActivity" />
+        <activity android:name=".HabitEventActivity"></activity>
+        <activity android:name=".NewsActivity"></activity>
     </application>
 
 </manifest>
