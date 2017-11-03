@@ -19,6 +19,10 @@ public class MainActivity extends AppCompatActivity {
         configureSignInButton();
     }
 
+    @Override
+    public void onBackPressed() {
+    }
+
 
 
     private void configureSignUpButton(){
@@ -42,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view){
 
                 startActivity(new Intent(MainActivity.this, HabitActivity.class));//Let signup buttion jump to Register activity page.
-                finish();
             }
 
         });
