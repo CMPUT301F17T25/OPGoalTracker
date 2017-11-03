@@ -18,9 +18,6 @@ public class HabitActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit);
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar1);
-        setSupportActionBar(myToolbar);
-
         FloatingActionButton add_habit = (FloatingActionButton) findViewById(R.id.add_habit);
         add_habit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,34 +28,6 @@ public class HabitActivity extends AppCompatActivity {
             }
         });
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater myMenuInflater = getMenuInflater();
-        myMenuInflater.inflate(R.menu.my_menu,menu);
-        return true ;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-
-        if (item.getItemId() == R.id.action_goto_habitEvent){
-            startActivity(new Intent(HabitActivity.this, HabitEventActivity.class));
-            finish();
-
-        }
-        if (item.getItemId() == R.id.action_goto_habit){
-            startActivity(new Intent(HabitActivity.this, HabitActivity.class));
-            finish();
-
-        }
-        if (item.getItemId() == R.id.action_goto_news){
-            startActivity(new Intent(HabitActivity.this, NewsActivity.class));
-            finish();
-
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 

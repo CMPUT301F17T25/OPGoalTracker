@@ -27,10 +27,6 @@ public class NewsActivity extends AppCompatActivity {
         //sort in arrayList
         //
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar3);
-        myToolbar.setTitle("News");
-        setSupportActionBar(myToolbar);
-
         ArrayList<HabitEvent> displayList = new ArrayList<HabitEvent>();
         try {
             displayList.add(new HabitEvent("test","this is first test",new Date()));
@@ -56,31 +52,5 @@ public class NewsActivity extends AppCompatActivity {
         listview.setAdapter(adapter);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater myMenuInflater = getMenuInflater();
-        myMenuInflater.inflate(R.menu.my_menu,menu);
-        return true ;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-
-        if (item.getItemId() == R.id.action_goto_habitEvent){
-            startActivity(new Intent(NewsActivity.this, HabitEventActivity.class));
-            finish();
-
-        }
-        if (item.getItemId() == R.id.action_goto_habit){
-            startActivity(new Intent(NewsActivity.this, HabitActivity.class));
-            finish();
-
-        }
-        if (item.getItemId() == R.id.action_goto_news){
-            startActivity(new Intent(NewsActivity.this, NewsActivity.class));
-            finish();
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }
