@@ -33,6 +33,7 @@ public class HabitActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater myMenuInflater = getMenuInflater();
@@ -41,13 +42,14 @@ public class HabitActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        if (item.getItemId() == R.id.action_goto_habit){
-            startActivity(new Intent(HabitActivity.this, MainActivity.class));
+
+        if (item.getItemId() == R.id.action_goto_habitEvent){
+            startActivity(new Intent(HabitActivity.this, HabitEventActivity.class));
             finish();
 
         }
-        if (item.getItemId() == R.id.action_goto_habitEvent){
-            startActivity(new Intent(HabitActivity.this, Register_activity.class));
+        if (item.getItemId() == R.id.action_goto_habit){
+            startActivity(new Intent(HabitActivity.this, HabitActivity.class));
             finish();
 
         }

@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/action_goto_habit"
-        android:title="@string/menu_action_habit" />
+        android:title="@string/menu_action_habit"
+        app:showAsAction = "never" />
     <item
         android:id="@+id/action_goto_habitEvent"
         android:title="@string/menu_action_habitEvent"

@@ -22,8 +22,9 @@
             android:label="@string/title_activity_habit" />
         <activity
             android:name=".HabitAddActivity"
-            android:label="@string/title_activity_habit_add"/>
-        <activity android:name=".HabitDetailActivity" ></activity>
+            android:label="@string/title_activity_habit_add" />
+        <activity android:name=".HabitDetailActivity" />
+        <activity android:name=".HabitEventActivity"></activity>
     </application>
 
 </manifest>
