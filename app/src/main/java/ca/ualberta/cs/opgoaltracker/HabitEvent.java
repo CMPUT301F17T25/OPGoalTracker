@@ -74,5 +74,9 @@ public class HabitEvent {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public String getUser(){
+        return "User return";
+    }
 }
 
