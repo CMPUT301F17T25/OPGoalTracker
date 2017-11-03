@@ -11,4 +11,10 @@
         android:title="@string/menu_action_habitEvent"
         app:showAsAction = "never" />
 
+    <item
+        android:id="@+id/action_goto_news"
+        android:title="@string/action_goto_news"
+        app:showAsAction = "never" />
+
+
 </menu>

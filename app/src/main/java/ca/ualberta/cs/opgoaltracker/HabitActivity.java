@@ -53,6 +53,11 @@ public class HabitActivity extends AppCompatActivity {
             finish();
 
         }
+        if (item.getItemId() == R.id.action_goto_news){
+            startActivity(new Intent(HabitActivity.this, NewsActivity.class));
+            finish();
+
+        }
         return super.onOptionsItemSelected(item);
     }
 
