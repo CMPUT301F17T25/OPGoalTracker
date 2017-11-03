@@ -5,4 +5,20 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_habit">Habit</string>
+    <string name="title_activity_habit_add">Add New Habit Plan</string>
+    <string name="habit_title">Title: </string>
+    <string name="habit_reason">Reason: </string>
+    <string name="habit_start_date">Start Date: </string>
+    <string name="habit_period">Period: </string>
+    <string name="habit_progress">Progress: </string>
+    <string name="habit_mon">Mon.</string>
+    <string name="habit_tue">Tue.</string>
+    <string name="habit_wed">Wed.</string>
+    <string name="habit_thur">Thur.</string>
+    <string name="habit_fri">Fri.</string>
+    <string name="habit_sat">Sat.</string>
+    <string name="habit_sun">Sun.</string>
+    <string name="create">Create</string>
+    <string name="title_activity_habit_detail">HabitDetailActivity</string>
+    <string name="save">Save</string>
 </resources>
