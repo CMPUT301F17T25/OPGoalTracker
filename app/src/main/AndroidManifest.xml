@@ -23,7 +23,7 @@
             android:name=".HabitAddActivity"
             android:label="@string/title_activity_habit_add" />
         <activity android:name=".HabitDetailActivity" />
-        <activity android:name=".HabitEventActivity"></activity>
+        <activity android:name=".HabitEventActivity"/>
         <activity android:name=".FriendActivity">
             <!--for test only, should be deleted later-->
             <intent-filter>
@@ -33,6 +33,7 @@
         </activity>
         <activity android:name=".FriendSearchActivity"/>
         <activity android:name=".FriendFollowActivity"/>
+        <activity android:name=".NewsActivity"></activity>
     </application>
 
 </manifest>

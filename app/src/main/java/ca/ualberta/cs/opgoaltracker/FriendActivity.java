@@ -39,9 +39,6 @@ public class FriendActivity extends AppCompatActivity {
         secondTab.setIcon(R.drawable.ic_launcher); // set an icon for the second tab
         tabLayout.addTab(secondTab); // add  the tab  in the TabLayout
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar1);
-        setSupportActionBar(myToolbar);
-
         FloatingActionButton addFriend = (FloatingActionButton) findViewById(R.id.add_friend);
         addFriend.setOnClickListener(new View.OnClickListener() {
             @Override

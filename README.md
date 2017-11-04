@@ -1,4 +1,4 @@
-# OPGoalTracke
+# OPGoalTracker
 
 This is a habit tracker App used to motivate user to achive their habit.
 
