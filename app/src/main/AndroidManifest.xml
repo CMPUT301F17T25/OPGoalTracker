@@ -9,31 +9,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register_activity" />
+        <activity android:name=".activity.Register_activity" />
         <activity
-            android:name=".HabitActivity"
+            android:name=".activity.HabitActivity"
             android:label="@string/title_activity_habit" />
         <activity
-            android:name=".HabitAddActivity"
+            android:name=".activity.HabitAddActivity"
             android:label="@string/title_activity_habit_add" />
-        <activity android:name=".HabitDetailActivity" />
-        <activity android:name=".HabitEventActivity"/>
-        <activity android:name=".FriendActivity">
+        <activity android:name=".activity.HabitDetailActivity" />
+        <activity android:name=".activity.HabitEventActivity"/>
+        <activity android:name=".activity.FriendActivity">
             <!--for test only, should be deleted later-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FriendSearchActivity"/>
-        <activity android:name=".FriendFollowActivity"/>
-        <activity android:name=".NewsActivity"></activity>
+        <activity android:name=".activity.FriendSearchActivity"/>
+        <activity android:name=".activity.FriendFollowActivity"/>
+        <activity android:name=".activity.NewsActivity"></activity>
     </application>
 
 </manifest>

@@ -4,6 +4,9 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
+import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
+import ca.ualberta.cs.opgoaltracker.models.Admin;
+
 /**
  * Created by song on 2017/10/23.
  */
@@ -11,7 +14,7 @@ import org.junit.Test;
 public class AdminUnitTest extends ActivityInstrumentationTestCase2 {
 
     public AdminUnitTest(){
-        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+        super(MainActivity.class);
     }
     @Override
     public void setUp() throws Exception{}

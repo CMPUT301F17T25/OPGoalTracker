@@ -7,13 +7,18 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
+import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
+import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
+import ca.ualberta.cs.opgoaltracker.models.Habit;
+
 /**
  * Created by song on 2017/10/23.
  */
 
 public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
     public HabitUnitTest() {
-        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+        super(MainActivity.class);
     }
 
     @Override
