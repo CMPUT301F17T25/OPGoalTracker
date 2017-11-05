@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
 
-                startActivity(new Intent(MainActivity.this, HabitActivity.class));//Let signup buttion jump to Register activity page.
+                startActivity(new Intent(MainActivity.this, MenuPage.class));//Let signup buttion jump to Register activity page.
             }
 
         });

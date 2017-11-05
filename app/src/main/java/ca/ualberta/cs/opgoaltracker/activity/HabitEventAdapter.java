@@ -19,14 +19,14 @@ import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 class HabitEventAdapter extends ArrayAdapter<HabitEvent> {
 
     public HabitEventAdapter(Context context, List<HabitEvent> objects) {
-        super(context, R.layout.news_list, objects);
+        super(context, R.layout.fragment_news, objects);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         //use elastic search to get user's info but for since this is just a test
         LayoutInflater EventInflater = LayoutInflater.from(getContext());
-        View customView = EventInflater.inflate(R.layout.news_list,parent,false);
+        View customView = EventInflater.inflate(R.layout.fragment_news,parent,false);
 
         HabitEvent event = getItem(position);
         TextView EventType = (TextView) customView.findViewById(R.id.newsType);

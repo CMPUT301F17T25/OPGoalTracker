@@ -21,7 +21,7 @@ public class FriendFollowActivity extends AppCompatActivity {
         Button followButton = (Button) findViewById(R.id.follow);
         followButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(FriendFollowActivity.this, FriendActivity.class));
+                startActivity(new Intent(FriendFollowActivity.this, FriendFragment.class));
                 finish();
             }
         });

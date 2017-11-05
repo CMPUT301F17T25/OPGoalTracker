@@ -38,7 +38,7 @@ public class Register_activity extends AppCompatActivity {
             @Override
             public void onClick(View view){
 
-                startActivity(new Intent(Register_activity.this, HabitActivity.class));//Let signup buttion jump to Register activity page.
+                startActivity(new Intent(Register_activity.this, MenuPage.class));//Let signup buttion jump to Register activity page.
                 finish();
             }
 
