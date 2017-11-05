@@ -1,5 +1,6 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,7 +18,7 @@ import android.view.MenuItem;
 import ca.ualberta.cs.opgoaltracker.R;
 
 public class MenuPage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener ,HabitFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class MenuPage extends AppCompatActivity
             HabitFragment habitFragment = new HabitFragment();
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
-            // Handle the camera action
+//            Handle the camera action
         } else if (id == R.id.habitEvent) {
 
         } else if (id == R.id.friends) {
@@ -92,5 +93,13 @@ public class MenuPage extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

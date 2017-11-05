@@ -18,9 +18,6 @@
         </activity>
         <activity android:name=".activity.Register_activity" />
         <activity
-            android:name=".activity.HabitActivity"
-            android:label="@string/title_activity_habit" />
-        <activity
             android:name=".activity.HabitAddActivity"
             android:label="@string/title_activity_habit_add" />
         <activity android:name=".activity.HabitDetailActivity" />
