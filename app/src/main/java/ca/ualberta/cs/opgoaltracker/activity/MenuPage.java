@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import ca.ualberta.cs.opgoaltracker.R;
 
 public class MenuPage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener ,FriendFragment.OnFragmentInteractionListener,HabitFragment.OnFragmentInteractionListener,HabitEventFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener ,NewsFragment.OnFragmentInteractionListener,FriendFragment.OnFragmentInteractionListener,HabitFragment.OnFragmentInteractionListener,HabitEventFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +91,9 @@ public class MenuPage extends AppCompatActivity
             manager.beginTransaction().replace(R.id.relativeLayout_1,friendFragment,friendFragment.getTag()).commit();
 
         } else if (id == R.id.social) {
+            NewsFragment newsFragment = new   NewsFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.relativeLayout_1,newsFragment ,newsFragment .getTag()).commit();
 
         } else if (id == R.id.setting) {
 
