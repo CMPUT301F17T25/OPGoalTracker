@@ -72,7 +72,7 @@ public class MyAccountFragment extends Fragment {
         ((MenuPage) getActivity())
                 .setActionBarTitle("My Account");
 
-       
+
 
         return view;
 
