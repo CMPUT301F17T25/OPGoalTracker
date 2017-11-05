@@ -21,7 +21,6 @@
             android:name=".activity.HabitAddActivity"
             android:label="@string/title_activity_habit_add" />
         <activity android:name=".activity.HabitDetailActivity" />
-        <activity android:name=".activity.HabitEventActivity" />
         <activity android:name=".activity.FriendActivity">
 
             <!-- for test only, should be deleted later -->

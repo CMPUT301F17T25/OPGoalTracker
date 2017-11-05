@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import ca.ualberta.cs.opgoaltracker.R;
 
 public class MenuPage extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener ,HabitFragment.OnFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener ,FriendFragment.OnFragmentInteractionListener,HabitFragment.OnFragmentInteractionListener,HabitEventFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +81,14 @@ public class MenuPage extends AppCompatActivity
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
 //            Handle the camera action
         } else if (id == R.id.habitEvent) {
+            HabitEventFragment habitEventFragment = new HabitEventFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.relativeLayout_1,habitEventFragment,habitEventFragment.getTag()).commit();
 
         } else if (id == R.id.friends) {
+            FriendFragment friendFragment = new   FriendFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction().replace(R.id.relativeLayout_1,friendFragment,friendFragment.getTag()).commit();
 
         } else if (id == R.id.social) {
 

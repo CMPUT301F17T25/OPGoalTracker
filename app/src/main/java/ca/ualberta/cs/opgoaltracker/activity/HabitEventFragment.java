@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +21,7 @@ import ca.ualberta.cs.opgoaltracker.R;
  * Use the {@link HabitFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HabitFragment extends Fragment {
+public class HabitEventFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -33,7 +34,7 @@ public class HabitFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public HabitFragment() {
+    public HabitEventFragment() {
         // Required empty public constructor
     }
 
@@ -46,8 +47,8 @@ public class HabitFragment extends Fragment {
      * @return A new instance of fragment HabitFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HabitFragment newInstance(String param1, String param2) {
-        HabitFragment fragment = new HabitFragment();
+    public static HabitEventFragment newInstance(String param1, String param2) {
+        HabitEventFragment fragment = new HabitEventFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -68,19 +69,10 @@ public class HabitFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_habit, container, false);
+        view = inflater.inflate(R.layout.fragment_habit_event, container, false);
         ((MenuPage) getActivity())
-                .setActionBarTitle("Habit");
+                .setActionBarTitle("Habit Event");
 
-        FloatingActionButton add_habit = (FloatingActionButton) view.findViewById(R.id.add_habit);
-        add_habit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Click action
-                Intent intent = new Intent(getActivity(), HabitAddActivity.class);
-                startActivity(intent);
-            }
-        });
 
         return view;
 
