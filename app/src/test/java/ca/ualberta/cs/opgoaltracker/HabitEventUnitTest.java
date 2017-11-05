@@ -1,11 +1,16 @@
 package ca.ualberta.cs.opgoaltracker;
 
-import android.media.Image;
 import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
 import java.util.Date;
+
+import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
+import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
+import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
+import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
+import ca.ualberta.cs.opgoaltracker.models.Photograph;
 
 /**
  * Created by donglin3 on 10/22/17.
@@ -14,7 +19,7 @@ import java.util.Date;
 public class HabitEventUnitTest extends ActivityInstrumentationTestCase2 {
 
     public HabitEventUnitTest(){
-        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+        super(MainActivity.class);
     }
 
     @Override

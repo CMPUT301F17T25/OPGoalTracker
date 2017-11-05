@@ -7,6 +7,12 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
+import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
+import ca.ualberta.cs.opgoaltracker.exception.MismatchedHabitTypeException;
+import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
+import ca.ualberta.cs.opgoaltracker.models.HabitEventList;
+
 /**
  * Created by donglin3 on 10/22/17.
  */
@@ -14,7 +20,7 @@ import java.util.Date;
 public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
 
     public HabitEventListUnitTest(){
-        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+        super(MainActivity.class);
     }
 
     @Override

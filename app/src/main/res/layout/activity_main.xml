@@ -4,15 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ca.ualberta.cs.opgoaltracker.MainActivity">
+    tools:context="ca.ualberta.cs.opgoaltracker.activity.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+    <ImageView
+        android:id="@+id/imageView4"
+        android:scaleType="fitXY"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="-100dp"
+        android:layout_marginRight="-100dp"
+        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/login" />
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:fontFamily="cursive"
+        android:text="OPGoalTracker"
+        android:textAppearance="@android:style/TextAppearance.WindowTitle"
+        android:textColor="#7676b3"
+        android:textSize="40sp"
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        android:layout_marginTop="110dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/userID"
+        android:layout_marginLeft="75dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="32dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <EditText
+        android:id="@+id/userID"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:background="#33f7fafb"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:lineSpacingExtra="8sp"
+        android:singleLine="true"
+        android:text="User name"
+        android:textAlignment="viewStart"
+
+
+        android:textAllCaps="false"
+        android:textColor="@android:color/background_light"
+        android:textSize="16sp"
+        android:layout_marginLeft="120dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="120dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/signin"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <Button
+        android:id="@+id/signup"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="#00f7fafb"
+        android:fontFamily="cursive"
+        android:text="Sign Up"
+        android:textColor="#8b8bcf"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        android:layout_marginLeft="100dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="120dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="140dp"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <Button
+        android:id="@+id/signin"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:background="#00f7fafb"
+        android:fontFamily="cursive"
+        android:text="Sign In"
+        android:textColor="#8b8bcf"
+        android:textSize="20sp"
+        android:textStyle="bold|italic"
+        android:layout_marginLeft="100dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="120dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginBottom="9dp"
+        app:layout_constraintBottom_toTopOf="@+id/signup"
+        app:layout_constraintHorizontal_bias="0.0" />
 </android.support.constraint.ConstraintLayout>

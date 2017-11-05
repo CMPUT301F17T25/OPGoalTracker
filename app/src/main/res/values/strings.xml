@@ -1,3 +1,40 @@
 <resources>
     <string name="app_name">OPGoalTracker</string>
+
+    <string name="title_activity_register_activity">Register_activity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_habit">Habit</string>
+    <string name="title_activity_habit_add">Add New Habit Plan</string>
+    <string name="habit_title">Title: </string>
+    <string name="habit_reason">Reason: </string>
+    <string name="habit_start_date">Start Date: </string>
+    <string name="habit_period">Period: </string>
+    <string name="habit_progress">Progress: </string>
+    <string name="habit_mon">Mon.</string>
+    <string name="habit_tue">Tue.</string>
+    <string name="habit_wed">Wed.</string>
+    <string name="habit_thur">Thur.</string>
+    <string name="habit_fri">Fri.</string>
+    <string name="habit_sat">Sat.</string>
+    <string name="habit_sun">Sun.</string>
+    <string name="create">Create</string>
+    <string name="title_activity_habit_detail">HabitDetailActivity</string>
+    <string name="save">Save</string>
+    <string name="menu_action_about_us">About us</string>
+    <string name="menu_action_setting">Setting</string>
+    <string name="action_goto_habit">Habit</string>
+    <string name="menu_action_habit">Habit</string>
+    <string name="menu_action_habitEvent">HabitEvent</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_goto_news">News</string>
+    <string name="title_activity_menu_page">MenuPage</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

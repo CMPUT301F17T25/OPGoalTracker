@@ -4,9 +4,15 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
+import ca.ualberta.cs.opgoaltracker.exception.DuplicatedHabitException;
+import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
+import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
+import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.HabitList;
 
 /**
  * Created by song on 2017/10/23.
@@ -15,7 +21,7 @@ import java.util.Date;
 public class HabitListUnitTest extends ActivityInstrumentationTestCase2 {
 
     public HabitListUnitTest(){
-        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+        super(MainActivity.class);
     }
 
     @Override
@@ -27,7 +33,7 @@ public class HabitListUnitTest extends ActivityInstrumentationTestCase2 {
     @Override
     public void runTest() throws Exception {}
 
-    public void testNormalAddDeleteHabit() throws StringTooLongException,NoTitleException,DuplicatedHabitException{
+    public void testNormalAddDeleteHabit() throws StringTooLongException,NoTitleException,DuplicatedHabitException {
         String habitType = "run";
         String reason = "i like it";
         Date date = new java.util.Date();
