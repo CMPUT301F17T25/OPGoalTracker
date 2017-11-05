@@ -21,15 +21,6 @@
             android:name=".activity.HabitAddActivity"
             android:label="@string/title_activity_habit_add" />
         <activity android:name=".activity.HabitDetailActivity" />
-        <activity android:name=".activity.FriendActivity">
-
-            <!-- for test only, should be deleted later -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity android:name=".activity.FriendSearchActivity" />
         <activity android:name=".activity.FriendFollowActivity" />
         <activity android:name=".activity.NewsActivity" />
