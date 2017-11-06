@@ -28,13 +28,6 @@
             android:name=".activity.MenuPage"
             android:label="@string/title_activity_menu_page"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.AccountActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
