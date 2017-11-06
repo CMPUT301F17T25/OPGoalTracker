@@ -2,10 +2,14 @@ package ca.ualberta.cs.opgoaltracker;
 
 import android.test.ActivityInstrumentationTestCase2;
 
-import android.media.Image;
-import android.test.ActivityInstrumentationTestCase2;
-
 import org.junit.Test;
+
+import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
+import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
+import ca.ualberta.cs.opgoaltracker.models.FriendList;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Photograph;
 
 /**
  * Created by malon_000 on 2017-10-22.
@@ -13,7 +17,7 @@ import org.junit.Test;
 
 public class ParticipantTest extends ActivityInstrumentationTestCase2 {
     public ParticipantTest(){
-        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+        super(MainActivity.class);
     }
     @Override
     public void setUp() throws Exception{}

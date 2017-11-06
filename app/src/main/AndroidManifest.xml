@@ -9,27 +9,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register_activity" />
+        <activity android:name=".activity.Register_activity" />
         <activity
-            android:name=".HabitActivity"
-            android:label="@string/title_activity_habit" />
-        <activity
-            android:name=".HabitAddActivity"
+            android:name=".activity.HabitAddActivity"
             android:label="@string/title_activity_habit_add" />
-        <activity android:name=".HabitDetailActivity" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+        <activity android:name=".activity.HabitDetailActivity" />
+        <activity android:name=".activity.FriendSearchActivity" />
+        <activity android:name=".activity.FriendFollowActivity" />
+        <activity android:name=".activity.NewsActivity" />
+        <activity android:name=".activity.HabitEventAddActivity" />
+        <activity android:name=".activity.EventInfoActivity" />
+        <activity
+            android:name=".activity.MenuPage"
+            android:label="@string/title_activity_menu_page"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

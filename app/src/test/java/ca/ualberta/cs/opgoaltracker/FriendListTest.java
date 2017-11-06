@@ -4,13 +4,19 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
+import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
+import ca.ualberta.cs.opgoaltracker.exception.OutOfBoundException;
+import ca.ualberta.cs.opgoaltracker.models.Admin;
+import ca.ualberta.cs.opgoaltracker.models.FriendList;
+import ca.ualberta.cs.opgoaltracker.models.User;
+
 /**
  * Created by malon_000 on 2017-10-22.
  */
 
 public class FriendListTest extends ActivityInstrumentationTestCase2 {
     public FriendListTest() {
-        super(ca.ualberta.cs.opgoaltracker.MainActivity.class);
+        super(MainActivity.class);
     }
     @Override
     public void setUp() throws Exception{}

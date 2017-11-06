@@ -11,7 +11,7 @@
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="ca.ualberta.cs.opgoaltracker.HabitAddActivity">
+        tools:context="ca.ualberta.cs.opgoaltracker.activity.HabitAddActivity">
 
         <TextView
             android:id="@+id/textTitleAdd"
