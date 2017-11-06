@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import ca.ualberta.cs.opgoaltracker.R;
 
@@ -72,7 +73,15 @@ public class MyAccountFragment extends Fragment {
         ((MenuPage) getActivity())
                 .setActionBarTitle("My Account");
 
+        Button addLogoutButton = (Button) view.findViewById(R.id.logout);
 
+        addLogoutButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
 
