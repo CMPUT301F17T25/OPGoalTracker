@@ -80,6 +80,7 @@ public class NewsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_news, container, false);
         ((MenuPage) getActivity())
                 .setActionBarTitle("News");
+        //((MenuPage) getActivity()).setActionBar();
 
         ArrayList<HabitEvent> displayList = new ArrayList<HabitEvent>();
         try {
@@ -98,7 +99,7 @@ public class NewsFragment extends Fragment {
             e.printStackTrace();
         }
 
-        HabitEventAdapter adapter = new HabitEventAdapter(getActivity(),displayList);
+        NewsAdapter adapter = new NewsAdapter(getActivity(),displayList);
         ListView listview=(ListView)view.findViewById(R.id.newsList);
         listview.setAdapter(adapter);
 

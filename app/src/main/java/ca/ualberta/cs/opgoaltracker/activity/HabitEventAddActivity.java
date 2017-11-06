@@ -5,10 +5,10 @@ import android.os.Bundle;
 
 import ca.ualberta.cs.opgoaltracker.R;
 
-public class HabitAddActivity extends AppCompatActivity {
+public class HabitEventAddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_habit_add);
+        setContentView(R.layout.activity_event_add);
     }
 }

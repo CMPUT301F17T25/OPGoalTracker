@@ -24,6 +24,8 @@
         <activity android:name=".activity.FriendSearchActivity" />
         <activity android:name=".activity.FriendFollowActivity" />
         <activity android:name=".activity.NewsActivity" />
+        <activity android:name=".activity.HabitEventAddActivity" />
+        <activity android:name=".activity.EventInfoActivity" />
         <activity
             android:name=".activity.MenuPage"
             android:label="@string/title_activity_menu_page"

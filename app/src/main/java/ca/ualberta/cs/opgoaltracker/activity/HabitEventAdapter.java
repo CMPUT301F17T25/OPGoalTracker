@@ -19,28 +19,26 @@ import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 class HabitEventAdapter extends ArrayAdapter<HabitEvent> {
 
     public HabitEventAdapter(Context context, List<HabitEvent> objects) {
-        super(context, R.layout.fragment_news, objects);
+        super(context, R.layout.fragment_habit_event, objects);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         //use elastic search to get user's info but for since this is just a test
         LayoutInflater EventInflater = LayoutInflater.from(getContext());
-        View customView = EventInflater.inflate(R.layout.fragment_news,parent,false);
+        View customView = EventInflater.inflate(R.layout.event_row,parent,false);
 
         HabitEvent event = getItem(position);
-        TextView EventType = (TextView) customView.findViewById(R.id.newsType);
-        TextView EventComment = (TextView) customView.findViewById(R.id.newsComment);
+        TextView EventType = (TextView) customView.findViewById(R.id.eventType);
+        TextView EventComment = (TextView) customView.findViewById(R.id.eventComment);
+        TextView EventDate = (TextView) customView.findViewById(R.id.eventDate);
         //ImageView EventImage = (ImageView) customView.findViewById(R.id.newsImage);
-        //ImageView UserImage = (ImageView) customView.findViewById(R.id.UserIcon);
-        TextView UserName = (TextView) customView.findViewById(R.id.newsUser);
+
 
         EventType.setText(event.getHabitType());
         EventComment.setText(event.getComment());
+        EventDate.setText(event.getDate().toString());
         //EvenImage.setImageResource(event.getPhoto());
-
-        //UserImage.setImageResouce()
-        UserName.setText(event.getUser());
 
         return customView;
     }

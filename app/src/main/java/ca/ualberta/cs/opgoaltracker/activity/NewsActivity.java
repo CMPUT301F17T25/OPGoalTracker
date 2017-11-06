@@ -44,7 +44,7 @@ public class NewsActivity extends AppCompatActivity {
         }
 
         HabitEventAdapter adapter = new HabitEventAdapter(this,displayList);
-        ListView listview=(ListView)findViewById(R.id.newsList);
+        ListView listview=(ListView)findViewById(R.id.newsListAct);
         listview.setAdapter(adapter);
 
 

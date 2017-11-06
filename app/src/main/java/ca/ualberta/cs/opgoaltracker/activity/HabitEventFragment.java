@@ -2,15 +2,26 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
+import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 
 /**
@@ -73,10 +84,61 @@ public class HabitEventFragment extends Fragment {
         ((MenuPage) getActivity())
                 .setActionBarTitle("Habit Event");
 
+        ArrayList<HabitEvent> displayList = new ArrayList<HabitEvent>();
+        try {
+            displayList.add(new HabitEvent("test","this is comment",new Date()));
+        } catch (CommentTooLongException e) {
+            e.printStackTrace();
+        }
+        try {
+            displayList.add(new HabitEvent("test","test picture",new Date()));
+        } catch (CommentTooLongException e) {
+            e.printStackTrace();
+        }
+        HabitEventAdapter adapter = new HabitEventAdapter(getActivity(),displayList);
+        final ListView listview=(ListView)view.findViewById(R.id.list_event);
+        listview.setAdapter(adapter);
+
+        //handles listview clicks
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Object selected = listview.getItemAtPosition(i);
+                HabitEvent selectedEvent = (HabitEvent) selected;
+
+
+                Intent intent = new Intent(getActivity(), EventInfoActivity.class);
+                intent.putExtra("type",selectedEvent.getHabitType());
+                intent.putExtra("comment",selectedEvent.getComment());
+                intent.putExtra("location",(selectedEvent.getLocation()==null));
+                if (selectedEvent.getComment()=="test picture") {
+                    //put extra picture
+                    Bitmap pic = BitmapFactory.decodeResource(getResources(),R.drawable.testpic);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    pic.compress(Bitmap.CompressFormat.PNG,50,stream);
+                    intent.putExtra("picture",stream.toByteArray());
+                    // picture putExtra taken from
+                    //https://stackoverflow.com/questions/4352172/how-do-you-pass-images-bitmaps-between-android-activities-using-bundles/7890405#7890405
+                    //17-11-06
+                }
+                startActivity(intent);
+            }
+        });
+        //handles button
+        FloatingActionButton add_event = (FloatingActionButton) view.findViewById(R.id.new_event);
+        add_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), HabitEventAddActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
 
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
