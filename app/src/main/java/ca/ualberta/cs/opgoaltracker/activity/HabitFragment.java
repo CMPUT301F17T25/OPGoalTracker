@@ -9,8 +9,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
+import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
+import ca.ualberta.cs.opgoaltracker.models.Habit;
+
+import static android.R.id.summary;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +31,12 @@ import ca.ualberta.cs.opgoaltracker.R;
  * create an instance of this fragment.
  */
 public class HabitFragment extends Fragment {
+
+    // variables for Habit ListView
+    private ArrayList<Habit> habitList; // may be changed after pull
+    private ListView lvHabit;
+    private HabitAdapter adapter;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -65,6 +81,30 @@ public class HabitFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        // refresh ListView
+        adapter = new HabitAdapter(getActivity(), habitList);
+        lvHabit.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+
+
+//        // call HabitDetailActivity by click rows of ListView
+//        lvHabit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
+//                /* this won't work:
+//                 * Intent intent = new Intent(this, DetailActivity.class);
+//                 */
+//                intent.putExtra("ArrayList position", position);
+//                startActivity(intent);
+//            }
+//        });
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -72,6 +112,25 @@ public class HabitFragment extends Fragment {
         ((MenuPage) getActivity())
                 .setActionBarTitle("Habit");
 
+        // create Habit ListView
+        // TODO: change this part to fit the variable passed from MainActivity
+        lvHabit = (ListView) view.findViewById(R.id.list_habit);
+        habitList = new ArrayList<Habit>();
+
+        // code for testing ListView
+        try {
+            habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(), 1, 1));
+        } catch (StringTooLongException e) {
+            e.printStackTrace();
+        } catch (NoTitleException e) {
+            e.printStackTrace();
+        }
+
+        // Init adapter
+        adapter = new HabitAdapter(getActivity(), habitList);
+        lvHabit.setAdapter(adapter);
+
+        // jump to HabitAddActivity if floating action button is clicked
         FloatingActionButton add_habit = (FloatingActionButton) view.findViewById(R.id.add_habit);
         add_habit.setOnClickListener(new View.OnClickListener() {
             @Override

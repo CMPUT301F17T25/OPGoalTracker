@@ -1,4 +1,4 @@
-package ca.ualberta.cs.opgoaltracker;
+package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
 import android.view.View;
@@ -7,6 +7,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Habit;
 
 /**
  * Created by arthur on 2017/11/5.
