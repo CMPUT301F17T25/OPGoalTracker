@@ -1,5 +1,9 @@
 package ca.ualberta.cs.opgoaltracker.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
@@ -9,7 +13,7 @@ import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
  * Created by song on 2017/10/23.
  */
 
-public class Habit {
+public class Habit implements Parcelable {
 
     private String habitType;
     private String reason;
@@ -31,6 +35,49 @@ public class Habit {
         this.startTime = startTime;
         this.intervalTime = intervalTime;
     }
+
+    // start of implementing Parcelable
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int i) {
+        out.writeString(habitType);
+        out.writeString(reason);
+        // Write long value of Date
+        out.writeLong(date.getTime());
+        out.writeLong(startTime);
+        out.writeLong(intervalTime);
+    }
+
+    private void readFromParcel(Parcel in) {
+        habitType = in.readString();
+        reason = in.readString();
+        // Read Long value and convert to date
+        date = new Date(in.readLong());
+        startTime = in.readLong();
+        intervalTime = in.readLong();
+
+    }
+
+    protected Habit(Parcel in) {
+        readFromParcel(in);
+    }
+
+    public static final Creator<Habit> CREATOR = new Creator<Habit>() {
+        @Override
+        public Habit createFromParcel(Parcel in) {
+            return new Habit(in);
+        }
+
+        @Override
+        public Habit[] newArray(int size) {
+            return new Habit[size];
+        }
+    };
+    // end of implementing Parcelable
 
     public String getHabitType() {
         return habitType;
