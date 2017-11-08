@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -90,18 +92,15 @@ public class HabitFragment extends Fragment {
 //        adapter.notifyDataSetChanged();
 
 
-//        // call HabitDetailActivity by click rows of ListView
-//        lvHabit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
-//                /* this won't work:
-//                 * Intent intent = new Intent(this, DetailActivity.class);
-//                 */
-//                intent.putExtra("ArrayList position", position);
-//                startActivity(intent);
-//            }
-//        });
+        // call HabitDetailActivity by click rows of ListView
+        lvHabit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
+                intent.putExtra("Habit", (Parcelable) habitList.get(position));
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -119,7 +118,8 @@ public class HabitFragment extends Fragment {
 
         // code for testing ListView
         try {
-            habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(), 1, 1));
+            Date today = new Date();
+            habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(today.getTime() + (1000 * 60 * 60 * 24)), 1, 1));
         } catch (StringTooLongException e) {
             e.printStackTrace();
         } catch (NoTitleException e) {
