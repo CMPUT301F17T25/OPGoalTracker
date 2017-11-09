@@ -1,18 +1,29 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.io.ByteArrayOutputStream;
@@ -37,6 +48,9 @@ public class HabitEventFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private MenuItem searchButton;
+    private MenuItem mapButton;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,6 +83,7 @@ public class HabitEventFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -134,6 +149,10 @@ public class HabitEventFragment extends Fragment {
             }
         });
 
+        //ActionBar actionBar = getActivity().getActionBar();
+
+
+
         return view;
 
     }
@@ -164,6 +183,7 @@ public class HabitEventFragment extends Fragment {
         mListener = null;
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -177,5 +197,38 @@ public class HabitEventFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_habit_event, menu);
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+
+            case R.id.event_menu_search :
+                final Dialog dialog = new Dialog(getContext());
+                dialog.setContentView(R.layout.dialog_search);
+                dialog.setTitle("Search Events");
+                EditText message = (EditText) dialog.findViewById(R.id.search_event_text);
+                Button search = (Button) dialog.findViewById(R.id.search_search);
+                search.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
