@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 public class MenuPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,MyAccountFragment.OnFragmentInteractionListener,NewsFragment.OnFragmentInteractionListener,FriendFragment.OnFragmentInteractionListener,HabitFragment.OnFragmentInteractionListener,HabitEventFragment.OnFragmentInteractionListener{
@@ -24,6 +25,9 @@ public class MenuPage extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_page);
+        Participant currentUser;
+        currentUser = getIntent().getParcelableExtra("LOGINUSER");
+
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, new HabitFragment()).commit();
         }

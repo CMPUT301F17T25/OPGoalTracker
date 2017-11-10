@@ -1,5 +1,8 @@
 package ca.ualberta.cs.opgoaltracker.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
@@ -9,7 +12,7 @@ import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
  * Created by donglin3 on 10/22/17.
  */
 
-public class HabitEvent {
+public class HabitEvent implements Parcelable {
 
     private String habitType;
     private String comment;
@@ -79,5 +82,42 @@ public class HabitEvent {
     public String getUser(){
         return "User return";
     }
-}
 
+    protected HabitEvent(Parcel in) {
+        habitType = in.readString();
+        comment = in.readString();
+        long tmpDate = in.readLong();
+        date = tmpDate != -1 ? new Date(tmpDate) : null;
+        photo = (Photograph) in.readValue(Photograph.class.getClassLoader());
+        location = in.readString();
+        maxPhotoSize = in.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(habitType);
+        dest.writeString(comment);
+        dest.writeLong(date != null ? date.getTime() : -1L);
+        dest.writeValue(photo);
+        dest.writeString(location);
+        dest.writeInt(maxPhotoSize);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<HabitEvent> CREATOR = new Parcelable.Creator<HabitEvent>() {
+        @Override
+        public HabitEvent createFromParcel(Parcel in) {
+            return new HabitEvent(in);
+        }
+
+        @Override
+        public HabitEvent[] newArray(int size) {
+            return new HabitEvent[size];
+        }
+    };
+}

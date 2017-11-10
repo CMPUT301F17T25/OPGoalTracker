@@ -1,5 +1,6 @@
 package ca.ualberta.cs.opgoaltracker.models;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
@@ -9,15 +10,16 @@ import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
  * Created by malon_000 on 2017-10-22.
  */
 
-public class Participant extends User  {
+public class Participant implements Parcelable {
     private Photograph avatar;
     private HabitList habitList;
     private FriendList followerList;
     private FriendList followeeList;
     private FriendList requestList;
+    private String id;
 
     public Participant(String id) {
-        super(id);
+        this.id = id;
     }
 
 
@@ -30,6 +32,9 @@ public class Participant extends User  {
             throw new ImageTooLargeException();
         }
         this.avatar=avatar;
+    }
+    public String getId(){
+        return id;
     }
 
     public HabitList getHabitList(){
@@ -69,4 +74,41 @@ public class Participant extends User  {
     public void setRequestList(FriendList requestList){
         this.requestList=requestList;
     }
+
+    protected Participant(Parcel in) {
+        avatar = (Photograph) in.readValue(Photograph.class.getClassLoader());
+        habitList = (HabitList) in.readValue(HabitList.class.getClassLoader());
+        followerList = (FriendList) in.readValue(FriendList.class.getClassLoader());
+        followeeList = (FriendList) in.readValue(FriendList.class.getClassLoader());
+        requestList = (FriendList) in.readValue(FriendList.class.getClassLoader());
+        id = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(avatar);
+        dest.writeValue(habitList);
+        dest.writeValue(followerList);
+        dest.writeValue(followeeList);
+        dest.writeValue(requestList);
+        dest.writeString(id);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Participant> CREATOR = new Parcelable.Creator<Participant>() {
+        @Override
+        public Participant createFromParcel(Parcel in) {
+            return new Participant(in);
+        }
+
+        @Override
+        public Participant[] newArray(int size) {
+            return new Participant[size];
+        }
+    };
 }

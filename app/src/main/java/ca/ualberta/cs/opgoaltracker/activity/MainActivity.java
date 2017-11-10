@@ -30,7 +30,7 @@ import ca.ualberta.cs.opgoaltracker.models.User;
 
 public class MainActivity extends AppCompatActivity {
     private static final String FILENAME = "file.sav";
-    private User currentUser;
+    private Participant currentUser;
     private EditText userID;
     private String name;
     private String name2;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 name = userID.getText().toString();
                 if (Objects.equals(name, currentUser.getId())){
                     Intent i = new Intent(MainActivity.this, MenuPage.class);
-//                    i.putExtra("LOGINUSER", currentUser);
+                    i.putExtra("LOGINUSER", currentUser);
                     startActivity(i);
 
                 }
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 
             Gson gson = new Gson();
-            Type listType = new TypeToken<User>() {
+            Type listType = new TypeToken<Participant>() {
             }.getType();
             currentUser = gson.fromJson(in, listType);
 
