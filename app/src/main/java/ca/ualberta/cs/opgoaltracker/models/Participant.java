@@ -1,5 +1,7 @@
 package ca.ualberta.cs.opgoaltracker.models;
 
+import android.os.Parcelable;
+
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 
@@ -7,7 +9,7 @@ import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
  * Created by malon_000 on 2017-10-22.
  */
 
-public class Participant extends User {
+public class Participant extends User  {
     private Photograph avatar;
     private HabitList habitList;
     private FriendList followerList;
@@ -17,6 +19,8 @@ public class Participant extends User {
     public Participant(String id) {
         super(id);
     }
+
+
     public Photograph getAvatar(){
         return avatar;
     }
