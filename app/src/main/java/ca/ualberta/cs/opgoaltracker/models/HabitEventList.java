@@ -1,5 +1,8 @@
 package ca.ualberta.cs.opgoaltracker.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.exception.MismatchedHabitTypeException;
@@ -8,7 +11,7 @@ import ca.ualberta.cs.opgoaltracker.exception.MismatchedHabitTypeException;
  * Created by donglin3 on 10/22/17.
  */
 
-public class HabitEventList {
+public class HabitEventList implements Parcelable {
     private ArrayList<HabitEvent> aHabitEventList;
     private String habitType;
 
@@ -47,4 +50,43 @@ public class HabitEventList {
         }
         return habitEventWithKeywordList;
     }
+
+    protected HabitEventList(Parcel in) {
+        if (in.readByte() == 0x01) {
+            aHabitEventList = new ArrayList<HabitEvent>();
+            in.readList(aHabitEventList, HabitEvent.class.getClassLoader());
+        } else {
+            aHabitEventList = null;
+        }
+        habitType = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (aHabitEventList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(aHabitEventList);
+        }
+        dest.writeString(habitType);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<HabitEventList> CREATOR = new Parcelable.Creator<HabitEventList>() {
+        @Override
+        public HabitEventList createFromParcel(Parcel in) {
+            return new HabitEventList(in);
+        }
+
+        @Override
+        public HabitEventList[] newArray(int size) {
+            return new HabitEventList[size];
+        }
+    };
 }
