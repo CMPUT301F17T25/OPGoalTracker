@@ -5,8 +5,6 @@
  */
 
 package ca.ualberta.cs.opgoaltracker.activity;
-
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,16 +12,20 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-import com.google.gson.Gson;
-
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-
 import ca.ualberta.cs.opgoaltracker.R;
 
+
+/**
+ * This is the Register page when User clicked "SignUp" button
+ * <br>
+ * This page allows user to create a Participant type user ID
+ * User can either go back to login page or finish sign up process and jump to the next page.
+ * <br>
+ * @author Yongjia Huang
+ * @version 3.0
+ * @see AppCompatActivity
+ * @since 1.0
+ */
 public class Register_activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
@@ -34,6 +36,13 @@ public class Register_activity extends AppCompatActivity {
         configureRegisterButton();
     }
 
+
+    /**
+     * Configure TrySignIn Button
+     * This method create the TrySignIn Button on the Register Page
+     * This Button brings User back to the Login Page
+     * After User click this button, thie Register Activity will be closed.
+     */
     private void configureTrySignInButton(){
         Button addTrySignInButton = (Button) findViewById(R.id.trysignin);
         addTrySignInButton.setOnClickListener(new View.OnClickListener(){
@@ -47,6 +56,12 @@ public class Register_activity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Configure RegisterButton
+     * This method create the Register Button on the Register Page
+     * This Button brings User directly to the Habit Page
+     * After User click this button, thie Register Activity will be closed.
+     */
     private void configureRegisterButton(){
         Button addRegisterButton = (Button) findViewById(R.id.register);
         addRegisterButton.setOnClickListener(new View.OnClickListener(){
