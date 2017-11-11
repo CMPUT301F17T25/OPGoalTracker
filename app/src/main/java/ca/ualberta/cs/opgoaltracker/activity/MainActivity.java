@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -35,6 +36,18 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 import ca.ualberta.cs.opgoaltracker.models.User;
 
+
+
+/**
+ * This is the first login page when this app is lanched.
+ * <br>
+ * This page allows user to enter their user ID and press login button to login, and allows user to click register and jump into the register page
+ * <br>
+ * @author Yongjia Huang
+ * @version 3.0
+ * @see AppCompatActivity
+ * @since 1.0
+ */
 public class MainActivity extends AppCompatActivity {
     private static final String FILENAME = "file.sav";
     private Participant currentUser;
@@ -43,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
     private String name2;
 
 
-
+    /**
+     * Default onCreate method for a activity
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
@@ -55,12 +71,21 @@ public class MainActivity extends AppCompatActivity {
         userID = (EditText) findViewById(R.id.userID);
     }
 
+
+    /**
+     * Disable Back button on android phone
+     */
     @Override
     public void onBackPressed() {
     }
 
 
-
+    /**
+     * Configure SignUp Button
+     * <br>
+     * SignUp Button brings user to Register Page
+     * Once SignUp Button is clicked, the current Login Page is closed.
+     */
     private void configureSignUpButton(){
         Button addSignUpButton = (Button) findViewById(R.id.signup);
         addSignUpButton.setOnClickListener(new View.OnClickListener(){
@@ -74,6 +99,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Configure SignIn Button
+     * <br>
+     * SignIn Button checks User's input ID and bring user to next page
+     * If User ID is invalid, show hit message
+     */
     private void configureSignInButton(){
         Button addSignInButton = (Button) findViewById(R.id.signin);
         addSignInButton.setOnClickListener(new View.OnClickListener(){
@@ -87,12 +118,18 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(i);
 
                 }
+                else{
+                    Toast.makeText(MainActivity.this, "Invalid User ID !", Toast.LENGTH_SHORT).show();
+                }
             }
 
         });
     }
 
 
+    /**
+     * for Project 4 only.
+     */
     private void loadFromFile() {
         try {
             FileInputStream fis = openFileInput(FILENAME);
@@ -112,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * For Project 4 Only
      * save all the changes into a file
      * <br>
      *  load countersList from the file
