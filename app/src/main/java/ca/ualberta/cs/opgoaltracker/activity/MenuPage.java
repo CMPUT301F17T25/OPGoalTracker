@@ -8,10 +8,7 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,10 +17,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
+
+
+/**
+ * This is a Navigation Drawer activity <br>
+ * This is the Menu side bar for this app <br>
+ * This Menu contains -> Habit, Habit Event, Friends, Social, My Account Setting<br>
+ * This Menu recives an Participant Object from the Login or Register page<br>
+ * This Menu palys a Object collaction role in this project, all objects are sent from this menu<br>
+ *
+ * @author Yongjia Huang
+ * @version 3.0
+ * @see AppCompatActivity
+ * @since 1.0
+ */
 public class MenuPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,MyAccountFragment.OnFragmentInteractionListener,NewsFragment.OnFragmentInteractionListener,FriendFragment.OnFragmentInteractionListener,HabitFragment.OnFragmentInteractionListener,HabitEventFragment.OnFragmentInteractionListener{
 
@@ -61,6 +71,10 @@ public class MenuPage extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+
+    /**
+     * Default Navigation Drawer onBackPressed method.
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -71,6 +85,12 @@ public class MenuPage extends AppCompatActivity
         }
     }
 
+
+    /**
+     * Default Navigation Drawer onCreateOptionMenu method
+     * @param menu add menu from menu file
+     * @return True if success
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -78,6 +98,12 @@ public class MenuPage extends AppCompatActivity
         return true;
     }
 
+
+    /**
+     * Default Navigation Drawer onOptionsItemSelected method
+     * @param item the selected menu item
+     * @return True if success
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -93,6 +119,12 @@ public class MenuPage extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This method is the main connection between the menu activity and the different fragments.
+     * This method passes the Participant object (from Login page) to its fragments.
+     * @param item the provied menu items
+     * @return boolen, true if success
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -105,7 +137,6 @@ public class MenuPage extends AppCompatActivity
             habitFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
-//            Handle the camera action
         } else if (id == R.id.habitEvent) {
             habitEventFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
@@ -133,10 +164,20 @@ public class MenuPage extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /**
+     * Default Navigation Drawer setActionBarTitle method
+     * @param title the title bar message.
+     */
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }
 
+
+    /**
+     * Disable onFragmentInteraction method.
+     * @param uri
+     */
     @Override
     public void onFragmentInteraction(Uri uri) {
 
