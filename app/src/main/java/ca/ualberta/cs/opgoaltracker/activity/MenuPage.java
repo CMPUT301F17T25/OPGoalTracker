@@ -21,15 +21,22 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
 public class MenuPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,MyAccountFragment.OnFragmentInteractionListener,NewsFragment.OnFragmentInteractionListener,FriendFragment.OnFragmentInteractionListener,HabitFragment.OnFragmentInteractionListener,HabitEventFragment.OnFragmentInteractionListener{
 
+
+    Participant currentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_page);
-        Participant currentUser;
+
         currentUser = getIntent().getParcelableExtra("LOGINUSER");
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, new HabitFragment()).commit();
+            HabitFragment habitFragment = new HabitFragment();
+            Bundle args = new Bundle();
+            args.putParcelable("CURRENTUSER",currentUser);
+            habitFragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, habitFragment).commit();
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,6 +91,9 @@ public class MenuPage extends AppCompatActivity
 
         if (id == R.id.habit) {
             HabitFragment habitFragment = new HabitFragment();
+            Bundle args = new Bundle();
+            args.putParcelable("CURRENTUSER",currentUser);
+            habitFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
 //            Handle the camera action

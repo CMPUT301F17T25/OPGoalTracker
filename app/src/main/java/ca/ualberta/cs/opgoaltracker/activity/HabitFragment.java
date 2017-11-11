@@ -21,6 +21,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 import static android.R.id.summary;
 
@@ -110,6 +111,8 @@ public class HabitFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_habit, container, false);
         ((MenuPage) getActivity())
                 .setActionBarTitle("Habit");
+        Bundle arg = getArguments();
+        Participant currentUser = arg.getParcelable("CURRENTUSER");
 
         // create Habit ListView
         // TODO: change this part to fit the variable passed from MainActivity
