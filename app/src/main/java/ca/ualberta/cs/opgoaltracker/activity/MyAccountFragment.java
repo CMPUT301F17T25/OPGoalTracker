@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +31,7 @@ public class MyAccountFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private Participant currentUser;
     View view;
 
     private OnFragmentInteractionListener mListener;
@@ -72,6 +74,8 @@ public class MyAccountFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_my_account, container, false);
         ((MenuPage) getActivity())
                 .setActionBarTitle("My Account");
+        Bundle arg = getArguments();
+        currentUser = arg.getParcelable("CURRENTUSER");
 
         Button addLogoutButton = (Button) view.findViewById(R.id.logout);
 

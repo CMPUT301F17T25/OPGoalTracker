@@ -20,6 +20,7 @@ import java.util.Date;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +40,7 @@ public class NewsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     View view;
+    private Participant currentUser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -81,6 +83,8 @@ public class NewsFragment extends Fragment {
         ((MenuPage) getActivity())
                 .setActionBarTitle("News");
         //((MenuPage) getActivity()).setActionBar();
+        Bundle arg = getArguments();
+        currentUser = arg.getParcelable("CURRENTUSER");
 
         ArrayList<HabitEvent> displayList = new ArrayList<HabitEvent>();
         try {

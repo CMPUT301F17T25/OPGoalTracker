@@ -34,6 +34,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,6 +52,7 @@ public class HabitEventFragment extends Fragment {
 
     private MenuItem searchButton;
     private MenuItem mapButton;
+    private Participant currentUser;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -98,6 +100,8 @@ public class HabitEventFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_habit_event, container, false);
         ((MenuPage) getActivity())
                 .setActionBarTitle("Habit Event");
+        Bundle arg = getArguments();
+        currentUser = arg.getParcelable("CURRENTUSER");
 
         ArrayList<HabitEvent> displayList = new ArrayList<HabitEvent>();
         try {

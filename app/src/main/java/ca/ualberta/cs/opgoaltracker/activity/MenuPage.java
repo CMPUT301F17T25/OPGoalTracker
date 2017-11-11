@@ -23,6 +23,11 @@ public class MenuPage extends AppCompatActivity
 
 
     Participant currentUser;
+    HabitFragment habitFragment = new HabitFragment();
+    HabitEventFragment habitEventFragment = new HabitEventFragment();
+    FriendFragment friendFragment = new   FriendFragment();
+    NewsFragment newsFragment = new   NewsFragment();
+    MyAccountFragment myAccountFragment = new MyAccountFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,6 @@ public class MenuPage extends AppCompatActivity
         currentUser = getIntent().getParcelableExtra("LOGINUSER");
 
         if (savedInstanceState == null) {
-            HabitFragment habitFragment = new HabitFragment();
             Bundle args = new Bundle();
             args.putParcelable("CURRENTUSER",currentUser);
             habitFragment.setArguments(args);
@@ -88,32 +92,31 @@ public class MenuPage extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Bundle args = new Bundle();
+        args.putParcelable("CURRENTUSER",currentUser);
 
         if (id == R.id.habit) {
-            HabitFragment habitFragment = new HabitFragment();
-            Bundle args = new Bundle();
-            args.putParcelable("CURRENTUSER",currentUser);
             habitFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
 //            Handle the camera action
         } else if (id == R.id.habitEvent) {
-            HabitEventFragment habitEventFragment = new HabitEventFragment();
+            habitEventFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitEventFragment,habitEventFragment.getTag()).commit();
 
         } else if (id == R.id.friends) {
-            FriendFragment friendFragment = new   FriendFragment();
+            friendFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,friendFragment,friendFragment.getTag()).commit();
 
         } else if (id == R.id.social) {
-            NewsFragment newsFragment = new   NewsFragment();
+            newsFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,newsFragment ,newsFragment .getTag()).commit();
 
         } else if (id == R.id.setting) {
-            MyAccountFragment myAccountFragment = new MyAccountFragment();
+            myAccountFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,myAccountFragment ,myAccountFragment .getTag()).commit();
 

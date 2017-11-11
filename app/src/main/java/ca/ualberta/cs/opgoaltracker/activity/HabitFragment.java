@@ -49,6 +49,7 @@ public class HabitFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     View view;
+    private Participant currentUser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -112,7 +113,7 @@ public class HabitFragment extends Fragment {
         ((MenuPage) getActivity())
                 .setActionBarTitle("Habit");
         Bundle arg = getArguments();
-        Participant currentUser = arg.getParcelable("CURRENTUSER");
+        currentUser = arg.getParcelable("CURRENTUSER");
 
         // create Habit ListView
         // TODO: change this part to fit the variable passed from MainActivity

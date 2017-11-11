@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +37,7 @@ public class FriendFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private FragmentActivity context;
+    private Participant currentUser;
     View view;
     ConstraintLayout constraintLayout;
     TabLayout tabLayout;
@@ -80,6 +82,8 @@ public class FriendFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_friend, container, false);
         ((MenuPage) getActivity())
                 .setActionBarTitle("My Friends");
+        Bundle arg = getArguments();
+        currentUser = arg.getParcelable("CURRENTUSER");
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.constraintLayout);
         tabLayout = (TabLayout) view.findViewById(R.id.simpleTabLayout);
         // Create a new Tab named "First"
