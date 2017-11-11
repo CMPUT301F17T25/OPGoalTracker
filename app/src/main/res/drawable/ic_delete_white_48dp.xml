@@ -1,3 +1,9 @@
+<!--
+  ~ Copyright 2017 Yongjia Huang, Dichong Song, Mingwei Li, Donglin Han, Long Ma,CMPUT301F17T25 CMPUT301, University of Alberta, All Rights Reserved.
+  ~ You may use distribut, or modify this code under terms and conditions of the ode of Student Behavior at University of Alberta
+  ~ You may find a copy of the license in this project. Otherwise please contact jajayongjia@gmail.com
+  -->
+
 <vector android:height="48dp" android:viewportHeight="24.0"
     android:viewportWidth="24.0" android:width="48dp" xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#ffffff" android:pathData="M6,19c0,1.1 0.9,2 2,2h8c1.1,0 2,-0.9 2,-2V7H6v12zM19,4h-3.5l-1,-1h-5l-1,1H5v2h14V4z"/>
