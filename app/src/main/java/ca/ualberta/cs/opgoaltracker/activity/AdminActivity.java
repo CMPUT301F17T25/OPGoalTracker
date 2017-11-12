@@ -120,6 +120,13 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * if current admin edit its restrictions, save to its account and save to json
+     * if current admin wants to edit restrictions (change pic size ), updated it for all admins, save to json
+     * @author donglin
+     * @see MainActivity
+     * @since 2.0
+     */
     public void saveChanges() {
         this.newPictureSize = pictureSizeEdittext.getText().toString();
         this.newTitleSize = titleSizeEdittext.getText().toString();
@@ -137,6 +144,11 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * if current admin wants to create another admin, check validity of name(repeated) save to new file with corresponding  json file name
+     * @author donglin
+     * @since 2.0
+     */
     public void addNewAdmin() {
         String newAdminName = idEdittext.getText().toString();
         if(isAdminExistent(newAdminName)) {
@@ -153,6 +165,11 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * if if current admin wants to delete account, check if it's the last admin account. if so then deny, if not delete. finish back to MainActvity
+     * @author donglin
+     * @since 2.0
+     */
     public void deleteCurrentAdmin() {
         if(this.adminList.size() == 1) {
             Toast.makeText(AdminActivity.this, "The last Admin should not be deleted", Toast.LENGTH_SHORT).show();
@@ -163,6 +180,13 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * check if the admin id is the same with corresponding json file name
+     * @author donglin
+     * @since 2.0
+     * @param newAdminID
+     * @return
+     */
     public boolean isAdminExistent(String newAdminID) {
         String[] jsonFileList = this.fileList();
 

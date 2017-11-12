@@ -22,8 +22,9 @@ import ca.ualberta.cs.opgoaltracker.models.Admin;
  * <br>
  * This page allows user to create a Participant type user ID
  * User can either go back to login page or finish sign up process and jump to the next page.
+ * sign up for  first admin account and  be able to sign in , do changes in admin account page
  * <br>
- * @author Yongjia Huang
+ * @author Yongjia Huang , Donglin Han
  * @version 3.0
  * @see AppCompatActivity
  * @since 1.0
@@ -61,6 +62,12 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    /**
+     * For admin sign up, add admin user if ID start with "admin"
+     * @author donglin
+     * @since 1.0
+     * @see AdminActivity
+     */
     public void addUser() {
         String username = usernameText.getText().toString();
 
@@ -72,6 +79,12 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
         }
     }
 
+    /**
+     * With Gson, connect data to add adminuser, save in json
+     * @param username
+     * @see AdminIOGson
+     * @see AdminActivity
+     */
     public void addAdminUser(String username) {
         // TODO sign up the first admin user via this register page, later admin users should be created by an existing admin
         AdminIOGson adminIOGson = new AdminIOGson();
