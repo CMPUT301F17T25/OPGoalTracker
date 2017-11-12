@@ -106,6 +106,14 @@ public class MainActivity extends AppCompatActivity {
      * <br>
      * SignIn Button checks User's input ID and bring user to next page
      * If User ID is invalid, show hit message
+     *
+     * For admin :
+     * add an additional check to see if the user is an admin user. if so put extra to put its id so that i
+     * in AdminActivity which is current admin known
+     *
+     * @author donglin
+     * @see AdminActivity
+     * @since 2.0
      */
     private void configureSignInButton(){
         Button addSignInButton = (Button) findViewById(R.id.signin);
@@ -132,6 +140,12 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * check if the admin id is the same with corresponding json file name
+     * @author donglin
+     * @since 2.0 
+     * @return
+     */
     public boolean isAdminExistent() {
         String[] jsonFileList = this.fileList();
         String adminName;
