@@ -6,16 +6,25 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
@@ -39,6 +48,9 @@ public class MyAccountFragment extends Fragment {
     private String mParam2;
     private Participant currentUser;
     View view;
+
+    ImageButton btn;// = (ImageButton) view.findViewById(R.id.head_portrait);
+//    Context context = getContext();
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,7 +96,6 @@ public class MyAccountFragment extends Fragment {
         currentUser = arg.getParcelable("CURRENTUSER");
 
         Button addLogoutButton = (Button) view.findViewById(R.id.logout);
-
         addLogoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -93,8 +104,44 @@ public class MyAccountFragment extends Fragment {
             }
         });
 
+        btn = (ImageButton) view.findViewById(R.id.head_portrait);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //btn.setImageResource(R.drawable.newevent);
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 1);
+            }
+        });
+
         return view;
 
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            Toast.makeText(getActivity().getApplicationContext(),picturePath,Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
