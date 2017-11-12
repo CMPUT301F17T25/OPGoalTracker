@@ -13,21 +13,29 @@ import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.exception.OutOfBoundException;
 
-/**
- * Created by malon_000 on 2017-10-22.
- */
 
+
+
+/**
+ * This Friedns List Object is designed for representing follower list and followee list<br>
+ *     The Base type of FriendList is an ArrayList, <br>
+ * @author Ma Long, Yongjia Huang
+ * @version 3.0
+ * @see Parcelable
+ * @see ArrayList
+ * @since 1.0
+ */
 public class FriendList implements Parcelable {
-    private ArrayList<User> friendList;
+    private ArrayList<Participant> friendList;
     private String listType;
 
     public FriendList(String listType){
         this.listType=listType;
     }
-    public ArrayList<User> getFriendList(){
+    public ArrayList<Participant> getFriendList(){
         return friendList;
     }
-    public User getFriend(int index) throws OutOfBoundException {
+    public Participant getFriend(int index) throws OutOfBoundException {
         if (index>friendList.size()){
             throw new OutOfBoundException();
         }
@@ -36,8 +44,8 @@ public class FriendList implements Parcelable {
     public int getLen(){
         return friendList.size();
     }
-    public void add(User user){
-        friendList.add(user);
+    public void add(Participant participant){
+        friendList.add(participant);
     }
     public void delete(int index) throws OutOfBoundException {
         if (index>=friendList.size()){
@@ -48,8 +56,8 @@ public class FriendList implements Parcelable {
 
     protected FriendList(Parcel in) {
         if (in.readByte() == 0x01) {
-            friendList = new ArrayList<User>();
-            in.readList(friendList, User.class.getClassLoader());
+            friendList = new ArrayList<Participant>();
+            in.readList(friendList, Participant.class.getClassLoader());
         } else {
             friendList = null;
         }

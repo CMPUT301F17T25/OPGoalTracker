@@ -54,7 +54,7 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         // TODO should we enable log in functionality only in the MainActivity?
         if(view == addTrySignInButton) {
-            startActivity(new Intent(this, MenuPage.class));
+            startActivity(new Intent(this, MainActivity.class));
         } else if (view == addRegisterButton) {
             addUser();
             finish();
