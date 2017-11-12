@@ -69,7 +69,7 @@ public class Admin extends User{
 
     /**
      * Basic commentLength setter
-     * @param commentLength int 
+     * @param commentLength int
      */
     public void setCommentLength(int commentLength){this.commentLength = commentLength;}
 
