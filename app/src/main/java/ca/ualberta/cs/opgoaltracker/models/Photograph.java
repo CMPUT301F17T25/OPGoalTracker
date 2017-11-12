@@ -10,43 +10,79 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by donglin3 on 10/22/17.
+ * This Photograph object is created from image setting propuse
+ * @author Donglin Han, Yongjia Huang
+ * @version 3.0
+ * @see Parcelable
+ * @since 1.0
  */
-
 public class Photograph implements Parcelable {
 
     private int height;
     private int width;
 
+    /**
+     * Basic Constructor for creating a photograph object
+     * @param height : int
+     * @param width : int
+     */
     public Photograph(int height, int width){
         this.height = height;
         this.width = width;
     }
 
+    /**
+     * Basic height getter
+     * @return height : int
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Basic width getter
+     * @return width int
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     * @param in
+     */
     protected Photograph(Parcel in) {
         height = in.readInt();
         width = in.readInt();
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     * @return
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     * @param dest
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(height);
         dest.writeInt(width);
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     */
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Photograph> CREATOR = new Parcelable.Creator<Photograph>() {
         @Override
