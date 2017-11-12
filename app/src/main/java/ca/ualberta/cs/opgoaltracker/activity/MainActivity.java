@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * check if the admin id is the same with corresponding json file name
      * @author donglin
-     * @since 2.0 
+     * @since 2.0
      * @return
      */
     public boolean isAdminExistent() {

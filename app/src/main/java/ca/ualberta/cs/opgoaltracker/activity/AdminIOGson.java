@@ -22,8 +22,12 @@ import ca.ualberta.cs.opgoaltracker.models.Admin;
 public class AdminIOGson {
 
     /**
-     * Load Habit objects from all saved json files.
-     * @return list of Habit objects.
+     * load  one admin from  one file
+     * @param adminID
+     * @param context
+     * @author donglin
+     * @see AdminActivity
+     * @return
      */
     public Admin loadAdminFromFile(String adminID, Context context) {
         Admin adminObj;
@@ -41,6 +45,14 @@ public class AdminIOGson {
         return adminObj;
     }
 
+    /**
+     * load all admin accounts from files
+     * @param adminIdList
+     * @param context
+     * @author donglin
+     * @see AdminActivity
+     * @return
+     */
     public ArrayList<Admin> loadAllAdminFromFiles(ArrayList<String> adminIdList, Context context){
         ArrayList<Admin> adminList = new ArrayList<>();
 
@@ -52,6 +64,13 @@ public class AdminIOGson {
         return adminList;
     }
 
+    /**
+     * save in file
+     * @author donglin
+     * @see AdminActivity
+     * @param admin
+     * @param context
+     */
     public void saveAdminInFile(Admin admin, Context context) {
         String fileName = jsonFileName(admin.getId());
         try {
@@ -70,10 +89,24 @@ public class AdminIOGson {
         }
     }
 
+    /**
+     * creaet jsonfile for each admin. name matches with ID
+     * @author donglin
+     * @see AdminActivity
+     * @param adminID
+     * @return
+     */
     public String jsonFileName(String adminID) {
         return adminID + ".json";
     }
 
+    /**
+     * delete admin by delete its corresponding file
+     * @author donglin
+     * @see AdminActivity
+     * @param adminID
+     * @param context
+     */
     public void deleteFile(String adminID, Context context) {
         String fileName = jsonFileName(adminID);
         context.deleteFile(fileName);
