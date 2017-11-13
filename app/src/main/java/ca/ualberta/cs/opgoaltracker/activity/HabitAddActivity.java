@@ -7,13 +7,10 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -24,7 +21,7 @@ import java.util.Date;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 
-public class HabitAddActivity extends AppCompatActivity implements HabitFragment.OnFragmentInteractionListener {
+public class HabitAddActivity extends AppCompatActivity {
 
     private EditText titleBox;
     private EditText reasonBox;
@@ -78,30 +75,8 @@ public class HabitAddActivity extends AppCompatActivity implements HabitFragment
 
         habit = new Habit(title, reason, date, period);
 
-//        Bundle args = new Bundle();
-//        args.putParcelable("new Habit", habit);
-//        HabitFragment habitFragment = new HabitFragment();
-//        habitFragment.setArguments(args);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.relativeLayout_1, habitFragment);
-//        transaction.commit();
-
-        Bundle args = new Bundle();
-        args.putParcelable("new Habit", habit);
-
-        HabitFragment habitFragment = new HabitFragment();
-        habitFragment.setArguments(args);
-        FragmentManager manager = getSupportFragmentManager();
-        manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
-
-    }
-
-    /**
-     * Disable onFragmentInteraction method.
-     * @param uri
-     */
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
+        Intent intent = new Intent(this, MenuPage.class);
+        intent.putExtra("Habit", (Parcelable) habit);
+        startActivity(intent);
     }
 }
