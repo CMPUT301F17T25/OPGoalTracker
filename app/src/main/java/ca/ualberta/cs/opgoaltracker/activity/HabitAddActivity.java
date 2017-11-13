@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
@@ -55,14 +56,23 @@ public class HabitAddActivity extends AppCompatActivity {
         checkBoxFri = (CheckBox) findViewById(R.id.checkBoxFriAdd);
         checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatAdd);
         checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunAdd);
+
+        date = new Date();
+        // get selected date from CalendarView
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                date = new Date(calendar.getTimeInMillis());
+            }
+        });
     }
 
-    public void buttonCreate (View view) {
+    public void buttonCreate(View view) {
         title = titleBox.getText().toString();
-
         reason = reasonBox.getText().toString();
-
-        date = new Date(calendarView.getDate());
 
         period = new ArrayList<Boolean>();
         period.add(checkBoxMon.isChecked());

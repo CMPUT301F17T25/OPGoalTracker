@@ -147,6 +147,8 @@ public class HabitFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
                 intent.putExtra("Habit", (Parcelable) habitList.get(position));
+//                intent.putParcelableArrayListExtra("HabitList", habitList);
+//                intent.putExtra("position", position);
                 startActivity(intent);
             }
         });

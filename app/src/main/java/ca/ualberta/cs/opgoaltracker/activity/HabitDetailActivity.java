@@ -6,24 +6,46 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
+import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 
 public class HabitDetailActivity extends AppCompatActivity {
 
+    private EditText titleBox;
+    private EditText reasonBox;
+    private CalendarView calendarView;
+    private CheckBox checkBoxMon;
+    private CheckBox checkBoxTue;
+    private CheckBox checkBoxWed;
+    private CheckBox checkBoxThur;
+    private CheckBox checkBoxFri;
+    private CheckBox checkBoxSat;
+    private CheckBox checkBoxSun;
+
+    private ArrayList<Habit> habitList;
+    private int position;
     private Habit habit;
-    private EditText title;
-    private EditText reason;
-    private CalendarView calendar;
+    private String title;
+    private String reason;
+    private Date date;
+    private ArrayList<Boolean> period;
 
 
     @Override
@@ -32,15 +54,82 @@ public class HabitDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_habit_detail);
 
         habit = (Habit) getIntent().getExtras().getParcelable("Habit");
+//        habitList = getIntent().getExtras().getParcelableArrayList("HabitList");
+//        position = getIntent().getExtras().getParcelable("position");
 
-        title = (EditText) findViewById(R.id.editTitleDetail);
-        reason = (EditText) findViewById(R.id.editReasonDetail);
-        calendar = (CalendarView) findViewById(R.id.calendarViewDetail);
+        titleBox = (EditText) findViewById(R.id.editTitleDetail);
+        reasonBox = (EditText) findViewById(R.id.editReasonDetail);
+        calendarView = (CalendarView) findViewById(R.id.calendarViewDetail);
+        checkBoxMon = (CheckBox) findViewById(R.id.checkBoxMonDetail);
+        checkBoxTue = (CheckBox) findViewById(R.id.checkBoxTueDetail);
+        checkBoxWed = (CheckBox) findViewById(R.id.checkBoxWedDetail);
+        checkBoxThur = (CheckBox) findViewById(R.id.checkBoxThurDetail);
+        checkBoxFri = (CheckBox) findViewById(R.id.checkBoxFriDetail);
+        checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatDetail);
+        checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunDetail);
 
-        title.setText(habit.getHabitType());
-        reason.setText(habit.getReason());
+        titleBox.setText(habit.getHabitType());
+        reasonBox.setText(habit.getReason());
 
-        calendar.setDate(habit.getDate().getTime(), false, true);
+        calendarView.setDate(habit.getDate().getTime(), false, true);
+        checkBoxMon.setChecked(habit.getPeriod().get(0));
+        checkBoxTue.setChecked(habit.getPeriod().get(1));
+        checkBoxWed.setChecked(habit.getPeriod().get(2));
+        checkBoxThur.setChecked(habit.getPeriod().get(3));
+        checkBoxFri.setChecked(habit.getPeriod().get(4));
+        checkBoxSat.setChecked(habit.getPeriod().get(5));
+        checkBoxSun.setChecked(habit.getPeriod().get(6));
+
+
+        date = new Date();
+        // get selected date from CalendarView
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                date = new Date(calendar.getTimeInMillis());
+            }
+        });
+    }
+
+    public void buttonSave(View view) {
+        title = titleBox.getText().toString();
+        reason = reasonBox.getText().toString();
+
+        period = new ArrayList<Boolean>();
+        period.add(checkBoxMon.isChecked());
+        period.add(checkBoxTue.isChecked());
+        period.add(checkBoxWed.isChecked());
+        period.add(checkBoxThur.isChecked());
+        period.add(checkBoxFri.isChecked());
+        period.add(checkBoxSat.isChecked());
+        period.add(checkBoxSun.isChecked());
+
+        try {
+            habit.setHabitType(title);
+        } catch (StringTooLongException exc) {
+            Toast.makeText(getApplicationContext(), "Too Many Characters",
+                    Toast.LENGTH_SHORT).show();
+        } catch (NoTitleException exc) {
+            Toast.makeText(getApplicationContext(), "Please Enter Title",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            habit.setReason(reason);
+        } catch (StringTooLongException exc) {
+            Toast.makeText(getApplicationContext(), "Too Many Characters",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        habit.setDate(date);
+        habit.setPeriod(period);
+
+        Intent intent = new Intent(this, MenuPage.class);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
     // create an action bar button
