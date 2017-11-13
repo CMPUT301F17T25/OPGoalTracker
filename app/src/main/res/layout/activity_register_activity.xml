@@ -48,28 +48,29 @@
         app:layout_constraintHorizontal_bias="0.0" />
 
     <EditText
-        android:id="@+id/userID"
+        android:id="@+id/user_id"
         android:layout_width="0dp"
         android:layout_height="42dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginRight="120dp"
         android:background="#33f7fafb"
         android:ems="10"
+        android:hint="User name"
+        android:textColorHint="#FFFFFF"
         android:inputType="textPersonName"
+
+
         android:lineSpacingExtra="8sp"
         android:singleLine="true"
-        android:text="User name"
         android:textAlignment="viewStart"
-
-
         android:textAllCaps="false"
-        android:textColor="@android:color/background_light"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:layout_marginLeft="120dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="120dp"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/register"
         app:layout_constraintHorizontal_bias="0.0"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toTopOf="@+id/register" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <Button
         android:id="@+id/button6"

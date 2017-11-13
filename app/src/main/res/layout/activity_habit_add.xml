@@ -8,10 +8,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/habitAddScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout_editor_absoluteY="0dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="0dp">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -23,14 +24,14 @@
             android:id="@+id/textTitleAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/habit_title"
-            android:textSize="24sp"
-            android:textColor="@color/black_overlay"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="24dp" />
+            android:layout_marginTop="24dp"
+            android:text="@string/habit_title"
+            android:textColor="@color/black_overlay"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/editTitleAdd"
@@ -48,17 +49,17 @@
             android:id="@+id/textReasonAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/habit_reason"
-            android:textSize="24sp"
-            android:textColor="@color/black_overlay"
-            app:layout_constraintRight_toLeftOf="@+id/editReasonAdd"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/textTitleAdd"
+            android:layout_marginRight="16dp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginTop="24dp"
+            android:text="@string/habit_reason"
+            android:textColor="@color/black_overlay"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/editReasonAdd"
+            app:layout_constraintTop_toBottomOf="@+id/textTitleAdd" />
 
         <EditText
             android:id="@+id/editReasonAdd"
@@ -76,14 +77,14 @@
             android:id="@+id/textStartDateAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/habit_start_date"
-            android:textSize="24sp"
-            android:textColor="@color/black_overlay"
             android:layout_marginLeft="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/textReasonAdd"
-            android:layout_marginStart="16dp" />
+            android:text="@string/habit_start_date"
+            android:textColor="@color/black_overlay"
+            android:textSize="24sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textReasonAdd" />
 
         <CalendarView
             android:id="@+id/calendarViewAdd"
@@ -103,42 +104,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:text="@string/habit_period"
             android:textColor="@color/black_overlay"
             android:textSize="24sp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/calendarViewAdd"
-            android:layout_marginStart="16dp" />
+            app:layout_constraintTop_toBottomOf="@+id/calendarViewAdd" />
 
         <CheckBox
             android:id="@+id/checkBoxMonAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@+id/checkBoxTueAdd"
-            app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginTop="15dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@+id/checkBoxTueAdd"
             app:layout_constraintTop_toBottomOf="@+id/periodTextAdd" />
 
         <TextView
             android:id="@+id/textMonAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/habit_mon"
-            android:textSize="20sp"
-            android:textColor="@color/black_overlay"
-            app:layout_constraintRight_toRightOf="@+id/checkBoxMonAdd"
-            app:layout_constraintLeft_toLeftOf="@+id/checkBoxMonAdd"
             android:layout_marginTop="8dp"
+            android:text="@string/habit_mon"
+            android:textColor="@color/black_overlay"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="@+id/checkBoxMonAdd"
+            app:layout_constraintRight_toRightOf="@+id/checkBoxMonAdd"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxMonAdd" />
 
         <CheckBox
             android:id="@+id/checkBoxTueAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@+id/checkBoxWedAdd"
+            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxMonAdd"
             app:layout_constraintLeft_toRightOf="@+id/checkBoxMonAdd"
-            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxMonAdd" />
+            app:layout_constraintRight_toLeftOf="@+id/checkBoxWedAdd" />
 
         <TextView
             android:id="@+id/textTueAdd"
@@ -156,9 +157,9 @@
             android:id="@+id/checkBoxWedAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@+id/checkBoxThurAdd"
+            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxTueAdd"
             app:layout_constraintLeft_toRightOf="@+id/checkBoxTueAdd"
-            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxTueAdd" />
+            app:layout_constraintRight_toLeftOf="@+id/checkBoxThurAdd" />
 
         <TextView
             android:id="@+id/textWedAdd"
@@ -176,9 +177,9 @@
             android:id="@+id/checkBoxThurAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@+id/checkBoxFriAdd"
+            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxWedAdd"
             app:layout_constraintLeft_toRightOf="@+id/checkBoxWedAdd"
-            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxWedAdd" />
+            app:layout_constraintRight_toLeftOf="@+id/checkBoxFriAdd" />
 
         <TextView
             android:id="@+id/textThurAdd"
@@ -196,9 +197,9 @@
             android:id="@+id/checkBoxFriAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@+id/checkBoxSatAdd"
+            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxThurAdd"
             app:layout_constraintLeft_toRightOf="@+id/checkBoxThurAdd"
-            app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxThurAdd" />
+            app:layout_constraintRight_toLeftOf="@+id/checkBoxSatAdd" />
 
         <TextView
             android:id="@+id/textFriAdd"
@@ -216,8 +217,8 @@
             android:id="@+id/checkBoxSatAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintLeft_toRightOf="@+id/checkBoxFriAdd"
             app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxFriAdd"
+            app:layout_constraintLeft_toRightOf="@+id/checkBoxFriAdd"
             app:layout_constraintRight_toLeftOf="@+id/checkBoxSunAdd" />
 
         <TextView
@@ -237,8 +238,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBaseline_toBaselineOf="@+id/checkBoxSatAdd"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/checkBoxSatAdd" />
+            app:layout_constraintLeft_toRightOf="@+id/checkBoxSatAdd"
+            app:layout_constraintRight_toRightOf="parent" />
 
         <TextView
             android:id="@+id/textSunAdd"
@@ -256,17 +257,18 @@
             android:id="@+id/buttonCreate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:onClick="buttonCreate"
             android:text="@string/create"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textMonAdd"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp" />
+            app:layout_constraintTop_toBottomOf="@+id/textMonAdd" />
 
     </android.support.constraint.ConstraintLayout>
 

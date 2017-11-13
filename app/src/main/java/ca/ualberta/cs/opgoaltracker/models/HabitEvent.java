@@ -15,9 +15,13 @@ import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 
 /**
- * Created by donglin3 on 10/22/17.
+ * This Habit Event describe a single Habit Event which belongs to a Habit Type<br>
+ *     This Class allow user to get and set information in this object
+ * @author Donglin Han, Yongjia Huang
+ * @version 3.0
+ * @see Parcelable
+ * @since 1.0
  */
-
 public class HabitEvent implements Parcelable {
 
     private String habitType;
@@ -27,6 +31,14 @@ public class HabitEvent implements Parcelable {
     private String location;
     private int maxPhotoSize = 65536;
 
+    /**
+     * Base Constructor which create a Habit Event type <br>
+     *     the New Habit Event type has a restrict commetn length smaller than 20<br>
+     * @param habitType
+     * @param comment
+     * @param date
+     * @throws CommentTooLongException
+     */
     public HabitEvent(String habitType, String comment, Date date) throws CommentTooLongException {
         if(comment.length() > 20) {
             throw new CommentTooLongException();
@@ -37,30 +49,59 @@ public class HabitEvent implements Parcelable {
         this.comment = comment;
     }
 
+    /**
+     * Basic Habit Type Getter
+     * @return String : habitType
+     */
     public String getHabitType() {
         return habitType;
     }
 
+    /**
+     * Basic Habit event comment getter
+     * @return String : Comment
+     */
     public String getComment() {
         return comment;
     }
 
+    /**
+     * Basic Habit Event Date getter
+     * @return Date : date
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Basic Habit Event Photo getter
+     * @return Photograph : photo
+     */
     public Photograph getPhoto() {
         return photo;
     }
 
+    /**
+     * Basic Habit Event Location getter
+     * @return String : location
+     */
     public String getLocation() {
         return location;
     }
 
+    /**
+     * Basic Habit Event HabitType setter
+     * @param habitType : String
+     */
     public void setHabitType(String habitType) {
         this.habitType = habitType;
     }
 
+    /**
+     *  Basic Habit Event Comment Setter
+     * @param comment String
+     * @throws CommentTooLongException
+     */
     public void setComment(String comment) throws CommentTooLongException {
         if(comment.length() > 20) {
             throw new CommentTooLongException();
@@ -68,10 +109,19 @@ public class HabitEvent implements Parcelable {
         this.comment = comment;
     }
 
+    /**
+     *  Basic Habit Event Date Setter
+     * @param date : Date
+     */
     public void setDate(Date date) {
         this.date = date;
     }
 
+    /**
+     *  Basic Habit Event Photo setter
+     * @param photo Photograph
+     * @throws ImageTooLargeException
+     */
     public void setPhoto(Photograph photo) throws ImageTooLargeException {
         // Assuming 24bits/pixel. Note that 8bits/byte.
         int photoSize = photo.getHeight() * photo.getWidth() * 24 / 8;
@@ -81,14 +131,27 @@ public class HabitEvent implements Parcelable {
         this.photo = photo;
     }
 
+    /**
+     *  Basic Habit Event Location setter
+     * @param location String
+     */
     public void setLocation(String location) {
         this.location = location;
     }
 
+    /**
+     *  Basic Habit Event User getter
+     * @return : String
+     */
     public String getUser(){
         return "User return";
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     * @param in
+     */
     protected HabitEvent(Parcel in) {
         habitType = in.readString();
         comment = in.readString();
@@ -99,11 +162,22 @@ public class HabitEvent implements Parcelable {
         maxPhotoSize = in.readInt();
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     * @return
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     * @param dest
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(habitType);
@@ -114,6 +188,10 @@ public class HabitEvent implements Parcelable {
         dest.writeInt(maxPhotoSize);
     }
 
+    /**
+     * Default Parcel method , implement Parcelable
+     * @see Parcelable
+     */
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<HabitEvent> CREATOR = new Parcelable.Creator<HabitEvent>() {
         @Override

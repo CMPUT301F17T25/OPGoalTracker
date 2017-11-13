@@ -7,9 +7,11 @@
 package ca.ualberta.cs.opgoaltracker.models;
 
 /**
- * Created by malon_000 on 2017-10-23.
+ * This Restriction object contains all admin acount setting information.
+ * @author Ma Long
+ * @version 1.0
+ * @since 1.0
  */
-
 public abstract class Restriction {
     int size;
     
