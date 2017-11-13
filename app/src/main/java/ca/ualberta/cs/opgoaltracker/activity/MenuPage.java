@@ -6,6 +6,8 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -17,7 +19,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
@@ -39,6 +50,9 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
 public class MenuPage extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,MyAccountFragment.OnFragmentInteractionListener,NewsFragment.OnFragmentInteractionListener,FriendFragment.OnFragmentInteractionListener,HabitFragment.OnFragmentInteractionListener,HabitEventFragment.OnFragmentInteractionListener{
 
+    private static final String FILENAME = "profile_file.sav";
+    String picturePath;
+    ImageButton button;
 
     Participant currentUser;
     Participant currentUser1;
@@ -88,8 +102,26 @@ public class MenuPage extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // https://stackoverflow.com/questions/33540090/textview-from-navigationview-header-returning-null
+        button = (ImageButton) navigationView.getHeaderView(0).findViewById(R.id.menu_profile_image);
+        loadFromFile();
+        //button.setImageResource(R.drawable.newevent);
+        //button.setImageResource(R.drawable.newevent);
     }
 
+    private void loadFromFile() {
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+            // Taken from https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples 2017-09-19
+            picturePath = gson.fromJson(in, String.class);
+            button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        } catch (FileNotFoundException e) {
+            button.setImageResource(R.drawable.newevent);
+        }
+    }
 
     /**
      * Default Navigation Drawer onBackPressed method.
