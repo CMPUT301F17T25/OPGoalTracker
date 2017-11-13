@@ -57,11 +57,9 @@ public class HabitAddActivity extends AppCompatActivity {
         checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunAdd);
     }
 
-    public void buttonCreate (View view) {
+    public void buttonCreate(View view) {
         title = titleBox.getText().toString();
-
         reason = reasonBox.getText().toString();
-
         date = new Date(calendarView.getDate());
 
         period = new ArrayList<Boolean>();

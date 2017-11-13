@@ -10,20 +10,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
+import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 
 public class HabitDetailActivity extends AppCompatActivity {
 
+    private EditText titleBox;
+    private EditText reasonBox;
+    private CalendarView calendarView;
+    private CheckBox checkBoxMon;
+    private CheckBox checkBoxTue;
+    private CheckBox checkBoxWed;
+    private CheckBox checkBoxThur;
+    private CheckBox checkBoxFri;
+    private CheckBox checkBoxSat;
+    private CheckBox checkBoxSun;
+
     private Habit habit;
-    private EditText title;
-    private EditText reason;
-    private CalendarView calendar;
+    private String title;
+    private String reason;
+    private Date date;
+    private ArrayList<Boolean> period;
 
 
     @Override
@@ -33,14 +51,62 @@ public class HabitDetailActivity extends AppCompatActivity {
 
         habit = (Habit) getIntent().getExtras().getParcelable("Habit");
 
-        title = (EditText) findViewById(R.id.editTitleDetail);
-        reason = (EditText) findViewById(R.id.editReasonDetail);
-        calendar = (CalendarView) findViewById(R.id.calendarViewDetail);
+        titleBox = (EditText) findViewById(R.id.editTitleDetail);
+        reasonBox = (EditText) findViewById(R.id.editReasonDetail);
+        calendarView = (CalendarView) findViewById(R.id.calendarViewDetail);
+        checkBoxMon = (CheckBox) findViewById(R.id.checkBoxMonDetail);
+        checkBoxTue = (CheckBox) findViewById(R.id.checkBoxTueDetail);
+        checkBoxWed = (CheckBox) findViewById(R.id.checkBoxWedDetail);
+        checkBoxThur = (CheckBox) findViewById(R.id.checkBoxThurDetail);
+        checkBoxFri = (CheckBox) findViewById(R.id.checkBoxFriDetail);
+        checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatDetail);
+        checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunDetail);
 
-        title.setText(habit.getHabitType());
-        reason.setText(habit.getReason());
+        titleBox.setText(habit.getHabitType());
+        reasonBox.setText(habit.getReason());
+        calendarView.setDate(habit.getDate().getTime(), false, true);
+        checkBoxMon.setChecked(habit.getPeriod().get(0));
+        checkBoxTue.setChecked(habit.getPeriod().get(1));
+        checkBoxWed.setChecked(habit.getPeriod().get(2));
+        checkBoxThur.setChecked(habit.getPeriod().get(3));
+        checkBoxFri.setChecked(habit.getPeriod().get(4));
+        checkBoxSat.setChecked(habit.getPeriod().get(5));
+        checkBoxSun.setChecked(habit.getPeriod().get(6));
+    }
 
-        calendar.setDate(habit.getDate().getTime(), false, true);
+    public void buttonSave(View view) {
+        title = titleBox.getText().toString();
+        reason = reasonBox.getText().toString();
+        date = new Date(calendarView.getDate());
+
+        period = new ArrayList<Boolean>();
+        period.add(checkBoxMon.isChecked());
+        period.add(checkBoxTue.isChecked());
+        period.add(checkBoxWed.isChecked());
+        period.add(checkBoxThur.isChecked());
+        period.add(checkBoxFri.isChecked());
+        period.add(checkBoxSat.isChecked());
+        period.add(checkBoxSun.isChecked());
+
+        try {
+            habit.setHabitType(title);
+        } catch (StringTooLongException exc) {
+            Toast.makeText(getApplicationContext(), "Too Many Characters",
+                    Toast.LENGTH_SHORT).show();
+        } catch (NoTitleException exc) {
+            Toast.makeText(getApplicationContext(), "Please Enter Title",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            habit.setReason(reason);
+        } catch (StringTooLongException exc) {
+            Toast.makeText(getApplicationContext(), "Too Many Characters",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        habit.setDate(date);
+        habit.setPeriod(period);
     }
 
     // create an action bar button

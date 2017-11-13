@@ -179,16 +179,22 @@ public class Habit implements Parcelable {
 
     /**
      * Basic Date setter
-     * @param date Long
+     * @param date: Long
      */
     public void setDate(Date date) {
         this.date = date;
     }
 
-    public ArrayList<Boolean> getPeriod() {
-        return period;
-    }
+    /**
+     * Basic period getter
+     * @return period ArrayList<Boolean>
+     */
+    public ArrayList<Boolean> getPeriod() {return period; }
 
+    /**
+     * Basic
+     * @param period
+     */
     public void setPeriod(ArrayList<Boolean> period) {
         this.period = period;
     }
