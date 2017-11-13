@@ -69,11 +69,6 @@ public class MainActivityTest {
         Espresso.onView(withId(R.id.userID)).perform(typeText(testUser.getId()));
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.signin)).perform(click());
-//        for (int i = 0; i < numItems; i++) {
-//            Espresso.onData(anything())
-//                    .inAdapterView(withId(R.id.list_habit)).atPosition(i)
-//                    .check(matches(isDisplayed()));
-//        }
 
 
     }
