@@ -1,4 +1,4 @@
-a<!--
+<!--
   ~ Copyright 2017 Yongjia Huang, Dichong Song, Mingwei Li, Donglin Han, Long Ma,CMPUT301F17T25 CMPUT301, University of Alberta, All Rights Reserved.
   ~ You may use distribut, or modify this code under terms and conditions of the ode of Student Behavior at University of Alberta
   ~ You may find a copy of the license in this project. Otherwise please contact jajayongjia@gmail.com
@@ -29,8 +29,8 @@ a<!--
         android:layout_height="match_parent">
         <ListView
             android:id="@+id/friendlist"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintTop_toBottomOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
