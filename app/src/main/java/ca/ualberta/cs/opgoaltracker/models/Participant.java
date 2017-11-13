@@ -35,6 +35,14 @@ public class Participant implements Parcelable {
      */
     public Participant(String id) {
         this.id = id;
+        habitList = new HabitList();
+        followeeList = new FriendList("followeeList");
+        followerList = new FriendList("followerList");
+        requestList = new FriendList("requestList");
+
+
+
+
     }
 
 

@@ -23,16 +23,23 @@ import ca.ualberta.cs.opgoaltracker.exception.DuplicatedHabitException;
  * @since 1.0
  */
 public class HabitList implements Parcelable {
-    private ArrayList<Habit> aHabitList;
+    private ArrayList<Habit> aHabitList ;
 
     /**
      * Basic HabitList getter
      * @return ArrayList<Habit></Habit>
      */
+    public  HabitList(){
+        aHabitList = new ArrayList<Habit>();
+    }
     public ArrayList<Habit> getHabitList() {
         return aHabitList;
     }
 
+
+    public int getListLen(){
+        return aHabitList.size();
+    }
     /**
      * Basic Habit getter
      * @param index the selected index of the Habit

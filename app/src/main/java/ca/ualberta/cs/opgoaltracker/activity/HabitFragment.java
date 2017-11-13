@@ -127,14 +127,14 @@ public class HabitFragment extends Fragment {
         habitList = new ArrayList<Habit>();
 
         // code for testing ListView
-        try {
+//        try {
             Date today = new Date();
             habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(today.getTime() + (1000 * 60 * 60 * 24)), 1, 1));
-        } catch (StringTooLongException e) {
-            e.printStackTrace();
-        } catch (NoTitleException e) {
-            e.printStackTrace();
-        }
+//        } catch (StringTooLongException e) {
+//            e.printStackTrace();
+//        } catch (NoTitleException e) {
+//            e.printStackTrace();
+//        }
 
         // Init adapter
         adapter = new HabitAdapter(getActivity(), habitList);

@@ -45,13 +45,13 @@ public class Habit implements Parcelable {
      * @throws StringTooLongException
      * @throws NoTitleException
      */
-    public Habit(String habitType, String reason, Date date, long startTime, long intervalTime) throws StringTooLongException,NoTitleException {
-        if(habitType.length() > admin.getTitleLength() || reason.length()> admin.getReasonLength() ) {
-            throw new StringTooLongException();
-        }
-        if(habitType.equals("")){
-            throw new NoTitleException();
-        }
+    public Habit(String habitType, String reason, Date date, long startTime, long intervalTime)  {
+//        if(habitType.length() > admin.getTitleLength() || reason.length()> admin.getReasonLength() ) {
+//            throw new StringTooLongException();
+//        }
+//        if(habitType.equals("")){
+//            throw new NoTitleException();
+//        }
         this.habitType = habitType;
         this.date = date;
         this.reason = reason;

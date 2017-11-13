@@ -57,7 +57,8 @@
         android:inputType="textPersonName"
         android:lineSpacingExtra="8sp"
         android:singleLine="true"
-        android:text="User name"
+        android:hint="User name"
+        android:textColorHint="#FFFFFF"
         android:textAlignment="viewStart"
 
 

@@ -167,9 +167,6 @@ public class MenuPage extends AppCompatActivity
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,myAccountFragment ,myAccountFragment .getTag()).commit();
         }
-//        else{
-//            Toast.makeText(MenuPage.this, "Got you!", Toast.LENGTH_SHORT).show();
-//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
