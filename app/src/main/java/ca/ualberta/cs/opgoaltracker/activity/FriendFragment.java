@@ -7,7 +7,6 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,11 +17,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
@@ -34,7 +38,11 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  * create an instance of this fragment.
  */
 public class FriendFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+    // variables for Friend ListView
+
+    private ArrayList<Participant>  followingList;
+    private ArrayList<Participant>  followerList;
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -44,9 +52,10 @@ public class FriendFragment extends Fragment {
     private String mParam2;
     private FragmentActivity context;
     private Participant currentUser;
-    View view;
-    ConstraintLayout constraintLayout;
-    TabLayout tabLayout;
+
+    private View view;
+    private ConstraintLayout constraintLayout;
+    private TabLayout tabLayout;
 
     private OnFragmentInteractionListener mListener;
 
@@ -75,10 +84,16 @@ public class FriendFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     @Override
@@ -90,27 +105,45 @@ public class FriendFragment extends Fragment {
                 .setActionBarTitle("My Friends");
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
+
         constraintLayout = (ConstraintLayout) view.findViewById(R.id.constraintLayout);
         tabLayout = (TabLayout) view.findViewById(R.id.simpleTabLayout);
-        // Create a new Tab named "First"
+
+        // Create a new Tab named "following"
         TabLayout.Tab firstTab = tabLayout.newTab();
         firstTab.setText("following"); // set the Text for the first Tab
         firstTab.setIcon(R.drawable.ic_launcher); // set an icon for the
-        // first tab
         tabLayout.addTab(firstTab); // add  the tab at in the TabLayout
 
-        // Create a new Tab named "Second"
+        // Create a new Tab named "follower"
         TabLayout.Tab secondTab = tabLayout.newTab();
         secondTab.setText("follower"); // set the Text for the second Tab
         secondTab.setIcon(R.drawable.ic_launcher); // set an icon for the second tab
         tabLayout.addTab(secondTab); // add  the tab  in the TabLayout
 
+        if (currentUser == null){
+            currentUser = new Participant("111");
+        }
+        try {
+            followingList = currentUser.getFollowingList();
+            followerList = currentUser.getFollowerList();
+        }catch(UndefinedException e){
+            followingList = new ArrayList<Participant>();
+            followerList = new ArrayList<Participant>();
+        }
+
+        final Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("followingList", followingList);
+        bundle.putParcelableArrayList("followerList", followerList);
+        //go to FriendSearchActivty
         FloatingActionButton addFriend = (FloatingActionButton) view.findViewById(R.id.add_friend);
         addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Click action
                 Intent intent = new Intent(getActivity(), FriendSearchActivity.class);
+                intent.putParcelableArrayListExtra("followingList", followingList);
+                intent.putExtra("LOGINUSER", currentUser);
                 startActivity(intent);
             }
         });
@@ -124,10 +157,12 @@ public class FriendFragment extends Fragment {
                 Fragment fragment = null;
                 switch (tab.getPosition()) {
                     case 0:
-                        fragment = new FollowingList();
+                        fragment = new FollowingListFragment();
+                        fragment.setArguments(bundle);
                         break;
                     case 1:
-                        fragment = new FollowerList();
+                        fragment = new FollowerListFragment();
+                        fragment.setArguments(bundle);
                         break;
                 }
                 FragmentManager fm = context.getSupportFragmentManager();
@@ -151,6 +186,7 @@ public class FriendFragment extends Fragment {
         return view;
 
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -187,7 +223,7 @@ public class FriendFragment extends Fragment {
      * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * >Communicating with Other Fragments</a> for more informatio 256n.
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name

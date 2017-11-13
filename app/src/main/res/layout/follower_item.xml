@@ -41,24 +41,6 @@
             android:text="UserName"
             android:textColor="#2D9DC8"
             android:textSize="30dp" />
-
-        <CheckBox
-            android:id="@+id/like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/unfollow"
-            android:layout_alignBottom="@+id/unfollow"
-            android:layout_toStartOf="@+id/unfollow"
-            android:text="" />
-
-        <Button
-            android:id="@+id/unfollow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/location"
-            android:layout_alignParentEnd="true"
-            android:text="unfollow" />
-
     </RelativeLayout>
 
 
