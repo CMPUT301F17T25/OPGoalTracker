@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -111,9 +112,16 @@ public class MenuPage extends AppCompatActivity
         loadFromFile();
         //button.setImageResource(R.drawable.newevent);
         //button.setImageResource(R.drawable.newevent);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadFromFile();
+            }
+        });
     }
 
-    private void loadFromFile() {
+    public void loadFromFile() {
         try {
             FileInputStream fis = openFileInput(FILENAME);
             BufferedReader in = new BufferedReader(new InputStreamReader(fis));
