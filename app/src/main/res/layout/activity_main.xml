@@ -58,6 +58,7 @@
         android:background="#33f7fafb"
         android:ems="10"
         android:hint="User name"
+        android:textColorHint="#FFFFFF"
 
 
         android:inputType="textPersonName"

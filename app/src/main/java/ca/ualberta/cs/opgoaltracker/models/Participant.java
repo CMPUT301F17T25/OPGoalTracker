@@ -25,7 +25,7 @@ import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
  */
 public class Participant implements Parcelable {
     private Photograph avatar;
-    private HabitList habitList;
+    private ArrayList<Habit> habitList;
     private ArrayList<Participant> followerList;
     private ArrayList<Participant> followingList;
     private FriendList requestList;
@@ -37,7 +37,7 @@ public class Participant implements Parcelable {
      */
     public Participant(String id) {
         this.id = id;
-        habitList = new HabitList();
+        habitList = new ArrayList<Habit>();
         followerList = new ArrayList<Participant>();
         followingList = new ArrayList<Participant>();
         requestList = new FriendList("requestList");
@@ -79,7 +79,7 @@ public class Participant implements Parcelable {
      * @return habitList : HabitList
      * @see HabitList
      */
-    public HabitList getHabitList(){
+    public ArrayList<Habit> getHabitList(){
         return habitList;
     }
 
@@ -89,7 +89,7 @@ public class Participant implements Parcelable {
      * @throws UndefinedException
      * @see HabitList
      */
-    public void setHabitList(HabitList habitList) throws UndefinedException {
+    public void setHabitList(ArrayList<Habit> habitList) throws UndefinedException {
         if (habitList==null) {
             throw new UndefinedException();
         }
@@ -158,52 +158,61 @@ public class Participant implements Parcelable {
         this.requestList=requestList;
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     * @param in
-     */
+
     protected Participant(Parcel in) {
         avatar = (Photograph) in.readValue(Photograph.class.getClassLoader());
-        habitList = (HabitList) in.readValue(HabitList.class.getClassLoader());
-        followerList = new ArrayList<Participant>();
-        followingList = new ArrayList<Participant>();
-        in.readList(followerList,Participant.class.getClassLoader());
-        in.readList(followingList,Participant.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            habitList = new ArrayList<Habit>();
+            in.readList(habitList, Habit.class.getClassLoader());
+        } else {
+            habitList = null;
+        }
+        if (in.readByte() == 0x01) {
+            followerList = new ArrayList<Participant>();
+            in.readList(followerList, Participant.class.getClassLoader());
+        } else {
+            followerList = null;
+        }
+        if (in.readByte() == 0x01) {
+            followingList = new ArrayList<Participant>();
+            in.readList(followingList, Participant.class.getClassLoader());
+        } else {
+            followingList = null;
+        }
         requestList = (FriendList) in.readValue(FriendList.class.getClassLoader());
         id = in.readString();
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     * @return
-     */
     @Override
     public int describeContents() {
         return 0;
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     * @param dest
-     * @param flags
-     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(avatar);
-        dest.writeValue(habitList);
-        dest.writeList(followerList);
-        dest.writeList(followingList);
+        if (habitList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(habitList);
+        }
+        if (followerList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(followerList);
+        }
+        if (followingList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(followingList);
+        }
         dest.writeValue(requestList);
         dest.writeString(id);
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     */
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<Participant> CREATOR = new Parcelable.Creator<Participant>() {
         @Override

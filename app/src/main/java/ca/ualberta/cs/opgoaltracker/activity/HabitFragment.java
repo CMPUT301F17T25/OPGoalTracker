@@ -27,9 +27,11 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.HabitList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 import static android.R.id.summary;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,6 +48,7 @@ public class HabitFragment extends Fragment {
     private ArrayList<Habit> habitList;
     private ListView lvHabit;
     private HabitAdapter adapter;
+    private static final int REQUEST_CODE_ONE = 1;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -103,17 +106,7 @@ public class HabitFragment extends Fragment {
         // create Habit ListView
         // TODO: change this part to fit the variable passed from MainActivity
         lvHabit = (ListView) view.findViewById(R.id.list_habit);
-        habitList = currentUser.getHabitList().getHabitList();
-
-        // code for testing ListView
-//        try {
-            Date today = new Date();
-            habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(today.getTime() + (1000 * 60 * 60 * 24)),new ArrayList<Boolean>()));
-//        } catch (StringTooLongException e) {
-//            e.printStackTrace();
-//        } catch (NoTitleException e) {
-//            e.printStackTrace();
-//        }
+        habitList = currentUser.getHabitList();
 
         // Init adapter
         adapter = new HabitAdapter(getActivity(), habitList);
@@ -126,7 +119,7 @@ public class HabitFragment extends Fragment {
             public void onClick(View view) {
                 // Click action
                 Intent intent = new Intent(getActivity(), HabitAddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_ONE);
             }
         });
 
@@ -153,6 +146,17 @@ public class HabitFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void  onActivityResult(int requestCode,int resultCode, Intent data){
+        if (requestCode == REQUEST_CODE_ONE){
+            if(resultCode == RESULT_OK){
+                Habit newHabit = data.getParcelableExtra("Habit");
+                habitList.add(newHabit);
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

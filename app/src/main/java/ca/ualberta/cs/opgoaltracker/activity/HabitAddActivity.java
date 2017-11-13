@@ -74,7 +74,8 @@ public class HabitAddActivity extends AppCompatActivity {
         habit = new Habit(title, reason, date, period);
 
         Intent intent = new Intent(this, MenuPage.class);
-        intent.putExtra("Habit", (Parcelable) habit);
-        startActivity(intent);
+        intent.putExtra("Habit", habit);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 }
