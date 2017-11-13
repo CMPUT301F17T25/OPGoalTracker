@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Admin;
 
 
 /**
@@ -20,58 +22,73 @@ import ca.ualberta.cs.opgoaltracker.R;
  * <br>
  * This page allows user to create a Participant type user ID
  * User can either go back to login page or finish sign up process and jump to the next page.
+ * sign up for  first admin account and  be able to sign in , do changes in admin account page
  * <br>
- * @author Yongjia Huang
+ * @author Yongjia Huang , Donglin Han
  * @version 3.0
  * @see AppCompatActivity
  * @since 1.0
  */
-public class Register_activity extends AppCompatActivity {
+public class Register_activity extends AppCompatActivity implements View.OnClickListener{
+    private EditText usernameText;
+    private Button addTrySignInButton;
+    private Button addRegisterButton;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_register_activity);
-        configureTrySignInButton();
-        configureRegisterButton();
+
+        usernameText = (EditText) findViewById(R.id.user_id);
+
+        addTrySignInButton = (Button) findViewById(R.id.trysignin);
+        addTrySignInButton.setOnClickListener(this);
+
+        addRegisterButton = (Button) findViewById(R.id.register);
+        addRegisterButton.setOnClickListener(this);
+
     }
 
-
-    /**
-     * Configure TrySignIn Button
-     * This method create the TrySignIn Button on the Register Page
-     * This Button brings User back to the Login Page
-     * After User click this button, thie Register Activity will be closed.
-     */
-    private void configureTrySignInButton(){
-        Button addTrySignInButton = (Button) findViewById(R.id.trysignin);
-        addTrySignInButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-
-                startActivity(new Intent(Register_activity.this, MainActivity.class));//Let signup buttion jump to Register activity page.
-                finish();
-            }
-
-        });
+    @Override
+    public void onClick(View view) {
+        // TODO should we enable log in functionality only in the MainActivity?
+        if(view == addTrySignInButton) {
+            startActivity(new Intent(this, MainActivity.class));
+        } else if (view == addRegisterButton) {
+            addUser();
+            finish();
+        }
     }
 
     /**
-     * Configure RegisterButton
-     * This method create the Register Button on the Register Page
-     * This Button brings User directly to the Habit Page
-     * After User click this button, thie Register Activity will be closed.
+     * For admin sign up, add admin user if ID start with "admin"
+     * @author donglin
+     * @since 1.0
+     * @see AdminActivity
      */
-    private void configureRegisterButton(){
-        Button addRegisterButton = (Button) findViewById(R.id.register);
-        addRegisterButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
+    public void addUser() {
+        String username = usernameText.getText().toString();
 
-                startActivity(new Intent(Register_activity.this, MenuPage.class));//Let signup buttion jump to Register activity page.
-                finish();
-            }
-
-        });
+        // TODO assume all admin user has username starting with "admin". This logic should be changed in the future
+        if(username.startsWith("admin")) {
+            addAdminUser(username);
+        } else {
+            // TODO implement method to add a regular user
+        }
     }
+
+    /**
+     * With Gson, connect data to add adminuser, save in json
+     * @param username
+     * @see AdminIOGson
+     * @see AdminActivity
+     */
+    public void addAdminUser(String username) {
+        // TODO sign up the first admin user via this register page, later admin users should be created by an existing admin
+        AdminIOGson adminIOGson = new AdminIOGson();
+        adminIOGson.saveAdminInFile(new Admin(username), this);
+    }
+
 }

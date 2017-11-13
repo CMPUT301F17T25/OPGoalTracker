@@ -7,9 +7,11 @@
 package ca.ualberta.cs.opgoaltracker.models;
 
 /**
- * Created by malon_000 on 2017-10-22.
+ * This is the SuperClass object for Admin and Participant
+ * @author Ma Long
+ * @version 1.0
+ * @since 1.0
  */
-
 public abstract class User {
     private String id;
 

@@ -12,15 +12,15 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add your follower!" />
+    <!--<TextView-->
+    <!--android:id="@+id/title"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Add your follower!" />-->
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="439dp" />
+    <!--<ListView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="439dp" />-->
 
     <EditText
         android:id="@+id/userID"

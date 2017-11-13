@@ -19,6 +19,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.widget.ImageButton;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class MenuPage extends AppCompatActivity
     ImageButton button;
 
     Participant currentUser;
+    Participant currentUser1;
     HabitFragment habitFragment = new HabitFragment();
     HabitEventFragment habitEventFragment = new HabitEventFragment();
     FriendFragment friendFragment = new   FriendFragment();
@@ -67,17 +69,33 @@ public class MenuPage extends AppCompatActivity
         setContentView(R.layout.activity_menu_page);
 
         currentUser = getIntent().getParcelableExtra("LOGINUSER");
-
+        currentUser1 = getIntent().getParcelableExtra("REQUESTADDFRIEND");
         if (savedInstanceState == null) {
-            Bundle args = new Bundle();
-            args.putParcelable("CURRENTUSER",currentUser);
-            habitFragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, habitFragment).commit();
+            if (currentUser1!= null){
+                Bundle args = new Bundle();
+                args.putParcelable("CURRENTUSER",currentUser1);
+                friendFragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, friendFragment).commit();
+            }else{
+                Bundle args = new Bundle();
+                args.putParcelable("CURRENTUSER",currentUser);
+                habitFragment.setArguments(args);
+                getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, habitFragment).commit();
+            }
+
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
+//        if(drawer.isDrawerOpen(GravityCompat.START)) {
+//            Toast.makeText(MenuPage.this, "Got you!", Toast.LENGTH_SHORT).show();
+//        }
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -168,30 +186,33 @@ public class MenuPage extends AppCompatActivity
         args.putParcelable("CURRENTUSER",currentUser);
 
         if (id == R.id.habit) {
+            this.setTitle("Habit");
             habitFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
         } else if (id == R.id.habitEvent) {
+            this.setTitle("Habit Event");
             habitEventFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,habitEventFragment,habitEventFragment.getTag()).commit();
 
         } else if (id == R.id.friends) {
+            this.setTitle("My Friends");
             friendFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,friendFragment,friendFragment.getTag()).commit();
 
         } else if (id == R.id.social) {
+            this.setTitle("News");
             newsFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,newsFragment ,newsFragment .getTag()).commit();
 
         } else if (id == R.id.setting) {
+            this.setTitle("My Account");
             myAccountFragment.setArguments(args);
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.relativeLayout_1,myAccountFragment ,myAccountFragment .getTag()).commit();
-
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

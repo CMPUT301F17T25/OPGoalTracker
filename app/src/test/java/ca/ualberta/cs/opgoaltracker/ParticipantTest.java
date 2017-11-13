@@ -10,6 +10,8 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
@@ -38,7 +40,7 @@ public class ParticipantTest extends ActivityInstrumentationTestCase2 {
     public void testgetNormalTest() throws UndefinedException {
         Participant participant = new Participant("normal");
         assertEquals(participant.getId(),"normal");
-        FriendList followerList = new FriendList("follower");
+        ArrayList<Participant> followerList = new ArrayList<Participant>();
         participant.setFollowerList(followerList);
         participant.getFollowerList();
     }
@@ -65,9 +67,5 @@ public class ParticipantTest extends ActivityInstrumentationTestCase2 {
         Participant participant = new Participant("NoFollowerList");
         participant.getFollowerList();
     }
-    @Test(expected = UndefinedException.class)
-    public void getNoFolloweeList() throws UndefinedException {
-        Participant participant = new Participant("NoFolloweeList");
-        participant.getFolloweeList();
-    }
+
 }

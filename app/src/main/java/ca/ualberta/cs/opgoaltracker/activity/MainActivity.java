@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Admin;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 import ca.ualberta.cs.opgoaltracker.models.User;
 
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText userID;
     private String name;
     private String name2;
+    private ArrayList<Admin> adminList;
 
 
     /**
@@ -92,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 startActivity(new Intent(MainActivity.this, Register_activity.class));//Let signup buttion jump to Register activity page.
-                finish();
+//                finish();
             }
 
         });
@@ -104,6 +106,14 @@ public class MainActivity extends AppCompatActivity {
      * <br>
      * SignIn Button checks User's input ID and bring user to next page
      * If User ID is invalid, show hit message
+     *
+     * For admin :
+     * add an additional check to see if the user is an admin user. if so put extra to put its id so that i
+     * in AdminActivity which is current admin known
+     *
+     * @author donglin
+     * @see AdminActivity
+     * @since 2.0
      */
     private void configureSignInButton(){
         Button addSignInButton = (Button) findViewById(R.id.signin);
@@ -117,6 +127,10 @@ public class MainActivity extends AppCompatActivity {
                     i.putExtra("LOGINUSER", currentUser);
                     startActivity(i);
 
+                } else if (name.startsWith("admin") && isAdminExistent()) {
+                    Intent adminIntent = new Intent(MainActivity.this, AdminActivity.class);
+                    adminIntent.putExtra("ADMINID", name);
+                    startActivity(adminIntent);
                 }
                 else{
                     Toast.makeText(MainActivity.this, "Invalid User ID !", Toast.LENGTH_SHORT).show();
@@ -124,6 +138,26 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    /**
+     * check if the admin id is the same with corresponding json file name
+     * @author donglin
+     * @since 2.0
+     * @return
+     */
+    public boolean isAdminExistent() {
+        String[] jsonFileList = this.fileList();
+        String adminName;
+        // TODO may need to start i from 1 instead of 0
+        for(int i = 0; i < jsonFileList.length; i++) {
+            adminName = jsonFileList[i].replace(".json", "");
+            if(this.name.equals(adminName)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
