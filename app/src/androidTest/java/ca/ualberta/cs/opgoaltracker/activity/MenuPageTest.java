@@ -1,6 +1,7 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 
+import android.support.test.espresso.Espresso;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
 import android.support.test.rule.ActivityTestRule;
@@ -10,11 +11,14 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.HabitList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
@@ -32,9 +36,13 @@ public class MenuPageTest {
 
     private Participant testUser = new Participant("111");
     private String title ;
+    private HabitList testHabitList;
+    private Habit testHabit;
+    private int numItems;
 
     @Before
     public void setUp() throws Exception {
+
     }
 
     @Test
