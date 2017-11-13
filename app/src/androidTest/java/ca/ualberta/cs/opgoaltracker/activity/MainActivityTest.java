@@ -82,9 +82,9 @@ public class MainActivityTest {
 
     }
 
-    @Test
-    public void isAdminExistent() throws Exception {
-
-    }
+//    @Test
+//    public void isAdminExistent() throws Exception {
+//
+//    }
 
 }
