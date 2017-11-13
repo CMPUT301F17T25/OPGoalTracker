@@ -179,26 +179,29 @@ public class MyAccountFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
+            try {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
 
-            Cursor cursor = getActivity().getApplicationContext().getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                picturePath = cursor.getString(columnIndex);
+                cursor.close();
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            picturePath = cursor.getString(columnIndex);
-            cursor.close();
+                btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
 
-            btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                //button.setImageResource(R.drawable.newevent);
+                //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                Toast.makeText(getActivity().getApplicationContext(), picturePath, Toast.LENGTH_SHORT).show();
 
-            //button.setImageResource(R.drawable.newevent);
-            //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            Toast.makeText(getActivity().getApplicationContext(),picturePath,Toast.LENGTH_SHORT).show();
+                saveInFile();
+            } catch (Exception e){
 
-            saveInFile();
+            }
         }
     }
 
