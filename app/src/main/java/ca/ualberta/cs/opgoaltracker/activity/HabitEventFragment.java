@@ -7,19 +7,24 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,9 +35,11 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -64,6 +71,9 @@ public class HabitEventFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     View view;
+
+
+    ArrayList<HabitEvent> displayList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -109,17 +119,9 @@ public class HabitEventFragment extends Fragment {
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
 
-        ArrayList<HabitEvent> displayList = new ArrayList<HabitEvent>();
-        try {
-            displayList.add(new HabitEvent("test","this is comment",new Date()));
-        } catch (CommentTooLongException e) {
-            e.printStackTrace();
-        }
-        try {
-            displayList.add(new HabitEvent("test","test picture",new Date()));
-        } catch (CommentTooLongException e) {
-            e.printStackTrace();
-        }
+        displayList = new ArrayList<HabitEvent>();
+        // add events to test the adapter
+
         HabitEventAdapter adapter = new HabitEventAdapter(getActivity(),displayList);
         final ListView listview=(ListView)view.findViewById(R.id.list_event);
         listview.setAdapter(adapter);
@@ -146,7 +148,7 @@ public class HabitEventFragment extends Fragment {
                     //https://stackoverflow.com/questions/4352172/how-do-you-pass-images-bitmaps-between-android-activities-using-bundles/7890405#7890405
                     //17-11-06
                 }
-                startActivity(intent);
+                startActivityForResult(intent,0);
             }
         });
         //handles button
@@ -155,7 +157,7 @@ public class HabitEventFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), HabitEventAddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
 
@@ -163,9 +165,13 @@ public class HabitEventFragment extends Fragment {
 
 
 
+
+
         return view;
 
     }
+
+
 
 
 
@@ -192,6 +198,8 @@ public class HabitEventFragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+
 
 
     /**
@@ -239,6 +247,22 @@ public class HabitEventFragment extends Fragment {
 
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode){ //if the activity was to create a new event
+            case 1:
+                if (resultCode== AppCompatActivity.RESULT_OK) {
+                    Log.d("start", "end");
+                    HabitEvent a = data.getParcelableExtra("event");
+                    displayList.add(a);
+                    HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
+                    final ListView listview = (ListView) view.findViewById(R.id.list_event);
+                    listview.setAdapter(adapter);
+
+                    Log.d("return", "event");
+                }
+                break;
         }
     }
 }

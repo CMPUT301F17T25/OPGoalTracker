@@ -63,6 +63,7 @@ public class MainActivityTest {
         testHabitList.add(testHabit);
         numItems = testHabitList.size();
 
+
     }
     @Test
     public void testLoginScenario(){
