@@ -54,21 +54,23 @@ public class MenuPage extends AppCompatActivity
         setContentView(R.layout.activity_menu_page);
 
         currentUser = getIntent().getParcelableExtra("LOGINUSER");
-        currentUser1 = getIntent().getParcelableExtra("REQUESTADDFRIEND");
-        if (savedInstanceState == null) {
-            if (currentUser1!= null){
+        if (currentUser == null){
+            currentUser = getIntent().getParcelableExtra("NEWFOLLOWUSER");
                 Bundle args = new Bundle();
-                args.putParcelable("CURRENTUSER",currentUser1);
+                args.putParcelable("CURRENTUSER", currentUser);
                 friendFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, friendFragment).commit();
-            }else{
-                Bundle args = new Bundle();
-                args.putParcelable("CURRENTUSER",currentUser);
-                habitFragment.setArguments(args);
-                getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, habitFragment).commit();
-            }
-
         }
+        else {
+            Bundle args = new Bundle();
+            args.putParcelable("CURRENTUSER", currentUser);
+            habitFragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, habitFragment).commit();
+        }
+
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

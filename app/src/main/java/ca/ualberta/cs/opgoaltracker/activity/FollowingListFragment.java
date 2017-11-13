@@ -74,6 +74,7 @@ public class FollowingListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.friendlist);
         adapter = new FollowingAdapter(getActivity(),followingList);
         listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         return view;
     }

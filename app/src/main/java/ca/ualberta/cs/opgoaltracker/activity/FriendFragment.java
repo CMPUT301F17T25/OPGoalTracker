@@ -147,6 +147,14 @@ public class FriendFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        Fragment fragment = null;
+        fragment = new FollowingListFragment();
+        fragment.setArguments(bundle);
+        FragmentManager fm = context.getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.constraintLayout, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
 
 
         // perform setOnTabSelectedListener event on TabLayout

@@ -49,7 +49,7 @@ public class FriendFollowActivity extends AppCompatActivity {
 
         TextView name = (TextView)findViewById(R.id.name);
         name.setText(userID);
-        Button followButton = (Button) findViewById(R.id.follow);
+        final Button followButton = (Button) findViewById(R.id.follow);
 
         followButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -59,9 +59,9 @@ public class FriendFollowActivity extends AppCompatActivity {
 
                 //TODO: verify that friend has already been added. This part should be connected to server later
                 Log.d("followingList:",followingList.get(0).getId());
-
+                currentUser.setFollowingList(followingList);
                 Intent intent = new Intent(FriendFollowActivity.this, MenuPage.class);
-                intent.putExtra("REQUESTADDFRIEND", currentUser);
+                intent.putExtra("NEWFOLLOWUSER", currentUser);
                 startActivity(intent);
                 //intent.putExtra("followingList", (Parcelable) followingList);
                 finish();
