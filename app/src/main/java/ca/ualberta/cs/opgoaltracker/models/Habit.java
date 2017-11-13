@@ -10,6 +10,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
@@ -20,7 +21,7 @@ import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
  * This Habit Object allows User to do the implementation to the Habit <br>
  *     This Habit object is passable by intent<br>
  *
- * @author Dichong Song, Yongjia Huang
+ * @author Dichong Song, Yongjia Huang, Mingwei Li
  * @version 3.0
  * @see Parcelable
  * @since 1.0
@@ -30,8 +31,7 @@ public class Habit implements Parcelable {
     private String habitType;
     private String reason;
     private Date date;
-    private long startTime;
-    private long intervalTime;
+    private ArrayList<Boolean> period;
     Admin admin = new Admin("admin");
 
     /**
@@ -40,12 +40,11 @@ public class Habit implements Parcelable {
      * @param habitType : String
      * @param reason : String
      * @param date : Date
-     * @param startTime : Long
-     * @param intervalTime : Long
+     * @param period : ArrayList<Boolean>
      * @throws StringTooLongException
      * @throws NoTitleException
      */
-    public Habit(String habitType, String reason, Date date, long startTime, long intervalTime)  {
+    public Habit(String habitType, String reason, Date date, ArrayList<Boolean> period)  {
 //        if(habitType.length() > admin.getTitleLength() || reason.length()> admin.getReasonLength() ) {
 //            throw new StringTooLongException();
 //        }
@@ -55,9 +54,9 @@ public class Habit implements Parcelable {
         this.habitType = habitType;
         this.date = date;
         this.reason = reason;
-        this.startTime = startTime;
-        this.intervalTime = intervalTime;
+        this.period = period;
     }
+
 
     /**
      * Default Parcel method , implement Parcelable
@@ -82,8 +81,7 @@ public class Habit implements Parcelable {
         out.writeString(reason);
         // Write long value of Date
         out.writeLong(date.getTime());
-        out.writeLong(startTime);
-        out.writeLong(intervalTime);
+        out.writeList(period);
     }
 
     /**
@@ -96,8 +94,7 @@ public class Habit implements Parcelable {
         reason = in.readString();
         // Read Long value and convert to date
         date = new Date(in.readLong());
-        startTime = in.readLong();
-        intervalTime = in.readLong();
+        period = in.readArrayList(null);
 
     }
 
@@ -127,6 +124,7 @@ public class Habit implements Parcelable {
     };
     // end of implementing Parcelable
 
+
     /**
      * Basic Habit Type getter
      * @return habitType : String
@@ -150,18 +148,6 @@ public class Habit implements Parcelable {
     public Date getDate() {
         return date;
     }
-
-    /**
-     * Basic Start time getter
-     * @return startTime : Long
-     */
-    public long getStartTime(){return startTime;}
-
-    /**
-     * Basic Interval time getter
-     * @return interval time : Long
-     */
-    public long getIntervalTime(){return intervalTime;}
 
     /**
      * Basic HabitType setter
@@ -199,13 +185,11 @@ public class Habit implements Parcelable {
         this.date = date;
     }
 
-    /**
-     * Basic Period setter ( including both start time and interval time )
-     * @param startTime : Long
-     * @param intervalTime : Long
-     */
-    public void setPeriod(long startTime, long intervalTime){
-        this.startTime = startTime;
-        this.intervalTime = intervalTime;
+    public ArrayList<Boolean> getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(ArrayList<Boolean> period) {
+        this.period = period;
     }
 }
