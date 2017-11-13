@@ -105,30 +105,30 @@ public class HabitFragment extends Fragment {
         lvHabit = (ListView) view.findViewById(R.id.list_habit);
         habitList = currentUser.getHabitList().getHabitList();
 
-//        // code for testing ListView
+        // code for testing ListView
 //        try {
-//            Date today = new Date();
-//            habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(today.getTime() + (1000 * 60 * 60 * 24)), 1, 1));
+            Date today = new Date();
+            habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(today.getTime() + (1000 * 60 * 60 * 24)),new ArrayList<Boolean>()));
 //        } catch (StringTooLongException e) {
 //            e.printStackTrace();
 //        } catch (NoTitleException e) {
 //            e.printStackTrace();
 //        }
 
-//        // Init adapter
-//        adapter = new HabitAdapter(getActivity(), habitList);
-//        lvHabit.setAdapter(adapter);
-//
-//        // jump to HabitAddActivity if floating action button is clicked
-//        FloatingActionButton add_habit = (FloatingActionButton) view.findViewById(R.id.add_habit);
-//        add_habit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Click action
-//                Intent intent = new Intent(getActivity(), HabitAddActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        // Init adapter
+        adapter = new HabitAdapter(getActivity(), habitList);
+        lvHabit.setAdapter(adapter);
+
+        // jump to HabitAddActivity if floating action button is clicked
+        FloatingActionButton add_habit = (FloatingActionButton) view.findViewById(R.id.add_habit);
+        add_habit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Click action
+                Intent intent = new Intent(getActivity(), HabitAddActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
 
@@ -138,21 +138,21 @@ public class HabitFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-//        // refresh ListView
-//        adapter = new HabitAdapter(getActivity(), habitList);
-//        lvHabit.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
+        // refresh ListView
+        adapter = new HabitAdapter(getActivity(), habitList);
+        lvHabit.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
 
-//        // call HabitDetailActivity by click rows of ListView
-//        lvHabit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
-//                intent.putExtra("Habit", (Parcelable) habitList.get(position));
-//                startActivity(intent);
-//            }
-//        });
+        // call HabitDetailActivity by click rows of ListView
+        lvHabit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
+                intent.putExtra("Habit", (Parcelable) habitList.get(position));
+                startActivity(intent);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

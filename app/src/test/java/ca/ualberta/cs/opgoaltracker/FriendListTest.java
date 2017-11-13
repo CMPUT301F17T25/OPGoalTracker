@@ -12,9 +12,10 @@ import org.junit.Test;
 
 import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
 import ca.ualberta.cs.opgoaltracker.exception.OutOfBoundException;
-import ca.ualberta.cs.opgoaltracker.models.Admin;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 import ca.ualberta.cs.opgoaltracker.models.FriendList;
-import ca.ualberta.cs.opgoaltracker.models.User;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
  * Created by malon_000 on 2017-10-22.
@@ -36,16 +37,16 @@ public class FriendListTest extends ActivityInstrumentationTestCase2 {
     @Test
     public void testNothingWrong() throws OutOfBoundException {
         FriendList friendList = new FriendList("normal");
-        User a = new Admin("test");
+        Participant a = new Participant("test");
         friendList.add(a);
-        User b = new Admin("test1");
+        Participant b = new Participant("test1");
         friendList.add(b);
-        User c = new Admin("test2");
+        Participant c = new Participant("test2");
         friendList.add(c);
-        User d = friendList.getFriend(1);
+        Participant d = friendList.getFriend(1);
         assertEquals(d.getId(),b.getId());
         friendList.delete(1);
-        User e = friendList.getFriend(1);
+        Participant e = friendList.getFriend(1);
         assertEquals(e.getId(),c.getId());
     }
     @Test(expected = OutOfBoundException.class)

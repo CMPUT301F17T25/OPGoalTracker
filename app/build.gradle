@@ -28,7 +28,15 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2',{
+        exclude module: 'espresso-core'
+        exclude module: 'support-v4'
+        exclude module: 'recyclerview-v7'
+        exclude module: 'appcompat-v7'
+        exclude module: 'support-annotations'
+        exclude module: 'design'
+    })
+    androidTestCompile( 'com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('libs/gson-2.8.2.jar')
