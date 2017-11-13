@@ -10,6 +10,8 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import ca.ualberta.cs.opgoaltracker.activity.MainActivity;
 import ca.ualberta.cs.opgoaltracker.exception.OutOfBoundException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
@@ -19,6 +21,7 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
  * Created by malon_000 on 2017-10-22.
+ * modified by song on 2017/11/13
  */
 
 public class FriendListTest extends ActivityInstrumentationTestCase2 {
@@ -36,23 +39,28 @@ public class FriendListTest extends ActivityInstrumentationTestCase2 {
 
     @Test
     public void testNothingWrong() throws OutOfBoundException {
-        FriendList friendList = new FriendList("normal");
-        Participant a = new Participant("test");
-        friendList.add(a);
-        Participant b = new Participant("test1");
-        friendList.add(b);
-        Participant c = new Participant("test2");
-        friendList.add(c);
-        Participant d = friendList.getFriend(1);
+        Participant currentUser = new Participant("test");
+        ArrayList<Participant> followingList = new ArrayList<Participant>();
+
+        Participant a = new Participant("test1");
+        followingList.add(a);
+        Participant b = new Participant("test2");
+        followingList.add(b);
+        Participant c = new Participant("test3");
+        followingList.add(c);
+
+        currentUser.setFollowingList(followingList);
+
+        Participant d = followingList.get(1);
         assertEquals(d.getId(),b.getId());
-        friendList.delete(1);
-        Participant e = friendList.getFriend(1);
+        followingList.remove(1);
+        Participant e = followingList.get(1);
         assertEquals(e.getId(),c.getId());
     }
+
     @Test(expected = OutOfBoundException.class)
     public void testEmpty() throws OutOfBoundException {
-        FriendList emptyList = new FriendList("empty");
-        emptyList.getFriend(0);
+        ArrayList<Participant> followingList = new ArrayList<Participant>();
+        followingList.get(0);
     }
-
 }

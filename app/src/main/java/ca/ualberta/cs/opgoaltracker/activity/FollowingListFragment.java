@@ -19,26 +19,52 @@ import java.util.ArrayList;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
+/**
+ * FollowingListFragment is called when user tap the 'following' tab in FriendFragment
+ * It will generate a fragment of user's following list
+ *
+ * @author song
+ * @version 1.0
+ * @since FollowerList
+ * @see Fragment
+ */
 public class FollowingListFragment extends Fragment {
 
     private ArrayList<Participant> followingList;
     private ListView listView;
-    private FriendAdapter adapter;
+    private FollowingAdapter adapter;
 
+    /**
+     * Required empty public constructor
+     */
     public FollowingListFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * default onCreate method
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * default onStart method
+     */
     @Override
     public void onStart() {
         super.onStart();
     }
 
+    /**
+     * Through this onCreateView method, a fragment is generated using fragment_friend layout and FollowingAdapter
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return view of fragment
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,7 +72,7 @@ public class FollowingListFragment extends Fragment {
         Bundle arg = getArguments();
         followingList = arg.getParcelableArrayList("followingList");
         listView = (ListView) view.findViewById(R.id.friendlist);
-        adapter = new FriendAdapter(getActivity(),followingList);
+        adapter = new FollowingAdapter(getActivity(),followingList);
         listView.setAdapter(adapter);
 
         return view;

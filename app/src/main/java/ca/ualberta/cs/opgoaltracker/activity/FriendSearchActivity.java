@@ -20,13 +20,23 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
- * Created by song on 2017/11/3.
+ * This is the search friend ID page.
+ * This page allows user to enter other user's ID and press search button to find,
+ * and jump into the adding page
+ *
+ * @author song
+ * @version 1.0
+ *
  */
 public class FriendSearchActivity extends AppCompatActivity {
     private EditText userID;
     private ArrayList<Participant> followingList;
     Participant currentUser;
 
+    /**
+     * default onCreate method. Event for searchButton is defined inside.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

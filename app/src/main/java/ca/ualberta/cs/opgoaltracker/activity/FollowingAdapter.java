@@ -24,22 +24,57 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
 import ca.ualberta.cs.opgoaltracker.models.User;
 
 /**
- * Created by song on 2017/11/11.
+ * Adapter for FollowingListFragment. It is used to inflate xml layout,
+ * as well as handle buttons and on click events.
+ *
+ * @author song
+ * @version 1.0
+ *
  */
-
-public class FriendAdapter extends ArrayAdapter<Participant> {
+public class FollowingAdapter extends ArrayAdapter<Participant> {
     private ArrayList<Participant> friendList;
     Context mContext;
 
-    // Counstructor
-    public FriendAdapter(Context context, ArrayList<Participant> friendList) {
+    /**
+     * Constructor for adapter
+     * @param context
+     * @param friendList
+     */
+    public FollowingAdapter(Context context, ArrayList<Participant> friendList) {
         super(context, R.layout.fragment_friend, friendList);
         this.friendList = friendList;
         this.mContext=context;
     }
 
+    /**
+     * getCount method
+     * @return size of followingList
+     */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public int getCount() {
+        return friendList.size();
+    }
+
+    /**
+     * getItem method
+     * @param pos
+     * @return the participant at selected location
+     */
+    @Override
+    public Participant getItem(int pos) {
+        return friendList.get(pos);
+    }
+
+    /**
+     * getView method, used to generate the view for FollowingListFragment page
+     * also define the onClick method for unfollow button.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return customView, view for FollowingListFragment
+     */
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.followed_item,parent,false);
         Participant participant = getItem(position);
@@ -48,7 +83,15 @@ public class FriendAdapter extends ArrayAdapter<Participant> {
         //TextView location = (TextView) customView.findViewById(R.id.location);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
         //CheckBox like = (CheckBox) customView.findViewById(R.id.like);
+        Button unfollow = (Button) customView.findViewById(R.id.unfollow);
 
+        unfollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                friendList.remove(position); //or some other task
+                notifyDataSetChanged();
+            }
+        });
         //participant need to change
         userName.setText(participant.getId());
         //picture.setImageResource(participant.getAvatar());

@@ -20,14 +20,24 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
- * Created by song on 2017/11/3.
+ * This is the follow friend page.
+ * This page shows another user's ID, location and photograph.
+ * It allows user to press follow button to add the target user to his following list,
+ * and jump back to the FollowingListFragment
+ *
+ * @author song
+ * @version 1.0
+ *
  */
-
 public class FriendFollowActivity extends AppCompatActivity {
     private String userID;
     private ArrayList<Participant> followingList;
     Participant currentUser;
 
+    /**
+     * Default onCreate method. Event for followButton is defined inside.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +61,7 @@ public class FriendFollowActivity extends AppCompatActivity {
                 Log.d("followingList:",followingList.get(0).getId());
 
                 Intent intent = new Intent(FriendFollowActivity.this, MenuPage.class);
-                intent.putExtra("LOGINUSER", currentUser);
+                intent.putExtra("REQUESTADDFRIEND", currentUser);
                 startActivity(intent);
                 //intent.putExtra("followingList", (Parcelable) followingList);
                 finish();

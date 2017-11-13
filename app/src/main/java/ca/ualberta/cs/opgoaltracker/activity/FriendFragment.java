@@ -42,8 +42,6 @@ public class FriendFragment extends Fragment {
 
     private ArrayList<Participant>  followingList;
     private ArrayList<Participant>  followerList;
-    private ListView listView;
-    private FriendAdapter adapter;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
