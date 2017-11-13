@@ -6,6 +6,7 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
@@ -37,6 +39,8 @@ public class HabitDetailActivity extends AppCompatActivity {
     private CheckBox checkBoxSat;
     private CheckBox checkBoxSun;
 
+    private ArrayList<Habit> habitList;
+    private int position;
     private Habit habit;
     private String title;
     private String reason;
@@ -50,6 +54,8 @@ public class HabitDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_habit_detail);
 
         habit = (Habit) getIntent().getExtras().getParcelable("Habit");
+//        habitList = getIntent().getExtras().getParcelableArrayList("HabitList");
+//        position = getIntent().getExtras().getParcelable("position");
 
         titleBox = (EditText) findViewById(R.id.editTitleDetail);
         reasonBox = (EditText) findViewById(R.id.editReasonDetail);
@@ -64,6 +70,7 @@ public class HabitDetailActivity extends AppCompatActivity {
 
         titleBox.setText(habit.getHabitType());
         reasonBox.setText(habit.getReason());
+
         calendarView.setDate(habit.getDate().getTime(), false, true);
         checkBoxMon.setChecked(habit.getPeriod().get(0));
         checkBoxTue.setChecked(habit.getPeriod().get(1));
@@ -72,12 +79,24 @@ public class HabitDetailActivity extends AppCompatActivity {
         checkBoxFri.setChecked(habit.getPeriod().get(4));
         checkBoxSat.setChecked(habit.getPeriod().get(5));
         checkBoxSun.setChecked(habit.getPeriod().get(6));
+
+
+        date = new Date();
+        // get selected date from CalendarView
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month,
+                                            int dayOfMonth) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, dayOfMonth);
+                date = new Date(calendar.getTimeInMillis());
+            }
+        });
     }
 
     public void buttonSave(View view) {
         title = titleBox.getText().toString();
         reason = reasonBox.getText().toString();
-        date = new Date(calendarView.getDate());
 
         period = new ArrayList<Boolean>();
         period.add(checkBoxMon.isChecked());
@@ -107,6 +126,10 @@ public class HabitDetailActivity extends AppCompatActivity {
 
         habit.setDate(date);
         habit.setPeriod(period);
+
+        Intent intent = new Intent(this, MenuPage.class);
+        setResult(RESULT_OK,intent);
+        finish();
     }
 
     // create an action bar button
