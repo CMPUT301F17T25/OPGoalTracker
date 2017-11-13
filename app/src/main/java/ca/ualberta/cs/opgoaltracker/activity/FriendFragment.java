@@ -121,6 +121,9 @@ public class FriendFragment extends Fragment {
         secondTab.setIcon(R.drawable.ic_launcher); // set an icon for the second tab
         tabLayout.addTab(secondTab); // add  the tab  in the TabLayout
 
+        if (currentUser == null){
+            currentUser = new Participant("111");
+        }
         try {
             followingList = currentUser.getFollowingList();
             followerList = currentUser.getFollowerList();
