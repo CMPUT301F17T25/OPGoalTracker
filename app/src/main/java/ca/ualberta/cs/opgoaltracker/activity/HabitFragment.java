@@ -106,6 +106,10 @@ public class HabitFragment extends Fragment {
         // create Habit ListView
         // TODO: change this part to fit the variable passed from MainActivity
         lvHabit = (ListView) view.findViewById(R.id.list_habit);
+        if (currentUser == null) {
+            currentUser = new Participant("111");
+
+        }
         habitList = currentUser.getHabitList();
 
         // Init adapter
