@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -26,8 +27,23 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +54,9 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  * create an instance of this fragment.
  */
 public class MyAccountFragment extends Fragment {
+
+    private static final String FILENAME = "profile_file.sav";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -48,9 +67,12 @@ public class MyAccountFragment extends Fragment {
     private String mParam2;
     private Participant currentUser;
     View view;
+//    View view2;
 
     ImageButton btn;// = (ImageButton) view.findViewById(R.id.head_portrait);
+//    ImageButton button; //= (ImageButton) view.findViewById(R.id.imageButton2);
 //    Context context = getContext();
+    String picturePath;
 
     private OnFragmentInteractionListener mListener;
 
@@ -104,7 +126,20 @@ public class MyAccountFragment extends Fragment {
             }
         });
 
+        //view2 = inflater.inflate(R.layout.activity_menu_page, null);
+        //NavigationView navigationView = (NavigationView) view2.findViewById(R.id.nav_view);
+        // navigationView.setNavigationItemSelectedListener(this);
+
+        // https://stackoverflow.com/questions/33540090/textview-from-navigationview-header-returning-null
+        //button = (ImageButton) navigationView.getHeaderView(0).findViewById(R.id.menu_profile_image);
+
+        //button = (ImageButton) inflater.inflate(R.layout.nav_header_menu_page, container, false).findViewById(R.id.menu_profile_image);
+        //button.setImageResource(R.drawable.newevent);
+
         btn = (ImageButton) view.findViewById(R.id.head_portrait);
+
+        loadFromFile();
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +158,24 @@ public class MyAccountFragment extends Fragment {
 
     }
 
+    private void loadFromFile() {
+        try {
+            FileInputStream fis = getContext().openFileInput(FILENAME);
+            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+            Gson gson = new Gson();
+            // Taken from https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples 2017-09-19
+            picturePath = gson.fromJson(in, String.class);
+            btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        } catch (FileNotFoundException e) {
+            btn.setImageResource(R.drawable.newevent);
+            //button.setImageResource(R.drawable.newevent);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1) {
@@ -135,12 +188,35 @@ public class MyAccountFragment extends Fragment {
             cursor.moveToFirst();
 
             int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
+            picturePath = cursor.getString(columnIndex);
             cursor.close();
 
             btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+            //button.setImageResource(R.drawable.newevent);
+            //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
             Toast.makeText(getActivity().getApplicationContext(),picturePath,Toast.LENGTH_SHORT).show();
 
+            saveInFile();
+        }
+    }
+
+    private void saveInFile() {
+        try {
+            FileOutputStream fos = getContext().openFileOutput(FILENAME, getContext().MODE_PRIVATE);
+            // https://developer.android.com/reference/android/content/Context.html
+            // MODE_APPEND File creation mode: for use with openFileOutput(String, int), if the file already exists then write data to the end of the existing file instead of erasing it.
+            // MODE_PRIVATE File creation mode: the default mode, where the created file can only be accessed by the calling application (or all applications sharing the same user ID).
+            OutputStreamWriter writer = new OutputStreamWriter(fos);
+            Gson gson = new Gson();
+            gson.toJson(picturePath, writer);
+            writer.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
