@@ -7,6 +7,8 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,7 +24,7 @@ import java.util.Date;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 
-public class HabitAddActivity extends AppCompatActivity {
+public class HabitAddActivity extends AppCompatActivity implements HabitFragment.OnFragmentInteractionListener {
 
     private EditText titleBox;
     private EditText reasonBox;
@@ -46,9 +48,9 @@ public class HabitAddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit_add);
 
-        titleBox = (EditText) findViewById(R.id.editTitleDetail);
-        reasonBox = (EditText) findViewById(R.id.editReasonDetail);
-        calendarView = (CalendarView) findViewById(R.id.calendarViewDetail);
+        titleBox = (EditText) findViewById(R.id.editTitleAdd);
+        reasonBox = (EditText) findViewById(R.id.editReasonAdd);
+        calendarView = (CalendarView) findViewById(R.id.calendarViewAdd);
         checkBoxMon = (CheckBox) findViewById(R.id.checkBoxMonAdd);
         checkBoxTue = (CheckBox) findViewById(R.id.checkBoxTueAdd);
         checkBoxWed = (CheckBox) findViewById(R.id.checkBoxWedAdd);
@@ -58,7 +60,7 @@ public class HabitAddActivity extends AppCompatActivity {
         checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunAdd);
     }
 
-    private void buttonCreate (View view) {
+    public void buttonCreate (View view) {
         title = titleBox.getText().toString();
 
         reason = reasonBox.getText().toString();
@@ -83,5 +85,23 @@ public class HabitAddActivity extends AppCompatActivity {
 //        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 //        transaction.replace(R.id.relativeLayout_1, habitFragment);
 //        transaction.commit();
+
+        Bundle args = new Bundle();
+        args.putParcelable("new Habit", habit);
+
+        HabitFragment habitFragment = new HabitFragment();
+        habitFragment.setArguments(args);
+        FragmentManager manager = getSupportFragmentManager();
+        manager.beginTransaction().replace(R.id.relativeLayout_1,habitFragment,habitFragment.getTag()).commit();
+
+    }
+
+    /**
+     * Disable onFragmentInteraction method.
+     * @param uri
+     */
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
