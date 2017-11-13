@@ -6,19 +6,27 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
 
-public class FollowingList extends Fragment {
+public class FollowingListFragment extends Fragment {
 
-    public FollowingList() {
-    // Required empty public constructor
+    private ArrayList<Participant> followingList;
+    private ListView listView;
+    private FriendAdapter adapter;
+
+    public FollowingListFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -27,10 +35,21 @@ public class FollowingList extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.followinglist, container, false);
+        View view =  inflater.inflate(R.layout.fragment_friend, container, false);
+        Bundle arg = getArguments();
+        followingList = arg.getParcelableArrayList("followingList");
+        listView = (ListView) view.findViewById(R.id.friendlist);
+        adapter = new FriendAdapter(getActivity(),followingList);
+        listView.setAdapter(adapter);
+
+        return view;
     }
 
 }

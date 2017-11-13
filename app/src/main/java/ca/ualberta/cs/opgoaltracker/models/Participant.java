@@ -9,6 +9,8 @@ package ca.ualberta.cs.opgoaltracker.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 
@@ -16,16 +18,16 @@ import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
  * This Participant is a basic object for normal login user<br>
  *     This object contains HabitList, FriendList, as instance<br>
  *         normally pass this object between activities
- * @author Ma Long, Yongjia Huang
- * @version 3.0
+ * @author Ma Long, Yongjia Huang,Dichong Song
+ * @version 4.0
  * @see Parcelable
  * @since 1.0
  */
 public class Participant implements Parcelable {
     private Photograph avatar;
     private HabitList habitList;
-    private FriendList followerList;
-    private FriendList followeeList;
+    private ArrayList<Participant> followerList;
+    private ArrayList<Participant> followingList;
     private FriendList requestList;
     private String id;
 
@@ -36,13 +38,9 @@ public class Participant implements Parcelable {
     public Participant(String id) {
         this.id = id;
         habitList = new HabitList();
-        followeeList = new FriendList("followeeList");
-        followerList = new FriendList("followerList");
+        followerList = new ArrayList<Participant>();
+        followingList = new ArrayList<Participant>();
         requestList = new FriendList("requestList");
-
-
-
-
     }
 
 
@@ -100,11 +98,10 @@ public class Participant implements Parcelable {
 
     /**
      * Basic follower list getter
-     * @return FriendList
+     * @return ArrayList<Participant>
      * @throws UndefinedException
-     * @see FriendList
      */
-    public FriendList getFollowerList() throws UndefinedException {
+    public ArrayList<Participant> getFollowerList() throws UndefinedException {
         if (followerList==null){
             throw new UndefinedException();
         }
@@ -113,46 +110,42 @@ public class Participant implements Parcelable {
 
     /**
      * Basic Follower list setter
-     * @param followerList : FriendList
-     * @see FriendList
+     * @param followerList : ArrayList<Participant>
      */
-    public void setFollowerList(FriendList followerList){
+    public void setFollowerList(ArrayList<Participant> followerList){
         this.followerList=followerList;
     }
 
     /**
-     * Basic followee list getter
-     * @return followee list : FriendList
+     * Basic following list getter
+     * @return followingList : ArrayList<Participant>
      * @throws UndefinedException
-     * @see FriendList
      */
-    public FriendList getFolloweeList() throws UndefinedException {
-        if (followeeList==null) {
+    public ArrayList<Participant> getFollowingList() throws UndefinedException {
+        if (followingList==null) {
             throw new UndefinedException();
         }
-        return followeeList;
+        return followingList;
     }
 
     /**
-     * Basic followee list setter
-     * @param followeeList FriendList
-     *                     @see FriendList
+     * Basic followingList setter
+     * @param followingList ArrayList<Participant>
      */
-    public void setFolloweeList(FriendList followeeList){
-        this.followeeList=followeeList;
+    public void setFollowingList(ArrayList<Participant> followingList){
+        this.followingList=followingList;
     }
 
     /**
      * Basic requestList getter
-     * @return FriendList
+     * @return ArrayList<Participant>
      * @throws UndefinedException
-     * @see FriendList
+     *  *                    @see FriendList
      */
     public FriendList getRequestList() throws UndefinedException {
         if (requestList==null){
             throw new UndefinedException();
         }
-
         return requestList;
     }
 
@@ -173,8 +166,10 @@ public class Participant implements Parcelable {
     protected Participant(Parcel in) {
         avatar = (Photograph) in.readValue(Photograph.class.getClassLoader());
         habitList = (HabitList) in.readValue(HabitList.class.getClassLoader());
-        followerList = (FriendList) in.readValue(FriendList.class.getClassLoader());
-        followeeList = (FriendList) in.readValue(FriendList.class.getClassLoader());
+        followerList = new ArrayList<Participant>();
+        followingList = new ArrayList<Participant>();
+        in.readList(followerList,Participant.class.getClassLoader());
+        in.readList(followingList,Participant.class.getClassLoader());
         requestList = (FriendList) in.readValue(FriendList.class.getClassLoader());
         id = in.readString();
     }
@@ -199,8 +194,8 @@ public class Participant implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(avatar);
         dest.writeValue(habitList);
-        dest.writeValue(followerList);
-        dest.writeValue(followeeList);
+        dest.writeList(followerList);
+        dest.writeList(followingList);
         dest.writeValue(requestList);
         dest.writeString(id);
     }
