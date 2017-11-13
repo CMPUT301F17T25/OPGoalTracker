@@ -102,6 +102,8 @@ public class MenuPageTest {
         assertEquals(title,"News");
     }
 
+
+
     @Test
     public void checkSettingonClickSuccess(){
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());

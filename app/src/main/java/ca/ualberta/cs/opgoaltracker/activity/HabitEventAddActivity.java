@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,14 @@ import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Photograph;
 
+/**
+ * This is the activity that allows users to create a new habit event
+ * This page allows user to create a new habit event with custom comment and ability to select a picture
+ * @author Long Ma
+ * @version 2.0
+ * @see AppCompatActivity
+ * @since 2.0
+ */
 public class HabitEventAddActivity extends AppCompatActivity {
     HabitEvent newEvent;
     Boolean setPicture;

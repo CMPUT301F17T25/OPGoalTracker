@@ -50,12 +50,14 @@ import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link HabitFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link HabitFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * This is the fragment that displays a user's own habit event
+ * <br>
+ * This page allows user to see own events in a listview and has the option of creating new events
+ * <br>
+ * @author Long Ma
+ * @version 2.0
+ * @see AppCompatActivity
+ * @since 2.0
  */
 public class HabitEventFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match

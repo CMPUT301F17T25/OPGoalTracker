@@ -18,7 +18,14 @@ import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 
 /**
- * Created by malon_000 on 2017-11-03.
+ * This is the fragment that displays habit event of users which the current user is following
+ * <br>
+ * This page allows user to see other's habit event in a listview
+ * <br>
+ * @author Long Ma
+ * @version 2.0
+ * @see AppCompatActivity
+ * @since 2.0
  */
 
 public class NewsActivity extends AppCompatActivity {
