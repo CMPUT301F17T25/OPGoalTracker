@@ -98,6 +98,11 @@ public class HabitDetailActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Invoke this method if Save button at the bottom of the activity is pressed.
+     * Set the selected Habit object with new attributes value, and then pass the ArrayList<Habit> back to HabitFragment.
+     * @param view
+     */
     public void buttonSave(View view) {
         title = titleBox.getText().toString();
         reason = reasonBox.getText().toString();
@@ -140,14 +145,22 @@ public class HabitDetailActivity extends AppCompatActivity {
         finish();
     }
 
-    // create an action bar button
+    /**
+     * Create an action bar button (the trash bin button)
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_habit_detail, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    // handle button activities
+    /**
+     * Handle button activities
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();

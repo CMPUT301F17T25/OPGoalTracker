@@ -60,7 +60,7 @@ public class HabitAddActivity extends AppCompatActivity {
         checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatAdd);
         checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunAdd);
 
-        date = new Date(); // this is necessary if user didn't change date
+        date = new Date(); // this is necessary to set default date as today if user didn't change date
         // get selected date from CalendarView
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -73,6 +73,11 @@ public class HabitAddActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Invoke this method if Save button at the bottom of the activity is pressed.
+     * Create a Habit object with user input value, then pass the Habit object back to HabitFragment
+     * @param view
+     */
     public void buttonCreate(View view) {
         title = titleBox.getText().toString();
         reason = reasonBox.getText().toString();

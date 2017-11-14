@@ -58,8 +58,14 @@ public class MainActivityTest {
         long intervalTime = 36000;
         testHabitList = testUser.getHabitList();
         Date today = new Date();
-        ArrayList<Boolean> period = new ArrayList<>();
-        testHabit = new Habit("Testing Habit", "Just for testing.", today,period);
+        ArrayList<Boolean> period = new ArrayList<Boolean>();
+        try {
+            testHabit = new Habit("Testing Habit", "Just for testing.", today, period);
+        } catch (StringTooLongException exc) {
+            return;
+        } catch (NoTitleException exc) {
+            return;
+        }
         testHabitList.add(testHabit);
         numItems = testHabitList.size();
 

@@ -54,9 +54,7 @@ public class HabitAdapter extends BaseAdapter {
 
         // Set text for TextView
         tvTitle.setText(habitList.get(position).getHabitType());
-        tvReason.setText("Current value: " +
-                String.valueOf(habitList.get(position).getReason()));
-
+        tvReason.setText(String.valueOf(habitList.get(position).getReason()));
         return v ;
     }
 }
