@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import java.util.Date;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
@@ -49,6 +51,7 @@ public class HabitFragment extends Fragment {
     private ListView lvHabit;
     private HabitAdapter adapter;
     private static final int REQUEST_CODE_ONE = 1;
+    private static final int REQUEST_CODE_TWO = 2;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -135,10 +138,10 @@ public class HabitFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        // refresh ListView
-        adapter = new HabitAdapter(getActivity(), habitList);
-        lvHabit.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+//        // refresh ListView
+//        adapter = new HabitAdapter(getActivity(), habitList);
+//        lvHabit.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
 
         // call HabitDetailActivity by click rows of ListView
@@ -146,23 +149,29 @@ public class HabitFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
-                intent.putExtra("Habit", (Parcelable) habitList.get(position));
-//                intent.putParcelableArrayListExtra("HabitList", habitList);
-//                intent.putExtra("position", position);
-                startActivity(intent);
+//                intent.putExtra("Habit", (Parcelable) habitList.get(position));
+                intent.putParcelableArrayListExtra("HabitList", habitList);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, REQUEST_CODE_TWO);
             }
         });
     }
 
     @Override
-    public void  onActivityResult(int requestCode,int resultCode, Intent data){
-        if (requestCode == REQUEST_CODE_ONE){
-            if(resultCode == RESULT_OK){
+    public void  onActivityResult(int requestCode,int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_ONE) { // update ListView after adding new Habit
+            if (resultCode == RESULT_OK) {
                 Habit newHabit = data.getParcelableExtra("Habit");
                 habitList.add(newHabit);
-                adapter.notifyDataSetChanged();
+            }
+        } else if (requestCode == REQUEST_CODE_TWO) { // update ListView after editing Habit
+            if (resultCode == RESULT_OK) {
+                ArrayList<Habit> newHabitList = data.getExtras().getParcelableArrayList("HabitList");
+                habitList.clear();
+                habitList.addAll(newHabitList);
             }
         }
+        adapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

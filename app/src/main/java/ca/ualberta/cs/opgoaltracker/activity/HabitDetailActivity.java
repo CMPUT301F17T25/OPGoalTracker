@@ -53,9 +53,10 @@ public class HabitDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit_detail);
 
-        habit = (Habit) getIntent().getExtras().getParcelable("Habit");
-//        habitList = getIntent().getExtras().getParcelableArrayList("HabitList");
-//        position = getIntent().getExtras().getParcelable("position");
+//        habit = (Habit) getIntent().getExtras().getParcelable("Habit");
+        habitList = getIntent().getExtras().getParcelableArrayList("HabitList");
+        position = getIntent().getIntExtra("position", 0);
+        habit = habitList.get(position);
 
         titleBox = (EditText) findViewById(R.id.editTitleDetail);
         reasonBox = (EditText) findViewById(R.id.editReasonDetail);
@@ -68,10 +69,15 @@ public class HabitDetailActivity extends AppCompatActivity {
         checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatDetail);
         checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunDetail);
 
-        titleBox.setText(habit.getHabitType());
-        reasonBox.setText(habit.getReason());
+        // get original Habit attributes
+        title = habit.getHabitType();
+        reason = habit.getReason();
+        date = habit.getDate();
 
-        calendarView.setDate(habit.getDate().getTime(), false, true);
+        // set View with original data
+        titleBox.setText(title);
+        reasonBox.setText(reason);
+        calendarView.setDate(date.getTime(), false, true);
         checkBoxMon.setChecked(habit.getPeriod().get(0));
         checkBoxTue.setChecked(habit.getPeriod().get(1));
         checkBoxWed.setChecked(habit.getPeriod().get(2));
@@ -80,8 +86,6 @@ public class HabitDetailActivity extends AppCompatActivity {
         checkBoxSat.setChecked(habit.getPeriod().get(5));
         checkBoxSun.setChecked(habit.getPeriod().get(6));
 
-
-        date = new Date();
         // get selected date from CalendarView
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -112,9 +116,11 @@ public class HabitDetailActivity extends AppCompatActivity {
         } catch (StringTooLongException exc) {
             Toast.makeText(getApplicationContext(), "Too Many Characters",
                     Toast.LENGTH_SHORT).show();
+            return;
         } catch (NoTitleException exc) {
             Toast.makeText(getApplicationContext(), "Please Enter Title",
                     Toast.LENGTH_SHORT).show();
+            return;
         }
 
         try {
@@ -122,12 +128,14 @@ public class HabitDetailActivity extends AppCompatActivity {
         } catch (StringTooLongException exc) {
             Toast.makeText(getApplicationContext(), "Too Many Characters",
                     Toast.LENGTH_SHORT).show();
+            return;
         }
 
         habit.setDate(date);
         habit.setPeriod(period);
 
         Intent intent = new Intent(this, MenuPage.class);
+        intent.putParcelableArrayListExtra("HabitList", habitList);
         setResult(RESULT_OK,intent);
         finish();
     }
@@ -145,7 +153,13 @@ public class HabitDetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.habit_detail_delete) {
-            // do something here
+            // delete current Habit
+            habitList.remove(position);
+
+            Intent intent = new Intent(this, MenuPage.class);
+            intent.putParcelableArrayListExtra("HabitList", habitList);
+            setResult(RESULT_OK,intent);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

@@ -23,22 +23,26 @@ import ca.ualberta.cs.opgoaltracker.exception.DuplicatedHabitException;
  * @since 1.0
  */
 public class HabitList implements Parcelable {
-    private ArrayList<Habit> aHabitList ;
+    private ArrayList<Habit> habitArrayList;
+
+    public  HabitList(){
+        habitArrayList = new ArrayList<Habit>();
+    }
 
     /**
      * Basic HabitList getter
      * @return ArrayList<Habit></Habit>
      */
-    public  HabitList(){
-        aHabitList = new ArrayList<Habit>();
-    }
-    public ArrayList<Habit> getHabitList() {
-        return aHabitList;
-    }
+    public ArrayList<Habit> getHabitArrayList() {return habitArrayList;}
 
+    /**
+     * Basic HabitList setter
+     * @param habitArrayList ArrayList<Habit>
+     */
+    public void setHabitArrayList(ArrayList<Habit> habitArrayList) {this.habitArrayList = habitArrayList;}
 
     public int getListLen(){
-        return aHabitList.size();
+        return habitArrayList.size();
     }
     /**
      * Basic Habit getter
@@ -46,7 +50,7 @@ public class HabitList implements Parcelable {
      * @return Habit type object
      */
     public Habit getHabit(int index){
-        return this.aHabitList.get(index);
+        return this.habitArrayList.get(index);
     }
 
     /**
@@ -56,10 +60,10 @@ public class HabitList implements Parcelable {
      */
     public void addHabit(Habit habit) throws DuplicatedHabitException {
         //not fully implemented, should just check habitType
-        if (aHabitList.contains(habit)){
+        if (habitArrayList.contains(habit)){
             throw new DuplicatedHabitException();
         }
-        this.aHabitList.add(habit);
+        this.habitArrayList.add(habit);
     }
 
     /**
@@ -68,10 +72,10 @@ public class HabitList implements Parcelable {
      * @throws IndexOutOfBoundsException
      */
     public void deleteHabit(int index) throws IndexOutOfBoundsException{
-        if (index<this.aHabitList.size()) {
+        if (index<this.habitArrayList.size()) {
             throw new IndexOutOfBoundsException();
         }
-        this.aHabitList.remove(index);
+        this.habitArrayList.remove(index);
     }
 
     /**
@@ -96,10 +100,10 @@ public class HabitList implements Parcelable {
      */
     protected HabitList(Parcel in) {
         if (in.readByte() == 0x01) {
-            aHabitList = new ArrayList<Habit>();
-            in.readList(aHabitList, Habit.class.getClassLoader());
+            habitArrayList = new ArrayList<Habit>();
+            in.readList(habitArrayList, Habit.class.getClassLoader());
         } else {
-            aHabitList = null;
+            habitArrayList = null;
         }
     }
 
@@ -121,11 +125,11 @@ public class HabitList implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (aHabitList == null) {
+        if (habitArrayList == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(aHabitList);
+            dest.writeList(habitArrayList);
         }
     }
 

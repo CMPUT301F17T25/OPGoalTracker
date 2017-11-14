@@ -14,12 +14,15 @@ import android.view.View;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
+import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 
 public class HabitAddActivity extends AppCompatActivity {
@@ -57,7 +60,7 @@ public class HabitAddActivity extends AppCompatActivity {
         checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatAdd);
         checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunAdd);
 
-        date = new Date();
+        date = new Date(); // this is necessary if user didn't change date
         // get selected date from CalendarView
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -83,7 +86,17 @@ public class HabitAddActivity extends AppCompatActivity {
         period.add(checkBoxSat.isChecked());
         period.add(checkBoxSun.isChecked());
 
-        habit = new Habit(title, reason, date, period);
+        try {
+            habit = new Habit(title, reason, date, period);
+        } catch (StringTooLongException exc) {
+            Toast.makeText(getApplicationContext(), "Too Many Characters",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        } catch (NoTitleException exc) {
+            Toast.makeText(getApplicationContext(), "Please Enter Title",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Intent intent = new Intent(this, MenuPage.class);
         intent.putExtra("Habit", habit);
