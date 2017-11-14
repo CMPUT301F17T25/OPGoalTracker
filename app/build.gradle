@@ -45,5 +45,6 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.android.support:design:26.+'
+    compile 'com.jayway.android.robotium:robotium-solo:5.6.3'
     testCompile 'junit:junit:4.12'
 }

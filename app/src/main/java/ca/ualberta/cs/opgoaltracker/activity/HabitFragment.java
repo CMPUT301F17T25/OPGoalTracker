@@ -96,6 +96,13 @@ public class HabitFragment extends Fragment {
         }
     }
 
+    /**
+     * Create a fragment with data passed in as Bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -157,6 +164,12 @@ public class HabitFragment extends Fragment {
         });
     }
 
+    /**
+     * Receive data from HabitAddActivity and HabitDetailActivity, then refresh HabitFragment
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void  onActivityResult(int requestCode,int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_ONE) { // update ListView after adding new Habit
