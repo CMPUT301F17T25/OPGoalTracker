@@ -6,15 +6,11 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -23,28 +19,24 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
- * FollowerListFragment is called when user tap the 'follower' tab in FriendFragment
- * It will generate a fragment of user's follower's list
- *
- * @author song
- * @version 1.0
- * @since FollowerList
- * @see Fragment
- *
+ * Created by song on 2017/11/24.
  */
-public class FollowerListFragment extends Fragment {
 
-    private ArrayList<Participant>  followerList;
+public class RequestListFragment extends Fragment {
+    private ArrayList<Participant> requestList;
     private ListView listView;
-    private FollowerAdapter adapter;
-
+    private RequestAdapter adapter;
+    private Participant currentUser;
     /**
      * Required empty public constructor
      */
-    public FollowerListFragment(){}
+    public RequestListFragment() {
+        // Required empty public constructor
+    }
 
     /**
      * default onCreate method
+     *
      * @param savedInstanceState
      */
     @Override
@@ -60,8 +52,9 @@ public class FollowerListFragment extends Fragment {
         super.onStart();
     }
 
+
     /**
-     * Through this onCreateView method, a fragment is generated using fragment_friend layout and FollowerAdapter
+     * Through this onCreateView method, a fragment is generated using fragment_friend layout and FollowingAdapter
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -72,13 +65,17 @@ public class FollowerListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_friend, container, false);
         Bundle arg = getArguments();
-        followerList = arg.getParcelableArrayList("followerList");
-
+        requestList = arg.getParcelableArrayList("requestList");
+        currentUser= arg.getParcelable("LOGINUSER");
         listView = (ListView) view.findViewById(R.id.friendlist);
-        adapter = new FollowerAdapter(getActivity(),followerList);
-        listView.setAdapter(adapter);
+        adapter = new RequestAdapter(getActivity(),requestList,currentUser);
 
+        listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        //test
+        if (requestList.isEmpty()){
+            requestList.add(new Participant("sdc"));
+        }
         return view;
     }
-
 }

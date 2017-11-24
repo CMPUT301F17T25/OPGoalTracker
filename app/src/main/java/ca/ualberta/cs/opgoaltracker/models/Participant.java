@@ -28,7 +28,7 @@ public class Participant implements Parcelable {
     private ArrayList<Habit> habitList;
     private ArrayList<Participant> followerList;
     private ArrayList<Participant> followingList;
-    private FriendList requestList;
+    private ArrayList<Participant> requestList;
     private String id;
 
     /**
@@ -40,7 +40,7 @@ public class Participant implements Parcelable {
         habitList = new ArrayList<Habit>();
         followerList = new ArrayList<Participant>();
         followingList = new ArrayList<Participant>();
-        requestList = new FriendList("requestList");
+        requestList = new ArrayList<Participant>();
     }
 
 
@@ -142,7 +142,7 @@ public class Participant implements Parcelable {
      * @throws UndefinedException
      *  *                    @see FriendList
      */
-    public FriendList getRequestList() throws UndefinedException {
+    public ArrayList<Participant> getRequestList() throws UndefinedException {
         if (requestList==null){
             throw new UndefinedException();
         }
@@ -154,7 +154,7 @@ public class Participant implements Parcelable {
      * @param requestList : FriendList
      *                    @see FriendList
      */
-    public void setRequestList(FriendList requestList){
+    public void setRequestList(ArrayList<Participant> requestList){
         this.requestList=requestList;
     }
 
@@ -179,7 +179,12 @@ public class Participant implements Parcelable {
         } else {
             followingList = null;
         }
-        requestList = (FriendList) in.readValue(FriendList.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            requestList = new ArrayList<Participant>();
+            in.readList(requestList, Participant.class.getClassLoader());
+        } else {
+            followingList = null;
+        }
         id = in.readString();
     }
 
@@ -209,7 +214,12 @@ public class Participant implements Parcelable {
             dest.writeByte((byte) (0x01));
             dest.writeList(followingList);
         }
-        dest.writeValue(requestList);
+        if (requestList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(requestList);
+        }
         dest.writeString(id);
     }
 

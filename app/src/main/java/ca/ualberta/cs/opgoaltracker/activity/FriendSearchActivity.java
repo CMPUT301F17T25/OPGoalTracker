@@ -54,7 +54,6 @@ public class FriendSearchActivity extends AppCompatActivity {
                 String ID = userID.getText().toString();
                 Intent intent = new Intent(FriendSearchActivity.this, FriendFollowActivity.class);
                 intent.putExtra("ID",ID);
-                intent.putParcelableArrayListExtra("followingList", followingList);
                 intent.putExtra("LOGINUSER", currentUser);
                 startActivity(intent);
 

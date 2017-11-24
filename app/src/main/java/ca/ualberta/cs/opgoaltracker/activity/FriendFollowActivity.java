@@ -17,6 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
@@ -31,7 +32,7 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  */
 public class FriendFollowActivity extends AppCompatActivity {
     private String userID;
-    private ArrayList<Participant> followingList;
+    private ArrayList<Participant> targetRequestList;
     Participant currentUser;
 
     /**
@@ -44,7 +45,6 @@ public class FriendFollowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_friend_follow);
 
         userID = (String) getIntent().getStringExtra("ID");
-        followingList = this.getIntent().getParcelableArrayListExtra("followingList");
         currentUser = getIntent().getParcelableExtra("LOGINUSER");
 
         TextView name = (TextView)findViewById(R.id.name);
@@ -55,11 +55,12 @@ public class FriendFollowActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //TODO: need elastic search to return a participant
                 Participant newFollow = new Participant(userID);
-                followingList.add(newFollow);
-
-                //TODO: verify that friend has already been added. This part should be connected to server later
-                Log.d("followingList:",followingList.get(0).getId());
-                currentUser.setFollowingList(followingList);
+                try {
+                    targetRequestList = newFollow.getRequestList();
+                } catch (UndefinedException e) {
+                    e.printStackTrace();
+                }
+                targetRequestList.add(currentUser);
                 Intent intent = new Intent(FriendFollowActivity.this, MenuPage.class);
                 intent.putExtra("NEWFOLLOWUSER", currentUser);
                 startActivity(intent);
