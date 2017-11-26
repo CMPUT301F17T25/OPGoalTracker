@@ -30,13 +30,13 @@ public class HabitAddActivity extends AppCompatActivity {
     private EditText titleBox;
     private EditText reasonBox;
     private CalendarView calendarView;
+    private CheckBox checkBoxSun;
     private CheckBox checkBoxMon;
     private CheckBox checkBoxTue;
     private CheckBox checkBoxWed;
     private CheckBox checkBoxThur;
     private CheckBox checkBoxFri;
     private CheckBox checkBoxSat;
-    private CheckBox checkBoxSun;
 
     private Habit habit;
     private String title;
@@ -52,13 +52,13 @@ public class HabitAddActivity extends AppCompatActivity {
         titleBox = (EditText) findViewById(R.id.editTitleAdd);
         reasonBox = (EditText) findViewById(R.id.editReasonAdd);
         calendarView = (CalendarView) findViewById(R.id.calendarViewAdd);
+        checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunAdd);
         checkBoxMon = (CheckBox) findViewById(R.id.checkBoxMonAdd);
         checkBoxTue = (CheckBox) findViewById(R.id.checkBoxTueAdd);
         checkBoxWed = (CheckBox) findViewById(R.id.checkBoxWedAdd);
         checkBoxThur = (CheckBox) findViewById(R.id.checkBoxThurAdd);
         checkBoxFri = (CheckBox) findViewById(R.id.checkBoxFriAdd);
         checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatAdd);
-        checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunAdd);
 
         date = new Date(); // this is necessary to set default date as today if user didn't change date
         // get selected date from CalendarView
@@ -83,13 +83,13 @@ public class HabitAddActivity extends AppCompatActivity {
         reason = reasonBox.getText().toString();
 
         period = new ArrayList<Boolean>();
+        period.add(checkBoxSun.isChecked());
         period.add(checkBoxMon.isChecked());
         period.add(checkBoxTue.isChecked());
         period.add(checkBoxWed.isChecked());
         period.add(checkBoxThur.isChecked());
         period.add(checkBoxFri.isChecked());
         period.add(checkBoxSat.isChecked());
-        period.add(checkBoxSun.isChecked());
 
         try {
             habit = new Habit(title, reason, date, period);

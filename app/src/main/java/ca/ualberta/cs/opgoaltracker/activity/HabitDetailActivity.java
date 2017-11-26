@@ -31,13 +31,13 @@ public class HabitDetailActivity extends AppCompatActivity {
     private EditText titleBox;
     private EditText reasonBox;
     private CalendarView calendarView;
+    private CheckBox checkBoxSun;
     private CheckBox checkBoxMon;
     private CheckBox checkBoxTue;
     private CheckBox checkBoxWed;
     private CheckBox checkBoxThur;
     private CheckBox checkBoxFri;
     private CheckBox checkBoxSat;
-    private CheckBox checkBoxSun;
 
     private ArrayList<Habit> habitList;
     private int position;
@@ -61,13 +61,13 @@ public class HabitDetailActivity extends AppCompatActivity {
         titleBox = (EditText) findViewById(R.id.editTitleDetail);
         reasonBox = (EditText) findViewById(R.id.editReasonDetail);
         calendarView = (CalendarView) findViewById(R.id.calendarViewDetail);
+        checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunDetail);
         checkBoxMon = (CheckBox) findViewById(R.id.checkBoxMonDetail);
         checkBoxTue = (CheckBox) findViewById(R.id.checkBoxTueDetail);
         checkBoxWed = (CheckBox) findViewById(R.id.checkBoxWedDetail);
         checkBoxThur = (CheckBox) findViewById(R.id.checkBoxThurDetail);
         checkBoxFri = (CheckBox) findViewById(R.id.checkBoxFriDetail);
         checkBoxSat = (CheckBox) findViewById(R.id.checkBoxSatDetail);
-        checkBoxSun = (CheckBox) findViewById(R.id.checkBoxSunDetail);
 
         // get original Habit attributes
         title = habit.getHabitType();
@@ -78,13 +78,13 @@ public class HabitDetailActivity extends AppCompatActivity {
         titleBox.setText(title);
         reasonBox.setText(reason);
         calendarView.setDate(date.getTime(), false, true);
-        checkBoxMon.setChecked(habit.getPeriod().get(0));
-        checkBoxTue.setChecked(habit.getPeriod().get(1));
-        checkBoxWed.setChecked(habit.getPeriod().get(2));
-        checkBoxThur.setChecked(habit.getPeriod().get(3));
-        checkBoxFri.setChecked(habit.getPeriod().get(4));
-        checkBoxSat.setChecked(habit.getPeriod().get(5));
-        checkBoxSun.setChecked(habit.getPeriod().get(6));
+        checkBoxSun.setChecked(habit.getPeriod().get(0));
+        checkBoxMon.setChecked(habit.getPeriod().get(1));
+        checkBoxTue.setChecked(habit.getPeriod().get(2));
+        checkBoxWed.setChecked(habit.getPeriod().get(3));
+        checkBoxThur.setChecked(habit.getPeriod().get(4));
+        checkBoxFri.setChecked(habit.getPeriod().get(5));
+        checkBoxSat.setChecked(habit.getPeriod().get(6));
 
         // get selected date from CalendarView
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
@@ -108,13 +108,13 @@ public class HabitDetailActivity extends AppCompatActivity {
         reason = reasonBox.getText().toString();
 
         period = new ArrayList<Boolean>();
+        period.add(checkBoxSun.isChecked());
         period.add(checkBoxMon.isChecked());
         period.add(checkBoxTue.isChecked());
         period.add(checkBoxWed.isChecked());
         period.add(checkBoxThur.isChecked());
         period.add(checkBoxFri.isChecked());
         period.add(checkBoxSat.isChecked());
-        period.add(checkBoxSun.isChecked());
 
         try {
             habit.setHabitType(title);
