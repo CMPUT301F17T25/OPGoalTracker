@@ -8,13 +8,18 @@ package ca.ualberta.cs.opgoaltracker.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Admin;
+import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.User;
 
 
 /**
@@ -58,7 +63,7 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
             startActivity(new Intent(this, MainActivity.class));
         } else if (view == addRegisterButton) {
             addUser();
-            finish();
+//            finish();
         }
     }
 
@@ -71,11 +76,30 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
     public void addUser() {
         String username = usernameText.getText().toString();
 
-        // TODO assume all admin user has username starting with "admin". This logic should be changed in the future
-        if(username.startsWith("admin")) {
-            addAdminUser(username);
-        } else {
-            // TODO implement method to add a regular user
+        // query server if username exists
+        String query = "{\n" +
+                "	\"query\": {\n" +
+                "		\"term\": {\"_id\":\"" + username + "\"}\n" +
+                "	}\n" +
+                "}";
+        // query server in type "admin"
+        ElasticsearchController.GetAdminsTask getAdminsTask = new ElasticsearchController.GetAdminsTask();
+        getAdminsTask.execute(query);
+        // query server in type "participant"
+        ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+        getParticipantsTask.execute(query);
+
+        try {
+            if (getAdminsTask.get().isEmpty() && getParticipantsTask.get().isEmpty()) { // if username not exists
+                Participant newParticipant = new Participant(username);
+                ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+                addUsersTask.execute(newParticipant);
+                finish();
+            } else {
+                Toast.makeText(Register_activity.this, "Username already existed.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the participant from the asyc object");
         }
     }
 

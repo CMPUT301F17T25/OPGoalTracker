@@ -120,7 +120,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
         Bundle bundle = data.getExtras();
         switch (requestCode){
             case 2:
-                if (resultCode==AppCompatActivity.RESULT_OK) {
+                try{
                     Log.d("getbitmap", "no bitmap");
                     Uri uri = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -141,8 +141,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
                     getImage.setImageBitmap(picture);
 
 
-                }
-
+                }catch (Exception e){}
         }
     }
 }

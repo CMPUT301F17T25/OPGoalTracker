@@ -7,38 +7,22 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Objects;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Admin;
-import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
-import ca.ualberta.cs.opgoaltracker.models.User;
-
 
 
 /**
@@ -122,21 +106,38 @@ public class MainActivity extends AppCompatActivity {
         addSignInButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                loadFromFile();
                 name = userID.getText().toString();
-                if (Objects.equals(name, currentUser.getId())){
-                    Intent i = new Intent(MainActivity.this, MenuPage.class);
-                    i.putExtra("LOGINUSER", currentUser);
-                    startActivity(i);
+                String query = "{\n" +
+                            "	\"query\": {\n" +
+                            "		\"term\": {\"_id\":\"" + name + "\"}\n" +
+                            "	}\n" +
+                            "}";
+                // query server in type "admin"
+                ElasticsearchController.GetAdminsTask getAdminsTask = new ElasticsearchController.GetAdminsTask();
+                getAdminsTask.execute(query);
+                // query server in type "participant"
+                ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+                getParticipantsTask.execute(query);
 
-                } else if (name.startsWith("admin") && isAdminExistent()) {
-                    Intent adminIntent = new Intent(MainActivity.this, AdminActivity.class);
-                    adminIntent.putExtra("ADMINID", name);
-                    startActivity(adminIntent);
+                try {
+                    if (getAdminsTask.get().isEmpty() == false) { // check if this is an admin user
+                        //TODO maybe passing currentUser rather than name
+                        Intent adminIntent = new Intent(MainActivity.this, AdminActivity.class);
+                        adminIntent.putExtra("ADMINID", name);
+                        startActivity(adminIntent);
+                    } else if (getParticipantsTask.get().isEmpty() == false) { // if not an admin, check if this is a participant user
+                        currentUser = getParticipantsTask.get().get(0); // currentUser size is 0 if there is no ID matched
+
+                        Intent i = new Intent(MainActivity.this, MenuPage.class);
+                        i.putExtra("LOGINUSER", currentUser);
+                        startActivity(i);
+                    } else { // if not admin nor participant, show Toast
+                        Toast.makeText(MainActivity.this, "Invalid User ID !", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Failed to get the participant from the asyc object");
                 }
-                else{
-                    Toast.makeText(MainActivity.this, "Invalid User ID !", Toast.LENGTH_SHORT).show();
-                }
+
             }
 
         });
@@ -163,52 +164,52 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * for Project 4 only.
-     */
-    private void loadFromFile() {
-        try {
-            FileInputStream fis = openFileInput(FILENAME);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-
-            Gson gson = new Gson();
-            Type listType = new TypeToken<Participant>() {
-            }.getType();
-            currentUser = gson.fromJson(in, listType);
-
-        } catch (FileNotFoundException e) {
-            currentUser = new Participant("111") ;
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-
-    }
-
-    /**
-     * For Project 4 Only
-     * save all the changes into a file
-     * <br>
-     *  load countersList from the file
-     */
-    private void saveInFile() {
-        try {
-            FileOutputStream fos = openFileOutput(FILENAME,
-                    Context.MODE_PRIVATE);
-
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
-
-            Gson gson = new Gson();
-            gson.toJson(currentUser, out);
-
-            out.flush();
-
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
+//    /**
+//     * for Project 4 only.
+//     */
+//    private void loadFromFile() {
+//        try {
+//            FileInputStream fis = openFileInput(FILENAME);
+//            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+//
+//            Gson gson = new Gson();
+//            Type listType = new TypeToken<Participant>() {
+//            }.getType();
+//            currentUser = gson.fromJson(in, listType);
+//
+//        } catch (FileNotFoundException e) {
+//            currentUser = new Participant("111") ;
+//        } catch (IOException e) {
+//            throw new RuntimeException();
+//        }
+//
+//    }
+//
+//    /**
+//     * For Project 4 Only
+//     * save all the changes into a file
+//     * <br>
+//     *  load countersList from the file
+//     */
+//    private void saveInFile() {
+//        try {
+//            FileOutputStream fos = openFileOutput(FILENAME,
+//                    Context.MODE_PRIVATE);
+//
+//            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
+//
+//            Gson gson = new Gson();
+//            gson.toJson(currentUser, out);
+//
+//            out.flush();
+//
+//            fos.close();
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException();
+//        } catch (IOException e) {
+//            throw new RuntimeException();
+//        }
+//    }
 
 
 }

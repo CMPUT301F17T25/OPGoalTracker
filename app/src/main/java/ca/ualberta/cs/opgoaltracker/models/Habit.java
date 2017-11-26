@@ -28,11 +28,28 @@ import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
  */
 public class Habit implements Parcelable {
 
+    private String id;
     private String habitType;
     private String reason;
     private Date date;
     private ArrayList<Boolean> period;
     Admin admin = new Admin("admin");
+
+    /**
+     * Set id for the Habit object
+     * @return id : String
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Get id of the Habit object
+     * @param id : String
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Basic Habit Constructor, allows user to create a Habit object by defining habit name ( habit type), date, reason ,starttime and intervaltime.<br>
