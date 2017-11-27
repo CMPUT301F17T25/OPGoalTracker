@@ -6,6 +6,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ca.ualberta.cs.opgoaltracker">
 
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
     <uses-permission
         android:name="android.permission.INTERNET" />
     <uses-permission
