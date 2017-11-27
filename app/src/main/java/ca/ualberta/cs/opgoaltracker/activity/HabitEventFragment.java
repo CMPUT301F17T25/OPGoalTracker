@@ -33,16 +33,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.Spinner;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -75,11 +72,10 @@ public class HabitEventFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private View view;
+    View view;
 
 
-    private ArrayList<HabitEvent> displayList;
-    private ArrayList<String> habitList;
+    ArrayList<HabitEvent> displayList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -126,11 +122,7 @@ public class HabitEventFragment extends Fragment {
         currentUser = arg.getParcelable("CURRENTUSER");
 
         displayList = new ArrayList<HabitEvent>();
-        habitList = new ArrayList<String>();
-        habitList.add("test");
         // add events to test the adapter
-        // probly name another variable arraylist type to store all events
-        //display list's stuff gets removed during search
 
         HabitEventAdapter adapter = new HabitEventAdapter(getActivity(),displayList);
         final ListView listview=(ListView)view.findViewById(R.id.list_event);
@@ -238,26 +230,18 @@ public class HabitEventFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+
             case R.id.event_menu_search :
                 final Dialog dialog = new Dialog(getContext());
                 dialog.setContentView(R.layout.dialog_search);
                 dialog.setTitle("Search Events");
-
-                ArrayList<String> searchList = new ArrayList<String>();
-                searchList.add("");
-                searchList.addAll(habitList);
-                Spinner searchHabit = (Spinner)dialog.findViewById(R.id.search_spinner);
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, searchList);
-                dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                searchHabit.setAdapter(dataAdapter);
-
                 EditText message = (EditText) dialog.findViewById(R.id.search_event_text);
                 Button search = (Button) dialog.findViewById(R.id.search_search);
                 search.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.dismiss();
-
                     }
                 });
                 dialog.show();
