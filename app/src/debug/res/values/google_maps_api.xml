@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright 2017 Yongjia Huang, Dichong Song, Mingwei Li, Donglin Han, Long Ma,CMPUT301F17T25 CMPUT301, University of Alberta, All Rights Reserved.
+  ~ You may use distribut, or modify this code under terms and conditions of the ode of Student Behavior at University of Alberta
+  ~ You may find a copy of the license in this project. Otherwise please contact jajayongjia@gmail.com
+  -->
+
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=15:6A:A5:FA:D3:6B:B7:C6:F1:9E:93:E6:C0:7C:9F:FF:5E:DE:2D:97%3Bca.ualberta.cs.opgoaltracker.activity
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    15:6A:A5:FA:D3:6B:B7:C6:F1:9E:93:E6:C0:7C:9F:FF:5E:DE:2D:97
+
+    SHA-1 certificate fingerprint:
+    15:6A:A5:FA:D3:6B:B7:C6:F1:9E:93:E6:C0:7C:9F:FF:5E:DE:2D:97
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyC8zORoFBXCUsphRnUp_-jQnXmoyy0F2ic</string>
+</resources>

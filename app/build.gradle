@@ -28,7 +28,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2',{
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2', {
         exclude module: 'espresso-core'
         exclude module: 'support-v4'
         exclude module: 'recyclerview-v7'
@@ -36,13 +36,13 @@ dependencies {
         exclude module: 'support-annotations'
         exclude module: 'design'
     })
-    androidTestCompile( 'com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile files('libs/gson-2.8.2.jar')
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.google.android.gms:play-services-maps:11.0.4'
+    compile 'com.google.android.gms:play-services-maps:11.6.0'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.android.support:design:26.+'
     compile 'com.jayway.android.robotium:robotium-solo:5.6.3'

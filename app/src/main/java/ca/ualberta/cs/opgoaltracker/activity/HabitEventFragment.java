@@ -246,6 +246,9 @@ public class HabitEventFragment extends Fragment {
                 });
                 dialog.show();
                 return true;
+            case R.id.event_menu_map:
+                Intent intent = new Intent(getActivity(),MapsActivity.class);
+                startActivity(intent);
 
             default:
                 return super.onOptionsItemSelected(item);
