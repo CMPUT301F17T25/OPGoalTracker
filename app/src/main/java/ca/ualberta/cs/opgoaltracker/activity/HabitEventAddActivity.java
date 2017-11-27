@@ -171,28 +171,30 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
                 //GET RESULT FROM SELECT PICTURE
                 if (resultCode == RESULT_OK && null != data) {
-                    setPicture=true;
-                    Uri uri = data.getData();
-                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    try {
+                        setPicture = true;
+                        Uri uri = data.getData();
+                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
-                    Cursor cursor = getContentResolver().query(
-                            uri, filePathColumn, null, null, null);
-                    cursor.moveToFirst();
+                        Cursor cursor = getContentResolver().query(
+                                uri, filePathColumn, null, null, null);
+                        cursor.moveToFirst();
 
-                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String filePath = cursor.getString(columnIndex);
+                        cursor.close();
 
-                    //taken from https://stackoverflow.com/questions/2507898/how-to-pick-an-image-from-gallery-sd-card-for-my-app
-                    //2017-11-13
+                        //taken from https://stackoverflow.com/questions/2507898/how-to-pick-an-image-from-gallery-sd-card-for-my-app
+                        //2017-11-13
 
-                    Bitmap picture = BitmapFactory.decodeFile(filePath);
-                    ImageButton getImage = (ImageButton) findViewById(R.id.new_event_picture);
-                    getImage.setImageBitmap(picture);
+                        Bitmap picture = BitmapFactory.decodeFile(filePath);
+                        ImageButton getImage = (ImageButton) findViewById(R.id.new_event_picture);
+                        getImage.setImageBitmap(picture);
 
 
-                }catch (Exception e){}
-        }
+                    }catch (Exception e){}
+                }
+            }
     }
 
 }
