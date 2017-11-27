@@ -83,7 +83,7 @@ public class NewsTest {
                                 2),
                         isDisplayed()));
         textView3.check(matches(withText("this is second test")));
-        
+
 
     }
 

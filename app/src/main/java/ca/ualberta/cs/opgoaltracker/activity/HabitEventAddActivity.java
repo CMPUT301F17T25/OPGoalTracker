@@ -7,24 +7,34 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.jar.Manifest;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
@@ -42,17 +52,26 @@ import ca.ualberta.cs.opgoaltracker.models.Photograph;
  */
 public class HabitEventAddActivity extends AppCompatActivity {
     HabitEvent newEvent;
-    Boolean setPicture;
+    Boolean setPicture=false;
     Bitmap picture;
     View view;
+    String habitType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_add);
-        setPicture=false;
 
-        // spinner does not work work as of right now, will add in a later version
+        //for test only
+        ArrayList<String> arrayListHabit = new ArrayList<String>();
+        arrayListHabit.add("test");
+        arrayListHabit.add("test1");
+
+        final Spinner habitList = (Spinner)findViewById(R.id.habit_spinner);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListHabit);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        habitList.setAdapter(dataAdapter);
+
         // for the all habit types are set to 'test'
 
         //Adds picture
@@ -62,8 +81,25 @@ public class HabitEventAddActivity extends AppCompatActivity {
         getImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 2);
+                /**
+                 * TO SELECT PICTURE
+                 */
+
+
+                if (ContextCompat.checkSelfPermission(HabitEventAddActivity.this, android.Manifest.permission.
+                        READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                    //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                    Intent intent = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(intent, 2);
+                }else{
+                    ActivityCompat.requestPermissions(HabitEventAddActivity.this, new String[]{
+                            android.Manifest.permission.READ_EXTERNAL_STORAGE}, 51);
+
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 1);
+                }
             }
         });
 
@@ -78,17 +114,21 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
                 try {
                     String eventComment = comment.getText().toString();
+                    String selectedHabit = habitList.getSelectedItem().toString();
                     //for some reason eventComment triggers commenttoolongexception
-                    newEvent = new HabitEvent("test",eventComment,new Date());
+                    newEvent = new HabitEvent(selectedHabit,eventComment,new Date());
 
 
                 } catch (CommentTooLongException e) {
                     e.printStackTrace();
                 }
+
                 if (newEvent!=null) {
+                    //handles if upload location
                     if (location.isChecked()){
                         newEvent.setLocation("somewhere");
                     }
+                    //handles picture
                     if (setPicture) {
                         try {
                             newEvent.setPhoto(new Photograph(33, 33));
@@ -96,6 +136,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                     }
+
 
                     Intent data = new Intent();
                     data.putExtra("event", (Parcelable)newEvent);
@@ -112,16 +153,25 @@ public class HabitEventAddActivity extends AppCompatActivity {
             }
         });
 
+    }
 
-
+    //NEEDED TO REQUEST PERMISSION
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permission, @NonNull int[]grantedResults){
+        if (requestCode==51){
+            if (grantedResults.length>0 && grantedResults[0]==PackageManager.PERMISSION_GRANTED){
+                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                startActivityForResult(intent, 2);
+            }
+        }
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Bundle bundle = data.getExtras();
         switch (requestCode){
             case 2:
-                try{
-                    Log.d("getbitmap", "no bitmap");
+
+                //GET RESULT FROM SELECT PICTURE
+                if (resultCode == RESULT_OK && null != data) {
+                    setPicture=true;
                     Uri uri = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -135,7 +185,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
                     //taken from https://stackoverflow.com/questions/2507898/how-to-pick-an-image-from-gallery-sd-card-for-my-app
                     //2017-11-13
-                    Log.d("pic","gotten filepath, getting bitmap");
+
                     Bitmap picture = BitmapFactory.decodeFile(filePath);
                     ImageButton getImage = (ImageButton) findViewById(R.id.new_event_picture);
                     getImage.setImageBitmap(picture);
@@ -144,4 +194,5 @@ public class HabitEventAddActivity extends AppCompatActivity {
                 }catch (Exception e){}
         }
     }
+
 }
