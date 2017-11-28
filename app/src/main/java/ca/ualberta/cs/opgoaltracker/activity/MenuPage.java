@@ -65,6 +65,7 @@ public class MenuPage extends AppCompatActivity
     NewsFragment newsFragment = new   NewsFragment();
     MyAccountFragment myAccountFragment = new MyAccountFragment();
     TextView comment;
+    TextView id;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
 
@@ -111,6 +112,8 @@ public class MenuPage extends AppCompatActivity
 
         comment = (TextView) navigationView.getHeaderView(0).findViewById(R.id.menuPageComment);
         comment.setText(currentUser.getComment());
+        id = (TextView) navigationView.getHeaderView(0).findViewById(R.id.menuPageId);
+        id.setText(currentUser.getId());
 
         // https://stackoverflow.com/questions/33540090/textview-from-navigationview-header-returning-null
         button = (ImageButton) navigationView.getHeaderView(0).findViewById(R.id.menu_profile_image);

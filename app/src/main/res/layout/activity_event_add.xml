@@ -18,7 +18,7 @@
         app:srcCompat="@drawable/newevent" />
 
     <TextView
-        android:id="@+id/profilePageId"
+        android:id="@+id/textView3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Habit:" />
@@ -29,7 +29,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/comment"
+        android:id="@+id/textView14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Comment:" />
