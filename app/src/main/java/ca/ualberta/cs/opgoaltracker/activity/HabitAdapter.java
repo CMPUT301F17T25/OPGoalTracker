@@ -60,15 +60,11 @@ public class HabitAdapter extends BaseAdapter {
         thisDate.setTime(thisHabit.getDate());
         Calendar currentDate = Calendar.getInstance();
 
-        // Set text for separator
-//        int a = thisDate.get(Calendar.YEAR);
-//        int b = currentDate.get(Calendar.YEAR);
-//        int c = thisDate.get(Calendar.DAY_OF_YEAR);
-//        int d = currentDate.get(Calendar.DAY_OF_YEAR);
+        // Set separator
         if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
                 (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                        thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) {
-            if (thisHabit.getPeriod().get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) {
+                        thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+            if (thisHabit.getPeriod().get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
                 separator.setText("TO-DO");
             } else {
                 separator.setText("Not For Today");

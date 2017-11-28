@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
@@ -47,7 +48,7 @@ public class HabitFragment extends Fragment {
 
     // variables for Habit ListView
     private Participant currentUser;
-    private ArrayList<Habit> habitList;
+    private HabitList habitList;
     private ListView lvHabit;
     private HabitAdapter adapter;
     private static final int REQUEST_CODE_ONE = 1;
@@ -123,7 +124,8 @@ public class HabitFragment extends Fragment {
         habitList = currentUser.getHabitList();
 
         // Init adapter
-        adapter = new HabitAdapter(getActivity(), habitList);
+        habitList.sort();
+        adapter = new HabitAdapter(getActivity(), habitList.getArrayList());
         lvHabit.setAdapter(adapter);
 
         // jump to HabitAddActivity if floating action button is clicked
@@ -157,7 +159,7 @@ public class HabitFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
 //                intent.putExtra("Habit", (Parcelable) habitList.get(position));
-                intent.putParcelableArrayListExtra("HabitList", habitList);
+                intent.putParcelableArrayListExtra("HabitList", habitList.getArrayList());
                 intent.putExtra("position", position);
                 startActivityForResult(intent, REQUEST_CODE_TWO);
             }
@@ -175,16 +177,24 @@ public class HabitFragment extends Fragment {
         if (requestCode == REQUEST_CODE_ONE) { // update ListView after adding new Habit
             if (resultCode == RESULT_OK) {
                 Habit newHabit = data.getParcelableExtra("Habit");
-                habitList.add(newHabit);
+                habitList.addHabit(newHabit);
             }
         } else if (requestCode == REQUEST_CODE_TWO) { // update ListView after editing Habit
             if (resultCode == RESULT_OK) {
                 ArrayList<Habit> newHabitList = data.getExtras().getParcelableArrayList("HabitList");
-                habitList.clear();
-                habitList.addAll(newHabitList);
+                habitList.setArrayList(newHabitList);
             }
         }
-        adapter.notifyDataSetChanged();
+
+        // sort habitList and refresh
+        habitList.sort();
+//        adapter.notifyDataSetChanged();
+        adapter = new HabitAdapter(getActivity(), habitList.getArrayList());
+        lvHabit.setAdapter(adapter);
+
+        // upload currentUser
+        ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+        addUsersTask.execute(currentUser);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

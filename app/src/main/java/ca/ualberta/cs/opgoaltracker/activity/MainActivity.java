@@ -30,7 +30,7 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  * <br>
  * This page allows user to enter their user ID and press login button to login, and allows user to click register and jump into the register page
  * <br>
- * @author Yongjia Huang
+ * @author Yongjia Huang, Mingwei Li
  * @version 3.0
  * @see AppCompatActivity
  * @since 1.0

@@ -29,7 +29,7 @@ import ca.ualberta.cs.opgoaltracker.models.User;
  * User can either go back to login page or finish sign up process and jump to the next page.
  * sign up for  first admin account and  be able to sign in , do changes in admin account page
  * <br>
- * @author Yongjia Huang , Donglin Han
+ * @author Yongjia Huang , Donglin Han, Mingwei Li
  * @version 3.0
  * @see AppCompatActivity
  * @since 1.0

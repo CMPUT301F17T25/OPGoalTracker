@@ -25,7 +25,7 @@ import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
  */
 public class Participant implements Parcelable {
     private Photograph avatar;
-    private ArrayList<Habit> habitList;
+    private HabitList habitList;
     private ArrayList<Participant> followerList;
     private ArrayList<Participant> followingList;
     private ArrayList<Participant> requestList;
@@ -37,7 +37,7 @@ public class Participant implements Parcelable {
      */
     public Participant(String id) {
         this.id = id;
-        habitList = new ArrayList<Habit>();
+        habitList = new HabitList();
         followerList = new ArrayList<Participant>();
         followingList = new ArrayList<Participant>();
         requestList = new ArrayList<Participant>();
@@ -79,7 +79,7 @@ public class Participant implements Parcelable {
      * @return habitList : HabitList
      * @see HabitList
      */
-    public ArrayList<Habit> getHabitList(){
+    public HabitList getHabitList(){
         return habitList;
     }
 
@@ -89,8 +89,8 @@ public class Participant implements Parcelable {
      * @throws UndefinedException
      * @see HabitList
      */
-    public void setHabitList(ArrayList<Habit> habitList) throws UndefinedException {
-        if (habitList==null) {
+    public void setHabitList(HabitList habitList) throws UndefinedException {
+        if (habitList.getArrayList()==null) {
             throw new UndefinedException();
         }
         this.habitList=habitList;
@@ -162,8 +162,8 @@ public class Participant implements Parcelable {
     protected Participant(Parcel in) {
         avatar = (Photograph) in.readValue(Photograph.class.getClassLoader());
         if (in.readByte() == 0x01) {
-            habitList = new ArrayList<Habit>();
-            in.readList(habitList, Habit.class.getClassLoader());
+            habitList = new HabitList();
+            in.readParcelable(HabitList.class.getClassLoader());
         } else {
             habitList = null;
         }
@@ -196,11 +196,11 @@ public class Participant implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(avatar);
-        if (habitList == null) {
+        if (habitList.getArrayList() == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(habitList);
+            dest.writeParcelable(habitList, flags);
         }
         if (followerList == null) {
             dest.writeByte((byte) (0x00));

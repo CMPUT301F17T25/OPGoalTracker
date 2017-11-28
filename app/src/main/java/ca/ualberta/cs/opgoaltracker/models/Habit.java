@@ -26,30 +26,15 @@ import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
  * @see Parcelable
  * @since 1.0
  */
-public class Habit implements Parcelable {
+public class Habit implements Parcelable, Comparable<Habit> {
 
     private String id;
     private String habitType;
     private String reason;
     private Date date;
+    private Date createDate;
     private ArrayList<Boolean> period;
     Admin admin = new Admin("admin");
-
-    /**
-     * Set id for the Habit object
-     * @return id : String
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * Get id of the Habit object
-     * @param id : String
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
 
     /**
      * Basic Habit Constructor, allows user to create a Habit object by defining habit name ( habit type), date, reason ,starttime and intervaltime.<br>
@@ -73,17 +58,18 @@ public class Habit implements Parcelable {
         }
         this.habitType = habitType;
         this.date = date;
+        this.createDate = new Date();
         this.reason = reason;
         this.period = period;
     }
 
 
+    // start of implementing Parcelable
     /**
      * Default Parcel method , implement Parcelable
      * @see Parcelable
      * @return
      */
-    // start of implementing Parcelable
     @Override
     public int describeContents() {
         return 0;
@@ -97,10 +83,12 @@ public class Habit implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel out, int i) {
+        out.writeString(id);
         out.writeString(habitType);
         out.writeString(reason);
         // Write long value of Date
         out.writeLong(date.getTime());
+        out.writeLong(createDate.getTime());
         out.writeList(period);
     }
 
@@ -110,10 +98,12 @@ public class Habit implements Parcelable {
      * @param in
      */
     private void readFromParcel(Parcel in) {
+        id = in.readString();
         habitType = in.readString();
         reason = in.readString();
         // Read Long value and convert to date
         date = new Date(in.readLong());
+        createDate = new Date(in.readLong());
         period = in.readArrayList(null);
 
     }
@@ -144,6 +134,21 @@ public class Habit implements Parcelable {
     };
     // end of implementing Parcelable
 
+    /**
+     * Set id for the Habit object
+     * @return id : String
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Get id of the Habit object
+     * @param id : String
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Basic Habit Type getter
@@ -212,10 +217,29 @@ public class Habit implements Parcelable {
     public ArrayList<Boolean> getPeriod() {return period; }
 
     /**
-     * Basic
+     * Basic period setter
      * @param period
      */
     public void setPeriod(ArrayList<Boolean> period) {
         this.period = period;
+    }
+
+    /**
+     * Basic createDate getter
+     * @return createDate : Date
+     */
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    /**
+     * Override compareTo to implement the sort method of HabitList
+     * @param compareHabit
+     * @see Comparable
+     * @return
+     */
+    @Override
+    public int compareTo(Habit compareHabit) {
+        return getCreateDate().compareTo(compareHabit.getCreateDate());
     }
 }
