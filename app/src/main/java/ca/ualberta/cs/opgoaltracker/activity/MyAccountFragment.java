@@ -161,7 +161,7 @@ public class MyAccountFragment extends Fragment {
         } catch (FileNotFoundException e) {
             btn.setImageResource(R.drawable.newevent);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

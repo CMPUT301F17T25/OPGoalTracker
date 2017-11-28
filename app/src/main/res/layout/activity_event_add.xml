@@ -54,11 +54,18 @@
             android:layout_weight="1"
             android:text="Upload my location" />
 
-        <CheckBox
-            android:id="@+id/new_event_location"
+        <EditText
+            android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:textSize="14sp"
+            android:hint="your address"
+            android:textColorHint="#000000" />
+
+
     </LinearLayout>
 
     <Button

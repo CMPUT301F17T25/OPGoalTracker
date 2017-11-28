@@ -48,4 +48,5 @@ dependencies {
     compile 'com.jayway.android.robotium:robotium-solo:5.6.3'
     compile 'io.searchbox:jest-droid:2.4.0'
     testCompile 'junit:junit:4.12'
+    compile 'org.osmdroid:osmdroid-android:5.6.5'
 }

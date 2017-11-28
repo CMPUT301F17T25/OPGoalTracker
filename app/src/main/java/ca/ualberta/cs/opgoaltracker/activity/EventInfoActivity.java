@@ -48,14 +48,14 @@ public class EventInfoActivity extends AppCompatActivity {
             imageButton.setImageBitmap(picture);
         }
         EditText comment= (EditText) findViewById(R.id.new_event_comment);
-        CheckBox location = (CheckBox) findViewById(R.id.new_event_location);
+//        CheckBox location = (CheckBox) findViewById(R.id.new_event_location);
         Button saveChanges = (Button) findViewById(R.id.create_event);
         saveChanges.setText("Save Changes");
 
         comment.setText(getIntent().getStringExtra("comment"));
-        if (getIntent().getBooleanExtra("location",false)){
-            location.setChecked(true);
-        }
+//        if (getIntent().getBooleanExtra("location",false)){
+//            location.setChecked(true);
+//        }
     }
 
     @Override

@@ -29,7 +29,8 @@ public class HabitEvent implements Parcelable {
     private String comment;
     private Date date;
     private Photograph photo;
-    private String location;
+    private String lat;
+    private String lng;
     private int maxPhotoSize = 65536;
 
     /**
@@ -102,8 +103,8 @@ public class HabitEvent implements Parcelable {
      * Basic Habit Event Location getter
      * @return String : location
      */
-    public String getLocation() {
-        return location;
+    public String[] getLocation() {
+        return new String[] {lat,lng};
     }
 
     /**
@@ -150,10 +151,11 @@ public class HabitEvent implements Parcelable {
 
     /**
      *  Basic Habit Event Location setter
-     * @param location String
+     *
      */
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocation(String lat,String lng) {
+        this.lat = lat;
+        this.lng = lng;
     }
 
     /**
@@ -164,11 +166,11 @@ public class HabitEvent implements Parcelable {
         return "User return";
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     * @param in
-     */
+    @Override
+    public String toString(){
+        return habitType+comment;
+    }
+
     protected HabitEvent(Parcel in) {
         id = in.readString();
         habitType = in.readString();
@@ -176,26 +178,16 @@ public class HabitEvent implements Parcelable {
         long tmpDate = in.readLong();
         date = tmpDate != -1 ? new Date(tmpDate) : null;
         photo = (Photograph) in.readValue(Photograph.class.getClassLoader());
-        location = in.readString();
+        lat = in.readString();
+        lng = in.readString();
         maxPhotoSize = in.readInt();
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     * @return
-     */
     @Override
     public int describeContents() {
         return 0;
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     * @param dest
-     * @param flags
-     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(id);
@@ -203,14 +195,11 @@ public class HabitEvent implements Parcelable {
         dest.writeString(comment);
         dest.writeLong(date != null ? date.getTime() : -1L);
         dest.writeValue(photo);
-        dest.writeString(location);
+        dest.writeString(lat);
+        dest.writeString(lng);
         dest.writeInt(maxPhotoSize);
     }
 
-    /**
-     * Default Parcel method , implement Parcelable
-     * @see Parcelable
-     */
     @SuppressWarnings("unused")
     public static final Parcelable.Creator<HabitEvent> CREATOR = new Parcelable.Creator<HabitEvent>() {
         @Override

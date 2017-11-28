@@ -6,36 +6,37 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import java.io.IOException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.jar.Manifest;
 
+import ca.ualberta.cs.opgoaltracker.Controller.LatitudeAndLongitudeWithPincode;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
@@ -56,6 +57,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
     Bitmap picture;
     View view;
     String habitType;
+    private  LatitudeAndLongitudeWithPincode convertedAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -110,7 +112,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 EditText comment = (EditText)findViewById(R.id.new_event_comment);
-                CheckBox location = (CheckBox)findViewById(R.id.new_event_location);
+                EditText address = (EditText) findViewById(R.id.address);
 
                 try {
                     String eventComment = comment.getText().toString();
@@ -122,32 +124,38 @@ public class HabitEventAddActivity extends AppCompatActivity {
                 } catch (CommentTooLongException e) {
                     e.printStackTrace();
                 }
-
-                if (newEvent!=null) {
-                    //handles if upload location
-                    if (location.isChecked()){
-                        newEvent.setLocation("somewhere");
-                    }
-                    //handles picture
-                    if (setPicture) {
-                        try {
-                            newEvent.setPhoto(new Photograph(33, 33));
-                        } catch (ImageTooLargeException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-
-                    Intent data = new Intent();
-                    data.putExtra("event", (Parcelable)newEvent);
-                    setResult(AppCompatActivity.RESULT_OK,data);
-                    finish();
+                try{
+                    String eventAddress = address.getText().toString();
+                    GetCoordinates getLocation = new GetCoordinates();
+                    getLocation.execute(eventAddress.replace(" ","+"));
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
-                else{
-                    Log.d("failed","null event");
-                    setResult(AppCompatActivity.RESULT_CANCELED);
-                    finish();
-                }
+//                if (newEvent!=null) {
+////                    //handles if upload location
+////                    if (location.isChecked()){
+////                        newEvent.setLocation("somewhere");
+////                    }
+//                    //handles picture
+//                    if (setPicture) {
+//                        try {
+//                            newEvent.setPhoto(new Photograph(33, 33));
+//                        } catch (ImageTooLargeException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//
+//                    Intent data = new Intent();
+//                    data.putExtra("event", (Parcelable)newEvent);
+//                    setResult(AppCompatActivity.RESULT_OK,data);
+//                    finish();
+//                }
+//                else{
+//                    Log.d("failed","null event");
+//                    setResult(AppCompatActivity.RESULT_CANCELED);
+//                    finish();
+//                }
 
 
             }
@@ -197,4 +205,75 @@ public class HabitEventAddActivity extends AppCompatActivity {
             }
     }
 
+    private class GetCoordinates extends AsyncTask<String,Void,String> {
+        ProgressDialog dialog = new ProgressDialog(HabitEventAddActivity.this);
+
+        String[] location = new String[] {"",""};
+
+
+        @Override
+        protected void onPreExecute(){
+
+            super.onPreExecute();
+//            dialog.setMessage("Please wait....");
+//            dialog.setCanceledOnTouchOutside(false);
+//            dialog.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String response;
+            try{
+                String address = strings[0];
+                LatitudeAndLongitudeWithPincode http = new LatitudeAndLongitudeWithPincode();
+                String url = String.format("https://maps.googleapis.com/maps/api/geocode/json?address=%s",address);
+                response = http.getHTTPDate(url);
+                return response;
+            }catch (Exception ex){
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s){
+            try{
+                JSONObject jsonObject = new JSONObject(s);
+                String lat = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                        .getJSONObject("location").get("lat").toString();
+                String lng = ((JSONArray)jsonObject.get("results")).getJSONObject(0).getJSONObject("geometry")
+                        .getJSONObject("location").get("lng").toString();
+                newEvent.setLocation(lat,lng);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if (newEvent!=null) {
+//                    //handles if upload location
+//                    if (location.isChecked()){
+//                        newEvent.setLocation("somewhere");
+//                    }
+                //handles picture
+                if (setPicture) {
+                    try {
+                        newEvent.setPhoto(new Photograph(33, 33));
+                    } catch (ImageTooLargeException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+                Intent data = new Intent();
+                data.putExtra("event", (Parcelable)newEvent);
+                setResult(AppCompatActivity.RESULT_OK,data);
+                finish();
+            }
+            else{
+                Log.d("failed","null event");
+                setResult(AppCompatActivity.RESULT_CANCELED);
+                finish();
+            }
+        }
+    }
 }
