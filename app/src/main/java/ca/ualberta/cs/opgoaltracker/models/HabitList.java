@@ -10,13 +10,16 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 
 import ca.ualberta.cs.opgoaltracker.exception.DuplicatedHabitException;
 
 /**
  * This HabitList Object contains a list of Habit<br>
  *     The ArrayList contains HabitType Object as instances<br>
- * @author Dichong Song, Yongjia Huang
+ * @author Dichong Song, Yongjia Huang, Mingwei Li
  * @version 3.0
  * @see Parcelable
  * @see ArrayList
@@ -79,10 +82,34 @@ public class HabitList implements Parcelable {
     }
 
     /**
-     *
+     * Sort habitList by create date and then move habit that need to do today to the front of the ArrayList.
      */
-    public void todayHabit(){
-        //todo
+    public void sort() {
+        ArrayList<Habit> todo = new ArrayList<Habit>();
+        ArrayList<Habit> notForToday = new ArrayList<Habit>();
+        Calendar thisDate = Calendar.getInstance();
+        Calendar currentDate = Calendar.getInstance();
+
+        Collections.sort(this.habitArrayList);
+
+        for(Habit habit : this.habitArrayList) {
+            thisDate.setTime(habit.getDate());
+
+            if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
+                    (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                            thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+                if (habit.getPeriod().get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
+                    todo.add(habit);
+                } else {
+                    notForToday.add(habit);
+                }
+            } else {
+                notForToday.add(habit);
+            }
+        }
+
+        todo.addAll(notForToday);
+        this.habitArrayList = todo;
     }
 
     /**
