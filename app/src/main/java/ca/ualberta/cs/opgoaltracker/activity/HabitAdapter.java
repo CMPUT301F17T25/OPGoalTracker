@@ -13,6 +13,8 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
@@ -49,14 +51,30 @@ public class HabitAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         View v= View.inflate(context, R.layout.item_habit_list, null);
+        TextView separator = (TextView) v.findViewById(R.id.separator);
         TextView tvTitle = (TextView) v.findViewById(R.id.tv_title);
         TextView tvReason = (TextView) v.findViewById(R.id.tv_reason);
 
-        // Set text for TextView
-        tvTitle.setText(habitList.get(position).getHabitType());
-        tvReason.setText("Current value: " +
-                String.valueOf(habitList.get(position).getReason()));
+        Habit thisHabit = habitList.get(position);
+        Calendar thisDate = Calendar.getInstance();
+        thisDate.setTime(thisHabit.getDate());
+        Calendar currentDate = Calendar.getInstance();
 
+        // Set separator
+        if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
+                (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                        thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+            if (thisHabit.getPeriod().get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
+                separator.setText("TO-DO");
+            } else {
+                separator.setText("Not For Today");
+            }
+        } else {
+            separator.setText("Not For Today");
+        }
+        // Set text for other TextView
+        tvTitle.setText(thisHabit.getHabitType());
+        tvReason.setText(thisHabit.getReason());
         return v ;
     }
 }

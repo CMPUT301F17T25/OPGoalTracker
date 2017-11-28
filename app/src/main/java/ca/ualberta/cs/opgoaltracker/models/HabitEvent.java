@@ -17,19 +17,36 @@ import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 /**
  * This Habit Event describe a single Habit Event which belongs to a Habit Type<br>
  *     This Class allow user to get and set information in this object
- * @author Donglin Han, Yongjia Huang
+ * @author Donglin Han, Yongjia Huang, Mingwei Li
  * @version 3.0
  * @see Parcelable
  * @since 1.0
  */
 public class HabitEvent implements Parcelable {
 
+    private String id;
     private String habitType;
     private String comment;
     private Date date;
     private Photograph photo;
     private String location;
     private int maxPhotoSize = 65536;
+
+    /**
+     * Set id for the HabitEvent object
+     * @return id : String
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Get id of the HabitEvent object
+     * @param id
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
     /**
      * Base Constructor which create a Habit Event type <br>
@@ -153,6 +170,7 @@ public class HabitEvent implements Parcelable {
      * @param in
      */
     protected HabitEvent(Parcel in) {
+        id = in.readString();
         habitType = in.readString();
         comment = in.readString();
         long tmpDate = in.readLong();
@@ -180,6 +198,7 @@ public class HabitEvent implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(habitType);
         dest.writeString(comment);
         dest.writeLong(date != null ? date.getTime() : -1L);

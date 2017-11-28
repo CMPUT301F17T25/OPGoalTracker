@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/habit_title"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/black_overlay"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginLeft="16dp"
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/habit_reason"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/black_overlay"
             app:layout_constraintRight_toLeftOf="@+id/editReasonDetail"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -78,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/habit_start_date"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textColor="@color/black_overlay"
             android:layout_marginLeft="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -107,7 +107,7 @@
             android:layout_marginTop="24dp"
             android:text="@string/habit_period"
             android:textColor="@color/black_overlay"
-            android:textSize="24sp"
+            android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/calendarViewDetail"
             android:layout_marginStart="16dp" />
@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/habit_mon"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="@color/black_overlay"
             app:layout_constraintRight_toRightOf="@+id/checkBoxMonDetail"
             app:layout_constraintLeft_toLeftOf="@+id/checkBoxMonDetail"
@@ -148,7 +148,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/habit_tue"
             android:textColor="@color/black_overlay"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/checkBoxTueDetail"
             app:layout_constraintRight_toRightOf="@+id/checkBoxTueDetail"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxTueDetail" />
@@ -168,7 +168,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/habit_wed"
             android:textColor="@color/black_overlay"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/checkBoxWedDetail"
             app:layout_constraintRight_toRightOf="@+id/checkBoxWedDetail"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxWedDetail" />
@@ -188,7 +188,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/habit_thur"
             android:textColor="@color/black_overlay"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/checkBoxThurDetail"
             app:layout_constraintRight_toRightOf="@+id/checkBoxThurDetail"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxThurDetail" />
@@ -208,7 +208,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/habit_fri"
             android:textColor="@color/black_overlay"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/checkBoxFriDetail"
             app:layout_constraintRight_toRightOf="@+id/checkBoxFriDetail"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxFriDetail" />
@@ -228,7 +228,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/habit_sat"
             android:textColor="@color/black_overlay"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/checkBoxSatDetail"
             app:layout_constraintRight_toRightOf="@+id/checkBoxSatDetail"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxSatDetail" />
@@ -248,26 +248,27 @@
             android:layout_marginTop="8dp"
             android:text="@string/habit_sun"
             android:textColor="@color/black_overlay"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/checkBoxSunDetail"
             app:layout_constraintRight_toRightOf="@+id/checkBoxSunDetail"
             app:layout_constraintTop_toBottomOf="@+id/checkBoxSunDetail" />
 
         <Button
-            android:id="@+id/buttonCreate"
+            android:id="@+id/buttonSave"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
+            android:onClick="buttonSave"
             android:text="@string/save"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textMonDetail"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="16dp" />
+            app:layout_constraintTop_toBottomOf="@+id/textMonDetail" />
 
     </android.support.constraint.ConstraintLayout>
 

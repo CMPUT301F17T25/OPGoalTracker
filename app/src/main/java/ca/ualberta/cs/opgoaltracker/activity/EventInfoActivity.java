@@ -18,11 +18,23 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 
 /**
  * Created by malon_000 on 2017-11-06.
  */
 
+/**
+ * This is the fragment that displays more information about a single habit event
+ * <br>
+ * This page allows user to see and edit their own a specific event
+ * <br>
+ * @author Long Ma
+ * @version 2.0
+ * @see AppCompatActivity,
+ * @see HabitEvent
+ * @since 2.0
+ */
 public class EventInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

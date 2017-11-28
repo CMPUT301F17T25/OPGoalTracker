@@ -42,6 +42,7 @@ public class FriendFragment extends Fragment {
 
     private ArrayList<Participant>  followingList;
     private ArrayList<Participant>  followerList;
+    private ArrayList<Participant>  requestList;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -121,20 +122,29 @@ public class FriendFragment extends Fragment {
         secondTab.setIcon(R.drawable.ic_launcher); // set an icon for the second tab
         tabLayout.addTab(secondTab); // add  the tab  in the TabLayout
 
+        // Create a new Tab named "request"
+        TabLayout.Tab thirdTab = tabLayout.newTab();
+        thirdTab.setText("request"); // set the Text for the second Tab
+        thirdTab.setIcon(R.drawable.ic_launcher); // set an icon for the second tab
+        tabLayout.addTab(thirdTab); // add  the tab  in the TabLayout
+
         if (currentUser == null){
             currentUser = new Participant("111");
         }
         try {
             followingList = currentUser.getFollowingList();
             followerList = currentUser.getFollowerList();
+            requestList = currentUser.getRequestList();
         }catch(UndefinedException e){
-            followingList = new ArrayList<Participant>();
-            followerList = new ArrayList<Participant>();
+            e.printStackTrace();
         }
 
         final Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("followingList", followingList);
         bundle.putParcelableArrayList("followerList", followerList);
+        bundle.putParcelableArrayList("requestList", requestList);
+        bundle.putParcelable("LOGINUSER",currentUser);
+
         //go to FriendSearchActivty
         FloatingActionButton addFriend = (FloatingActionButton) view.findViewById(R.id.add_friend);
         addFriend.setOnClickListener(new View.OnClickListener() {
@@ -147,6 +157,14 @@ public class FriendFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        Fragment fragment = null;
+        fragment = new FollowingListFragment();
+        fragment.setArguments(bundle);
+        FragmentManager fm = context.getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.constraintLayout, fragment);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        ft.commit();
 
 
         // perform setOnTabSelectedListener event on TabLayout
@@ -162,6 +180,10 @@ public class FriendFragment extends Fragment {
                         break;
                     case 1:
                         fragment = new FollowerListFragment();
+                        fragment.setArguments(bundle);
+                        break;
+                    case 2:
+                        fragment = new RequestListFragment();
                         fragment.setArguments(bundle);
                         break;
                 }

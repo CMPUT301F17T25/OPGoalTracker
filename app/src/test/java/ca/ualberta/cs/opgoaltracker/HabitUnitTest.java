@@ -10,6 +10,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -39,20 +40,12 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
     public void testNormalHabit() throws StringTooLongException,NoTitleException {
         String habitType = "run";
         String reason = "i like it";
-        Date date = new java.util.Date();
-        Calendar calendar= Calendar.getInstance();
-        long startTime = calendar.getTimeInMillis();
-        long intervalTime = 36000;
-        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+        Date today = new Date();
+        ArrayList<Boolean> period = new ArrayList<>();
+        Habit habit = new Habit(habitType,reason, today,period);
 
         assertEquals(habit.getHabitType(), habitType);
         assertEquals(habit.getReason(), reason);
-        assertEquals(habit.getDate(), date);
-
-        intervalTime = 72000;
-        habit.setPeriod(startTime, intervalTime);
-        assertEquals(habit.getStartTime(), startTime);
-        assertEquals(habit.getIntervalTime(), intervalTime);
 
         habitType = "swim";
         habit.setHabitType(habitType);
@@ -68,10 +61,9 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         String habitType = "";
         String reason = "i like it";
         Date date = new java.util.Date();
-        Calendar calendar= Calendar.getInstance();
-        long startTime = calendar.getTimeInMillis();
-        long intervalTime = 36000;
-        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+        Date today = new Date();
+        ArrayList<Boolean> period = new ArrayList<>();
+        Habit habit = new Habit(habitType,reason, today,period);
     }
 
     @Test(expected = NoTitleException.class)
@@ -79,10 +71,9 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         String habitType = "run";
         String reason = "i like it";
         Date date = new java.util.Date();
-        Calendar calendar= Calendar.getInstance();
-        long startTime = calendar.getTimeInMillis();
-        long intervalTime = 36000;
-        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+        Date today = new Date();
+        ArrayList<Boolean> period = new ArrayList<>();
+        Habit habit = new Habit(habitType,reason, today,period);
 
         habitType="";
         habit.setHabitType(habitType);
@@ -92,33 +83,27 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
     public void testTooLongTitle() throws StringTooLongException,NoTitleException {
         String habitType = "111111111111111111111111111111";
         String reason = "i like it";
-        Date date = new java.util.Date();
-        Calendar calendar= Calendar.getInstance();
-        long startTime = calendar.getTimeInMillis();
-        long intervalTime = 36000;
-        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+        Date today = new Date();
+        ArrayList<Boolean> period = new ArrayList<>();
+        Habit habit = new Habit(habitType,reason, today,period);
     }
 
     @Test(expected = StringTooLongException.class)
     public void testTooLongReason() throws StringTooLongException,NoTitleException {
         String habitType = "run";
         String reason =  "11111111111111111111111111111111111111111111111111111";
-        Date date = new java.util.Date();
-        Calendar calendar= Calendar.getInstance();
-        long startTime = calendar.getTimeInMillis();
-        long intervalTime = 36000;
-        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+        Date today = new Date();
+        ArrayList<Boolean> period = new ArrayList<>();
+        Habit habit = new Habit(habitType,reason, today,period);
     }
 
     @Test(expected = StringTooLongException.class)
     public void testSetLongReason() throws StringTooLongException,NoTitleException {
         String habitType = "runrun";
         String reason = "i like it";
-        Date date = new java.util.Date();
-        Calendar calendar= Calendar.getInstance();
-        long startTime = calendar.getTimeInMillis();
-        long intervalTime = 36000;
-        Habit habit = new Habit(habitType, reason, date, startTime, intervalTime);
+        Date today = new Date();
+        ArrayList<Boolean> period = new ArrayList<>();
+        Habit habit = new Habit(habitType,reason, today,period);
 
         reason = "111111111111111111111111111111";
         habit.setReason(reason);

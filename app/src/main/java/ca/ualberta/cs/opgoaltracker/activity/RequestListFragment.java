@@ -8,7 +8,6 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,29 +19,24 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
- * FollowingListFragment is called when user tap the 'following' tab in FriendFragment
- * It will generate a fragment of user's following list
- *
- * @author song
- * @version 1.0
- * @since FollowerList
- * @see Fragment
+ * Created by song on 2017/11/24.
  */
-public class FollowingListFragment extends Fragment {
 
-    private ArrayList<Participant> followingList;
+public class RequestListFragment extends Fragment {
+    private ArrayList<Participant> requestList;
     private ListView listView;
-    private FollowingAdapter adapter;
-
+    private RequestAdapter adapter;
+    private Participant currentUser;
     /**
      * Required empty public constructor
      */
-    public FollowingListFragment() {
+    public RequestListFragment() {
         // Required empty public constructor
     }
 
     /**
      * default onCreate method
+     *
      * @param savedInstanceState
      */
     @Override
@@ -58,6 +52,7 @@ public class FollowingListFragment extends Fragment {
         super.onStart();
     }
 
+
     /**
      * Through this onCreateView method, a fragment is generated using fragment_friend layout and FollowingAdapter
      * @param inflater
@@ -70,13 +65,17 @@ public class FollowingListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_friend, container, false);
         Bundle arg = getArguments();
-        followingList = arg.getParcelableArrayList("followingList");
+        requestList = arg.getParcelableArrayList("requestList");
+        currentUser= arg.getParcelable("LOGINUSER");
         listView = (ListView) view.findViewById(R.id.friendlist);
-        adapter = new FollowingAdapter(getActivity(),followingList);
+        adapter = new RequestAdapter(getActivity(),requestList,currentUser);
+
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
+        //test
+        if (requestList.isEmpty()){
+            requestList.add(new Participant("sdc"));
+        }
         return view;
     }
-
 }
