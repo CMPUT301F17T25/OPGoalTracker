@@ -88,6 +88,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         out.writeString(reason);
         // Write long value of Date
         out.writeLong(date.getTime());
+        out.writeLong(createDate.getTime());
         out.writeList(period);
     }
 
@@ -102,6 +103,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         reason = in.readString();
         // Read Long value and convert to date
         date = new Date(in.readLong());
+        createDate = new Date(in.readLong());
         period = in.readArrayList(null);
 
     }
@@ -230,6 +232,12 @@ public class Habit implements Parcelable, Comparable<Habit> {
         return createDate;
     }
 
+    /**
+     * Override compareTo to implement the sort method of HabitList
+     * @param compareHabit
+     * @see Comparable
+     * @return
+     */
     @Override
     public int compareTo(Habit compareHabit) {
         return getCreateDate().compareTo(compareHabit.getCreateDate());

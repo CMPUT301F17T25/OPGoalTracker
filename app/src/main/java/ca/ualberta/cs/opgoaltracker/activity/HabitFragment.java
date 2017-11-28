@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
@@ -123,6 +124,7 @@ public class HabitFragment extends Fragment {
         habitList = currentUser.getHabitList();
 
         // Init adapter
+        habitList.sort();
         adapter = new HabitAdapter(getActivity(), habitList.getArrayList());
         lvHabit.setAdapter(adapter);
 
@@ -183,7 +185,16 @@ public class HabitFragment extends Fragment {
                 habitList.setArrayList(newHabitList);
             }
         }
-        adapter.notifyDataSetChanged();
+
+        // sort habitList and refresh
+        habitList.sort();
+//        adapter.notifyDataSetChanged();
+        adapter = new HabitAdapter(getActivity(), habitList.getArrayList());
+        lvHabit.setAdapter(adapter);
+
+        // upload currentUser
+        ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+        addUsersTask.execute(currentUser);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

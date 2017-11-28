@@ -170,6 +170,7 @@ public class HabitEvent implements Parcelable {
      * @param in
      */
     protected HabitEvent(Parcel in) {
+        id = in.readString();
         habitType = in.readString();
         comment = in.readString();
         long tmpDate = in.readLong();
@@ -197,6 +198,7 @@ public class HabitEvent implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(habitType);
         dest.writeString(comment);
         dest.writeLong(date != null ? date.getTime() : -1L);

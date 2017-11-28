@@ -86,8 +86,10 @@ public class HabitList implements Parcelable {
         Calendar thisDate = Calendar.getInstance();
         Calendar currentDate = Calendar.getInstance();
 
+        // sort habitArrayList by createDate in ascending order
         Collections.sort(this.habitArrayList);
 
+        // for each habit in habitArrayList, check if it need to do today, and add it into proper ArrayList
         for(Habit habit : this.habitArrayList) {
             thisDate.setTime(habit.getDate());
 
@@ -104,6 +106,7 @@ public class HabitList implements Parcelable {
             }
         }
 
+        // combine two ArrayList and replace this.habitArrayList
         todo.addAll(notForToday);
         this.habitArrayList = todo;
     }
