@@ -6,7 +6,6 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,32 +13,25 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
@@ -67,11 +59,9 @@ public class MyAccountFragment extends Fragment {
     private String mParam2;
     private Participant currentUser;
     View view;
-//    View view2;
-
-    ImageButton btn;// = (ImageButton) view.findViewById(R.id.head_portrait);
-//    ImageButton button; //= (ImageButton) view.findViewById(R.id.imageButton2);
-//    Context context = getContext();
+    TextView comment;
+    TextView id;
+    ImageButton btn;
     String picturePath;
 
     private OnFragmentInteractionListener mListener;
@@ -116,6 +106,9 @@ public class MyAccountFragment extends Fragment {
                 .setActionBarTitle("My Account");
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
+        comment = (TextView) view.findViewById(R.id.comment);
+        id = (TextView) view.findViewById(R.id.profilePageId);
+        id.setText(currentUser.getId());
 
         Button addLogoutButton = (Button) view.findViewById(R.id.logout);
         addLogoutButton.setOnClickListener(new View.OnClickListener(){
@@ -126,15 +119,14 @@ public class MyAccountFragment extends Fragment {
             }
         });
 
-        //view2 = inflater.inflate(R.layout.activity_menu_page, null);
-        //NavigationView navigationView = (NavigationView) view2.findViewById(R.id.nav_view);
-        // navigationView.setNavigationItemSelectedListener(this);
-
-        // https://stackoverflow.com/questions/33540090/textview-from-navigationview-header-returning-null
-        //button = (ImageButton) navigationView.getHeaderView(0).findViewById(R.id.menu_profile_image);
-
-        //button = (ImageButton) inflater.inflate(R.layout.nav_header_menu_page, container, false).findViewById(R.id.menu_profile_image);
-        //button.setImageResource(R.drawable.newevent);
+        Button addSaveButton = (Button) view.findViewById(R.id.save);
+        addSaveButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                String com = comment.getText().toString();
+                currentUser.setComment(com);
+            }
+        });
 
         btn = (ImageButton) view.findViewById(R.id.head_portrait);
 
@@ -166,10 +158,8 @@ public class MyAccountFragment extends Fragment {
             // Taken from https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples 2017-09-19
             picturePath = gson.fromJson(in, String.class);
             btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         } catch (FileNotFoundException e) {
             btn.setImageResource(R.drawable.newevent);
-            //button.setImageResource(R.drawable.newevent);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -192,10 +182,6 @@ public class MyAccountFragment extends Fragment {
                 cursor.close();
 
                 btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-                //button.setImageResource(R.drawable.newevent);
-                //button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 Toast.makeText(getActivity().getApplicationContext(), picturePath, Toast.LENGTH_SHORT).show();
 
                 saveInFile();
