@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +24,17 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.HabitList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 import static android.R.id.summary;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -43,9 +48,11 @@ public class HabitFragment extends Fragment {
 
     // variables for Habit ListView
     private Participant currentUser;
-    private ArrayList<Habit> habitList;
+    private HabitList habitList;
     private ListView lvHabit;
     private HabitAdapter adapter;
+    private static final int REQUEST_CODE_ONE = 1;
+    private static final int REQUEST_CODE_TWO = 2;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -90,6 +97,13 @@ public class HabitFragment extends Fragment {
         }
     }
 
+    /**
+     * Create a fragment with data passed in as Bundle
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -103,20 +117,15 @@ public class HabitFragment extends Fragment {
         // create Habit ListView
         // TODO: change this part to fit the variable passed from MainActivity
         lvHabit = (ListView) view.findViewById(R.id.list_habit);
-        habitList = currentUser.getHabitList().getHabitList();
+        if (currentUser == null) {
+            currentUser = new Participant("111");
 
-        // code for testing ListView
-//        try {
-            Date today = new Date();
-            habitList.add(new Habit("Testing Habit", "Just for testing.", new Date(today.getTime() + (1000 * 60 * 60 * 24)),new ArrayList<Boolean>()));
-//        } catch (StringTooLongException e) {
-//            e.printStackTrace();
-//        } catch (NoTitleException e) {
-//            e.printStackTrace();
-//        }
+        }
+        habitList = currentUser.getHabitList();
 
         // Init adapter
-        adapter = new HabitAdapter(getActivity(), habitList);
+        habitList.sort();
+        adapter = new HabitAdapter(getActivity(), habitList.getArrayList());
         lvHabit.setAdapter(adapter);
 
         // jump to HabitAddActivity if floating action button is clicked
@@ -126,7 +135,7 @@ public class HabitFragment extends Fragment {
             public void onClick(View view) {
                 // Click action
                 Intent intent = new Intent(getActivity(), HabitAddActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE_ONE);
             }
         });
 
@@ -138,10 +147,10 @@ public class HabitFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        // refresh ListView
-        adapter = new HabitAdapter(getActivity(), habitList);
-        lvHabit.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+//        // refresh ListView
+//        adapter = new HabitAdapter(getActivity(), habitList);
+//        lvHabit.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
 
         // call HabitDetailActivity by click rows of ListView
@@ -149,10 +158,43 @@ public class HabitFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getActivity(), HabitDetailActivity.class);
-                intent.putExtra("Habit", (Parcelable) habitList.get(position));
-                startActivity(intent);
+//                intent.putExtra("Habit", (Parcelable) habitList.get(position));
+                intent.putParcelableArrayListExtra("HabitList", habitList.getArrayList());
+                intent.putExtra("position", position);
+                startActivityForResult(intent, REQUEST_CODE_TWO);
             }
         });
+    }
+
+    /**
+     * Receive data from HabitAddActivity and HabitDetailActivity, then refresh HabitFragment
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    public void  onActivityResult(int requestCode,int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_ONE) { // update ListView after adding new Habit
+            if (resultCode == RESULT_OK) {
+                Habit newHabit = data.getParcelableExtra("Habit");
+                habitList.addHabit(newHabit);
+            }
+        } else if (requestCode == REQUEST_CODE_TWO) { // update ListView after editing Habit
+            if (resultCode == RESULT_OK) {
+                ArrayList<Habit> newHabitList = data.getExtras().getParcelableArrayList("HabitList");
+                habitList.setArrayList(newHabitList);
+            }
+        }
+
+        // sort habitList and refresh
+        habitList.sort();
+//        adapter.notifyDataSetChanged();
+        adapter = new HabitAdapter(getActivity(), habitList.getArrayList());
+        lvHabit.setAdapter(adapter);
+
+        // upload currentUser
+        ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+        addUsersTask.execute(currentUser);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

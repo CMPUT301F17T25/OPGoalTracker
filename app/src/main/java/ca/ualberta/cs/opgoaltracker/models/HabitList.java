@@ -10,35 +10,42 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 
 import ca.ualberta.cs.opgoaltracker.exception.DuplicatedHabitException;
 
 /**
  * This HabitList Object contains a list of Habit<br>
  *     The ArrayList contains HabitType Object as instances<br>
- * @author Dichong Song, Yongjia Huang
+ * @author Dichong Song, Yongjia Huang, Mingwei Li
  * @version 3.0
  * @see Parcelable
  * @see ArrayList
  * @since 1.0
  */
 public class HabitList implements Parcelable {
-    private ArrayList<Habit> aHabitList ;
+    private ArrayList<Habit> habitArrayList;
+
+    public  HabitList(){
+        habitArrayList = new ArrayList<Habit>();
+    }
 
     /**
      * Basic HabitList getter
      * @return ArrayList<Habit></Habit>
      */
-    public  HabitList(){
-        aHabitList = new ArrayList<Habit>();
-    }
-    public ArrayList<Habit> getHabitList() {
-        return aHabitList;
-    }
+    public ArrayList<Habit> getArrayList() {return habitArrayList;}
 
+    /**
+     * Basic HabitList setter
+     * @param habitArrayList ArrayList<Habit>
+     */
+    public void setArrayList(ArrayList<Habit> habitArrayList) {this.habitArrayList = habitArrayList;}
 
-    public int getListLen(){
-        return aHabitList.size();
+    public int size(){
+        return habitArrayList.size();
     }
     /**
      * Basic Habit getter
@@ -46,7 +53,7 @@ public class HabitList implements Parcelable {
      * @return Habit type object
      */
     public Habit getHabit(int index){
-        return this.aHabitList.get(index);
+        return this.habitArrayList.get(index);
     }
 
     /**
@@ -54,12 +61,8 @@ public class HabitList implements Parcelable {
      * @param habit The selected Habit
      * @throws DuplicatedHabitException
      */
-    public void addHabit(Habit habit) throws DuplicatedHabitException {
-        //not fully implemented, should just check habitType
-        if (aHabitList.contains(habit)){
-            throw new DuplicatedHabitException();
-        }
-        this.aHabitList.add(habit);
+    public void addHabit(Habit habit) {
+        this.habitArrayList.add(habit);
     }
 
     /**
@@ -67,18 +70,45 @@ public class HabitList implements Parcelable {
      * @param index the selected Habit object
      * @throws IndexOutOfBoundsException
      */
-    public void deleteHabit(int index) throws IndexOutOfBoundsException{
-        if (index<this.aHabitList.size()) {
+    public void remove(int index) throws IndexOutOfBoundsException{
+        if (index<this.habitArrayList.size()) {
             throw new IndexOutOfBoundsException();
         }
-        this.aHabitList.remove(index);
+        this.habitArrayList.remove(index);
     }
 
     /**
-     *
+     * Sort habitList by create date and then move habit that need to do today to the front of the ArrayList.
      */
-    public void todayHabit(){
-        //todo
+    public void sort() {
+        ArrayList<Habit> todo = new ArrayList<Habit>();
+        ArrayList<Habit> notForToday = new ArrayList<Habit>();
+        Calendar thisDate = Calendar.getInstance();
+        Calendar currentDate = Calendar.getInstance();
+
+        // sort habitArrayList by createDate in ascending order
+        Collections.sort(this.habitArrayList);
+
+        // for each habit in habitArrayList, check if it need to do today, and add it into proper ArrayList
+        for(Habit habit : this.habitArrayList) {
+            thisDate.setTime(habit.getDate());
+
+            if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
+                    (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                            thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+                if (habit.getPeriod().get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
+                    todo.add(habit);
+                } else {
+                    notForToday.add(habit);
+                }
+            } else {
+                notForToday.add(habit);
+            }
+        }
+
+        // combine two ArrayList and replace this.habitArrayList
+        todo.addAll(notForToday);
+        this.habitArrayList = todo;
     }
 
     /**
@@ -96,10 +126,10 @@ public class HabitList implements Parcelable {
      */
     protected HabitList(Parcel in) {
         if (in.readByte() == 0x01) {
-            aHabitList = new ArrayList<Habit>();
-            in.readList(aHabitList, Habit.class.getClassLoader());
+            habitArrayList = new ArrayList<Habit>();
+            in.readList(habitArrayList, Habit.class.getClassLoader());
         } else {
-            aHabitList = null;
+            habitArrayList = null;
         }
     }
 
@@ -121,11 +151,11 @@ public class HabitList implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        if (aHabitList == null) {
+        if (habitArrayList == null) {
             dest.writeByte((byte) (0x00));
         } else {
             dest.writeByte((byte) (0x01));
-            dest.writeList(aHabitList);
+            dest.writeList(habitArrayList);
         }
     }
 

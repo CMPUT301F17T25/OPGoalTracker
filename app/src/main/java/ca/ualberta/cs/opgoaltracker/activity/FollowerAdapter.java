@@ -82,10 +82,8 @@ public class FollowerAdapter extends ArrayAdapter<Participant> {
         //TextView location = (TextView) customView.findViewById(R.id.location);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
 
-        //participant need to change
         userName.setText(participant.getId());
         //picture.setImageResource(participant.getAvatar());
-        //like.setChecked(participant.like());
 
         return customView;
     }

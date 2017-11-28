@@ -77,12 +77,6 @@ public class FollowerListFragment extends Fragment {
         listView = (ListView) view.findViewById(R.id.friendlist);
         adapter = new FollowerAdapter(getActivity(),followerList);
         listView.setAdapter(adapter);
-        Button unfollow = (Button) view.findViewById(R.id.unfollow);
-
-        //test
-        if (followerList.isEmpty()){
-            followerList.add(new Participant("sdc"));
-        }
 
         return view;
     }

@@ -18,12 +18,14 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.DrawerMatchers.isOpen;
 import static android.support.test.espresso.matcher.ViewMatchers.isDescendantOfA;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.*;
 
 /**
@@ -63,6 +65,16 @@ public class MenuPageTest {
     }
 
     @Test
+    public void checkHabitAddonClickSuccess(){
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.habit));
+        Espresso.onView(withId(R.id.add_habit)).perform(click());
+        Espresso.closeSoftKeyboard();
+
+    }
+
+    @Test
     public void checkHabitEventonClickSuccess(){
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view))
@@ -80,6 +92,7 @@ public class MenuPageTest {
         assertEquals(title,"My Friends");
     }
 
+
     @Test
     public void checkNewsonClickSuccess(){
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
@@ -89,6 +102,9 @@ public class MenuPageTest {
         assertEquals(title,"News");
     }
 
+
+
+    @Test
     public void checkSettingonClickSuccess(){
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view))
@@ -96,6 +112,15 @@ public class MenuPageTest {
         title = (String) menuPageActivityTestRule.getActivity().getTitle();
         assertEquals(title,"My Account");
     }
+
+    @Test
+    public void checkLogOutonClickSuccess(){
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open());
+        onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.setting));
+        Espresso.onView(withId(R.id.logout)).perform(click());
+    }
+
 
 
 
