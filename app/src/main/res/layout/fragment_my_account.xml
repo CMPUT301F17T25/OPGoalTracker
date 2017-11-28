@@ -12,7 +12,7 @@
     android:layout_height="match_parent"
     tools:context="ca.ualberta.cs.opgoaltracker.activity.MyAccountFragment">
 
-    <TextView
+    <EditText
         android:id="@+id/textView15"
         android:layout_width="160dp"
         android:layout_height="47dp"
@@ -22,7 +22,7 @@
         android:text="Address"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/comment" />
 
     <ImageButton
         android:id="@+id/head_portrait"
@@ -39,7 +39,7 @@
         app:srcCompat="@drawable/my_picture" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/profilePageId"
         android:layout_width="97dp"
         android:layout_height="36dp"
         android:layout_marginLeft="8dp"
@@ -53,8 +53,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/head_portrait" />
 
-    <TextView
-        android:id="@+id/textView14"
+    <EditText
+        android:id="@+id/comment"
         android:layout_width="160dp"
         android:layout_height="47dp"
         android:layout_marginLeft="8dp"
@@ -63,19 +63,27 @@
         android:text="Comment"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/profilePageId" />
 
     <Button
         android:id="@+id/logout"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginRight="100dp"
         android:text="@string/log_out"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+        app:layout_constraintStart_toEndOf="@+id/save" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="100dp"
+        android:text="SAVE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/logout"
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>

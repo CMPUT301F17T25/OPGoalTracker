@@ -30,6 +30,15 @@ public class Participant implements Parcelable {
     private ArrayList<Participant> followingList;
     private FriendList requestList;
     private String id;
+    private String comment;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     /**
      * Basic Constructor for creating a Participant with specific user id.

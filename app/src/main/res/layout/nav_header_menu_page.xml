@@ -36,7 +36,7 @@
         android:textColor="@color/black_overlay" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/menuPageComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="casual"
