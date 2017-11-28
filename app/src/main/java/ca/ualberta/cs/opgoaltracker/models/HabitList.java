@@ -36,15 +36,15 @@ public class HabitList implements Parcelable {
      * Basic HabitList getter
      * @return ArrayList<Habit></Habit>
      */
-    public ArrayList<Habit> getHabitArrayList() {return habitArrayList;}
+    public ArrayList<Habit> getArrayList() {return habitArrayList;}
 
     /**
      * Basic HabitList setter
      * @param habitArrayList ArrayList<Habit>
      */
-    public void setHabitArrayList(ArrayList<Habit> habitArrayList) {this.habitArrayList = habitArrayList;}
+    public void setArrayList(ArrayList<Habit> habitArrayList) {this.habitArrayList = habitArrayList;}
 
-    public int getListLen(){
+    public int size(){
         return habitArrayList.size();
     }
     /**
@@ -61,11 +61,7 @@ public class HabitList implements Parcelable {
      * @param habit The selected Habit
      * @throws DuplicatedHabitException
      */
-    public void addHabit(Habit habit) throws DuplicatedHabitException {
-        //not fully implemented, should just check habitType
-        if (habitArrayList.contains(habit)){
-            throw new DuplicatedHabitException();
-        }
+    public void addHabit(Habit habit) {
         this.habitArrayList.add(habit);
     }
 
@@ -74,7 +70,7 @@ public class HabitList implements Parcelable {
      * @param index the selected Habit object
      * @throws IndexOutOfBoundsException
      */
-    public void deleteHabit(int index) throws IndexOutOfBoundsException{
+    public void remove(int index) throws IndexOutOfBoundsException{
         if (index<this.habitArrayList.size()) {
             throw new IndexOutOfBoundsException();
         }
