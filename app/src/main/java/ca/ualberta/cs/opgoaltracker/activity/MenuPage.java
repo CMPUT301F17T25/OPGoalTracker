@@ -22,6 +22,7 @@ import android.view.MenuItem;
 
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -63,6 +64,10 @@ public class MenuPage extends AppCompatActivity
     FriendFragment friendFragment = new   FriendFragment();
     NewsFragment newsFragment = new   NewsFragment();
     MyAccountFragment myAccountFragment = new MyAccountFragment();
+    TextView comment;
+    TextView id;
+    DrawerLayout drawerLayout;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,11 +88,7 @@ public class MenuPage extends AppCompatActivity
             habitFragment.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, habitFragment).commit();
         }
-
-
-
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
@@ -107,11 +108,14 @@ public class MenuPage extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        comment = (TextView) navigationView.getHeaderView(0).findViewById(R.id.menuPageComment);
+        comment.setText(currentUser.getComment());
+        id = (TextView) navigationView.getHeaderView(0).findViewById(R.id.menuPageId);
+        id.setText(currentUser.getId());
+
         // https://stackoverflow.com/questions/33540090/textview-from-navigationview-header-returning-null
         button = (ImageButton) navigationView.getHeaderView(0).findViewById(R.id.menu_profile_image);
         loadFromFile();
-        //button.setImageResource(R.drawable.newevent);
-        //button.setImageResource(R.drawable.newevent);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,6 +123,39 @@ public class MenuPage extends AppCompatActivity
                 loadFromFile();
             }
         });
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        DrawerLayout fullView = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_menu_page, null);
+        super.setContentView(fullView);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.drawer_open,R.string.drawer_close){
+
+            @Override
+            public void onDrawerClosed(View v){
+                comment.setText(currentUser.getComment());
+                super.onDrawerClosed(v);
+            }
+
+            @Override
+            public void onDrawerOpened(View v) {
+                comment.setText(currentUser.getComment());
+                super.onDrawerOpened(v);
+            }
+        };
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        comment.setText(currentUser.getComment());
+        loadFromFile();
     }
 
     public void loadFromFile() {
