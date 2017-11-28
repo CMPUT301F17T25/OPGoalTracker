@@ -168,14 +168,10 @@ public class Participant implements Parcelable {
     }
 
 
+
     protected Participant(Parcel in) {
         avatar = (Photograph) in.readValue(Photograph.class.getClassLoader());
-        if (in.readByte() == 0x01) {
-            habitList = new HabitList();
-            in.readParcelable(HabitList.class.getClassLoader());
-        } else {
-            habitList = null;
-        }
+        habitList = (HabitList) in.readValue(HabitList.class.getClassLoader());
         if (in.readByte() == 0x01) {
             followerList = new ArrayList<Participant>();
             in.readList(followerList, Participant.class.getClassLoader());
@@ -192,9 +188,10 @@ public class Participant implements Parcelable {
             requestList = new ArrayList<Participant>();
             in.readList(requestList, Participant.class.getClassLoader());
         } else {
-            followingList = null;
+            requestList = null;
         }
         id = in.readString();
+        comment = in.readString();
     }
 
     @Override
@@ -205,12 +202,7 @@ public class Participant implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(avatar);
-        if (habitList.getArrayList() == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeParcelable(habitList, flags);
-        }
+        dest.writeValue(habitList);
         if (followerList == null) {
             dest.writeByte((byte) (0x00));
         } else {
@@ -230,6 +222,7 @@ public class Participant implements Parcelable {
             dest.writeList(requestList);
         }
         dest.writeString(id);
+        dest.writeString(comment);
     }
 
     @SuppressWarnings("unused")
