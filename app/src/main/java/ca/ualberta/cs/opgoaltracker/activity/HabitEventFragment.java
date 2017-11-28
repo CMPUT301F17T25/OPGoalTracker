@@ -50,6 +50,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
+import ca.ualberta.cs.opgoaltracker.models.HabitEventList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
@@ -264,6 +265,7 @@ public class HabitEventFragment extends Fragment {
                 return true;
             case R.id.event_menu_map:
                 Intent intent = new Intent(getActivity(),MapsActivity.class);
+                intent.putExtra("DISPLAYLIST",displayList);
                 startActivity(intent);
 
             default:
