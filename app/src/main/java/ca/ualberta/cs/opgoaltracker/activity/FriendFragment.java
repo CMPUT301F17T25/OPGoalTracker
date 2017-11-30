@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,9 +41,9 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
 public class FriendFragment extends Fragment {
     // variables for Friend ListView
 
-    private ArrayList<Participant>  followingList;
-    private ArrayList<Participant>  followerList;
-    private ArrayList<Participant>  requestList;
+    private ArrayList<ParticipantName>  followingList;
+    private ArrayList<ParticipantName>  followerList;
+    private ArrayList<ParticipantName>  requestList;
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";

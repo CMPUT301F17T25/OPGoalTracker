@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 
 /**
  * FollowerListFragment is called when user tap the 'follower' tab in FriendFragment
@@ -34,7 +35,7 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  */
 public class FollowerListFragment extends Fragment {
 
-    private ArrayList<Participant>  followerList;
+    private ArrayList<ParticipantName>  followerList;
     private ListView listView;
     private FollowerAdapter adapter;
 

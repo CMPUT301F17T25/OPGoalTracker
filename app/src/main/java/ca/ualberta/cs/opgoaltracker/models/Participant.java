@@ -26,9 +26,9 @@ import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 public class Participant implements Parcelable {
     private Photograph avatar;
     private HabitList habitList;
-    private ArrayList<Participant> followerList;
-    private ArrayList<Participant> followingList;
-    private ArrayList<Participant> requestList;
+    private ArrayList<ParticipantName> followerList;
+    private ArrayList<ParticipantName> followingList;
+    private ArrayList<ParticipantName> requestList;
     private String id;
     private String comment;
 
@@ -47,9 +47,9 @@ public class Participant implements Parcelable {
     public Participant(String id) {
         this.id = id;
         habitList = new HabitList();
-        followerList = new ArrayList<Participant>();
-        followingList = new ArrayList<Participant>();
-        requestList = new ArrayList<Participant>();
+        followerList = new ArrayList<ParticipantName>();
+        followingList = new ArrayList<ParticipantName>();
+        requestList = new ArrayList<ParticipantName>();
     }
 
 
@@ -110,7 +110,7 @@ public class Participant implements Parcelable {
      * @return ArrayList<Participant>
      * @throws UndefinedException
      */
-    public ArrayList<Participant> getFollowerList() throws UndefinedException {
+    public ArrayList<ParticipantName> getFollowerList() throws UndefinedException {
         if (followerList==null){
             throw new UndefinedException();
         }
@@ -121,7 +121,7 @@ public class Participant implements Parcelable {
      * Basic Follower list setter
      * @param followerList : ArrayList<Participant>
      */
-    public void setFollowerList(ArrayList<Participant> followerList){
+    public void setFollowerList(ArrayList<ParticipantName> followerList){
         this.followerList=followerList;
     }
 
@@ -130,7 +130,7 @@ public class Participant implements Parcelable {
      * @return followingList : ArrayList<Participant>
      * @throws UndefinedException
      */
-    public ArrayList<Participant> getFollowingList() throws UndefinedException {
+    public ArrayList<ParticipantName> getFollowingList() throws UndefinedException {
         if (followingList==null) {
             throw new UndefinedException();
         }
@@ -141,7 +141,7 @@ public class Participant implements Parcelable {
      * Basic followingList setter
      * @param followingList ArrayList<Participant>
      */
-    public void setFollowingList(ArrayList<Participant> followingList){
+    public void setFollowingList(ArrayList<ParticipantName> followingList){
         this.followingList=followingList;
     }
 
@@ -151,7 +151,7 @@ public class Participant implements Parcelable {
      * @throws UndefinedException
      *  *                    @see FriendList
      */
-    public ArrayList<Participant> getRequestList() throws UndefinedException {
+    public ArrayList<ParticipantName> getRequestList() throws UndefinedException {
         if (requestList==null){
             throw new UndefinedException();
         }
@@ -163,7 +163,7 @@ public class Participant implements Parcelable {
      * @param requestList : FriendList
      *                    @see FriendList
      */
-    public void setRequestList(ArrayList<Participant> requestList){
+    public void setRequestList(ArrayList<ParticipantName> requestList){
         this.requestList=requestList;
     }
 
@@ -173,20 +173,20 @@ public class Participant implements Parcelable {
         avatar = (Photograph) in.readValue(Photograph.class.getClassLoader());
         habitList = (HabitList) in.readValue(HabitList.class.getClassLoader());
         if (in.readByte() == 0x01) {
-            followerList = new ArrayList<Participant>();
-            in.readList(followerList, Participant.class.getClassLoader());
+            followerList = new ArrayList<ParticipantName>();
+            in.readList(followerList, ParticipantName.class.getClassLoader());
         } else {
             followerList = null;
         }
         if (in.readByte() == 0x01) {
-            followingList = new ArrayList<Participant>();
-            in.readList(followingList, Participant.class.getClassLoader());
+            followingList = new ArrayList<ParticipantName>();
+            in.readList(followingList, ParticipantName.class.getClassLoader());
         } else {
             followingList = null;
         }
         if (in.readByte() == 0x01) {
-            requestList = new ArrayList<Participant>();
-            in.readList(requestList, Participant.class.getClassLoader());
+            requestList = new ArrayList<ParticipantName>();
+            in.readList(requestList, ParticipantName.class.getClassLoader());
         } else {
             requestList = null;
         }

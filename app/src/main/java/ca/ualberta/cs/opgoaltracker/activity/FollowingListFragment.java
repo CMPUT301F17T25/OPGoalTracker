@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 
 /**
  * FollowingListFragment is called when user tap the 'following' tab in FriendFragment
@@ -30,10 +31,10 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  */
 public class FollowingListFragment extends Fragment {
 
-    private ArrayList<Participant> followingList;
+    private ArrayList<ParticipantName> followingList;
     private ListView listView;
     private FollowingAdapter adapter;
-
+    private Participant currentUser;
     /**
      * Required empty public constructor
      */
@@ -69,10 +70,12 @@ public class FollowingListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_friend, container, false);
+        listView = (ListView) view.findViewById(R.id.friendlist);
         Bundle arg = getArguments();
         followingList = arg.getParcelableArrayList("followingList");
-        listView = (ListView) view.findViewById(R.id.friendlist);
-        adapter = new FollowingAdapter(getActivity(),followingList);
+        currentUser= arg.getParcelable("LOGINUSER");
+        adapter = new FollowingAdapter(getActivity(),followingList,currentUser);
+
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 

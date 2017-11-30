@@ -7,6 +7,7 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,11 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 import ca.ualberta.cs.opgoaltracker.models.User;
 
 /**
@@ -31,19 +35,25 @@ import ca.ualberta.cs.opgoaltracker.models.User;
  * @version 1.0
  *
  */
-public class FollowingAdapter extends ArrayAdapter<Participant> {
-    private ArrayList<Participant> friendList;
+public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
+    private ArrayList<ParticipantName> followingList;
+    private ArrayList<ParticipantName> targetFollowerList;
+    private Participant currentUser;
+    private ParticipantName followingName;
+    private Participant following;
     Context mContext;
+    private int currentPosition;
 
     /**
      * Constructor for adapter
      * @param context
      * @param friendList
      */
-    public FollowingAdapter(Context context, ArrayList<Participant> friendList) {
+    public FollowingAdapter(Context context, ArrayList<ParticipantName> friendList,Participant currentUser) {
         super(context, R.layout.fragment_friend, friendList);
-        this.friendList = friendList;
-        this.mContext=context;
+        this.followingList = friendList;
+        this.mContext = context;
+        this.currentUser = currentUser;
     }
 
     /**
@@ -52,7 +62,7 @@ public class FollowingAdapter extends ArrayAdapter<Participant> {
      */
     @Override
     public int getCount() {
-        return friendList.size();
+        return followingList.size();
     }
 
     /**
@@ -61,8 +71,8 @@ public class FollowingAdapter extends ArrayAdapter<Participant> {
      * @return the participant at selected location
      */
     @Override
-    public Participant getItem(int pos) {
-        return friendList.get(pos);
+    public ParticipantName getItem(int pos) {
+        return followingList.get(pos);
     }
 
     /**
@@ -77,26 +87,61 @@ public class FollowingAdapter extends ArrayAdapter<Participant> {
     public View getView(final int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.followed_item,parent,false);
-        Participant participant = getItem(position);
+        followingName = getItem(position);
+        currentPosition = position;
+        String query = "{\n" +
+                "	\"query\": {\n" +
+                "		\"term\": {\"_id\":\"" + followingName.getId() + "\"}\n" +
+                "	}\n" +
+                "}";
+        ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+        getParticipantsTask.execute(query);
+
+        try {
+            following = getParticipantsTask.get().get(0);
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the participant from the asyc object");
+        }
+        try {
+            targetFollowerList = following.getFollowerList();
+            followingList = currentUser.getFollowingList();
+        } catch (UndefinedException e) {
+            e.printStackTrace();
+        }
 
         TextView userName = (TextView) customView.findViewById(R.id.userName);
-        //TextView location = (TextView) customView.findViewById(R.id.location);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
-        //CheckBox like = (CheckBox) customView.findViewById(R.id.like);
         Button unfollow = (Button) customView.findViewById(R.id.unfollow);
 
         unfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                friendList.remove(position); //or some other task
+                removeFollowing();
                 notifyDataSetChanged();
             }
         });
-        //participant need to change
-        userName.setText(participant.getId());
+
+        userName.setText(followingName.getId());
         //picture.setImageResource(participant.getAvatar());
-        //like.setChecked(participant.like());
 
         return customView;
+    }
+
+    public void removeFollowing(){
+        followingList.remove(currentPosition);
+        for (int i=0;i<targetFollowerList.size();i++){
+            if (targetFollowerList.get(i).equals(currentUser)){
+                targetFollowerList.remove(i);
+            }
+        }
+        currentUser.setFollowingList(followingList);
+        update(following,currentUser);
+    }
+
+    public void update(Participant currentUser, Participant following){
+        ElasticsearchController.AddParticipantsTask addUsersTask1 = new ElasticsearchController.AddParticipantsTask();
+        addUsersTask1.execute(currentUser);
+        ElasticsearchController.AddParticipantsTask addUsersTask2 = new ElasticsearchController.AddParticipantsTask();
+        addUsersTask2.execute(following);
     }
 }

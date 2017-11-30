@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 
 /**
  * Created by song on 2017/11/13.
@@ -31,8 +32,8 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  * @version 1.0
  *
  */
-public class FollowerAdapter extends ArrayAdapter<Participant> {
-    private ArrayList<Participant> friendList;
+public class FollowerAdapter extends ArrayAdapter<ParticipantName> {
+    private ArrayList<ParticipantName> friendList;
     Context mContext;
 
     /**
@@ -40,7 +41,7 @@ public class FollowerAdapter extends ArrayAdapter<Participant> {
      * @param context
      * @param friendList
      */
-    public FollowerAdapter(Context context, ArrayList<Participant> friendList) {
+    public FollowerAdapter(Context context, ArrayList<ParticipantName> friendList) {
         super(context, R.layout.fragment_friend, friendList);
         this.friendList = friendList;
         this.mContext=context;
@@ -61,7 +62,7 @@ public class FollowerAdapter extends ArrayAdapter<Participant> {
      * @return the participant at selected location
      */
     @Override
-    public Participant getItem(int pos) {
+    public ParticipantName getItem(int pos) {
         return friendList.get(pos);
     }
 
@@ -76,7 +77,7 @@ public class FollowerAdapter extends ArrayAdapter<Participant> {
     public View getView(int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.follower_item,parent,false);
-        Participant participant = getItem(position);
+        ParticipantName participant = getItem(position);
 
         TextView userName = (TextView) customView.findViewById(R.id.userName);
         //TextView location = (TextView) customView.findViewById(R.id.location);

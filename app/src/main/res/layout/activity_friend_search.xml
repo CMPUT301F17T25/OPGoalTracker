@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:text="User's ID" />
+        android:hint="User's ID" />
     <Button
         android:id="@+id/search"
         android:layout_width="match_parent"
