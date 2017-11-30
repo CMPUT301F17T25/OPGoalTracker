@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -122,7 +123,8 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
 
                 } catch (CommentTooLongException e) {
-                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "Comment should be no more than 20 characters",
+                            Toast.LENGTH_SHORT).show();
                 }
                 try{
                     String eventAddress = address.getText().toString();
@@ -259,7 +261,9 @@ public class HabitEventAddActivity extends AppCompatActivity {
                     try {
                         newEvent.setPhoto(new Photograph(33, 33));
                     } catch (ImageTooLargeException e) {
-                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Image should be under 65536 bytes",
+                                Toast.LENGTH_SHORT).show();
+
                     }
                 }
 
