@@ -6,6 +6,7 @@
 
 package ca.ualberta.cs.opgoaltracker.models;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -142,7 +143,7 @@ public class HabitEvent implements Parcelable {
      */
     public void setPhoto(Photograph photo) throws ImageTooLargeException {
         // Assuming 24bits/pixel. Note that 8bits/byte.
-        int photoSize = photo.getHeight() * photo.getWidth() * 24 / 8;
+        int photoSize = photo.getBitMap().getByteCount();
         if( photoSize > this.maxPhotoSize){
             throw new ImageTooLargeException();
         }
@@ -177,10 +178,10 @@ public class HabitEvent implements Parcelable {
         comment = in.readString();
         long tmpDate = in.readLong();
         date = tmpDate != -1 ? new Date(tmpDate) : null;
-        photo = (Photograph) in.readValue(Photograph.class.getClassLoader());
         lat = in.readString();
         lng = in.readString();
         maxPhotoSize = in.readInt();
+        photo = in.readParcelable(Photograph.class.getClassLoader());
     }
 
     @Override
@@ -194,10 +195,10 @@ public class HabitEvent implements Parcelable {
         dest.writeString(habitType);
         dest.writeString(comment);
         dest.writeLong(date != null ? date.getTime() : -1L);
-        dest.writeValue(photo);
         dest.writeString(lat);
         dest.writeString(lng);
         dest.writeInt(maxPhotoSize);
+        dest.writeParcelable((Parcelable)photo,flags);
     }
 
     @SuppressWarnings("unused")

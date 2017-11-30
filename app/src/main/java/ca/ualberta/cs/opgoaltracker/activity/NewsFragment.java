@@ -6,27 +6,31 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ExecutionException;
 
-import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
+import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.NewsUserEventPair;
+import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +51,7 @@ public class NewsFragment extends Fragment {
     private String mParam2;
     View view;
     private Participant currentUser;
+    private ArrayList<HabitEvent> toMap;
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,31 +96,67 @@ public class NewsFragment extends Fragment {
         //((MenuPage) getActivity()).setActionBar();
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
+        ArrayList<ParticipantName> followingList;
 
-        ArrayList<HabitEvent> displayList = new ArrayList<HabitEvent>();
         try {
-            displayList.add(new HabitEvent("test","this is first test",new Date()));
-        } catch (CommentTooLongException e) {
+            followingList = currentUser.getFollowingList();
+        } catch (UndefinedException e) {
             e.printStackTrace();
+            followingList = new ArrayList<ParticipantName>();
         }
-        try {
-            displayList.add(new HabitEvent("test","this is second test",new Date()));
-        } catch (CommentTooLongException e) {
-            e.printStackTrace();
-        }
-        try {
-            displayList.add(new HabitEvent("test","this is third test",new Date()));
-        } catch (CommentTooLongException e) {
-            e.printStackTrace();
-        }
-
-        NewsAdapter adapter = new NewsAdapter(getActivity(),displayList);
+        ArrayList<NewsUserEventPair> pairList = getPairs(followingList);
+        NewsAdapter adapter = new NewsAdapter(getContext(),pairList);
         ListView listview=(ListView)view.findViewById(R.id.newsList);
         listview.setAdapter(adapter);
 
         return view;
 
-    };
+    }
+
+    private ArrayList<NewsUserEventPair> getPairs(ArrayList<ParticipantName> followingList) {
+        ArrayList<NewsUserEventPair> news = new ArrayList<NewsUserEventPair>();
+        //test
+        for (ParticipantName participant : followingList){
+            String id = participant.getId();
+            //UNSURE ABOUt THIS QUERY
+            String query = "{\n" +
+                    "	\"query\": {\n" +
+                    "		\"term\": {\"id\":\"" + id + "\"}\n" +
+                    "	}\n" +
+                    "}";
+            ElasticsearchController.GetHabitsTask getHabitsTask = new ElasticsearchController.GetHabitsTask();
+            getHabitsTask.execute(query);
+            try {
+                ArrayList<Habit> habits = getHabitsTask.get();
+                for (Habit habit: habits){
+                    String query2="{\n" +
+                            "	\"query\": {\n" +
+                            "		\"term\": {\"habitType\":\"" + id + "\"}\n" +
+                            "	},\n" +
+                            "   \"sort\": { \"date\":{\"order\":\"desc\"}}"+
+                            "}";
+                    ElasticsearchController.GetHabitEventsTask getHabitEventsTask =
+                            new ElasticsearchController.GetHabitEventsTask();
+                    getHabitEventsTask.execute(query2);
+                    ArrayList<HabitEvent>sortedEvents = getHabitEventsTask.get();
+                    if (sortedEvents.isEmpty()==Boolean.FALSE) {
+                        toMap.add(sortedEvents.get(0));
+                        news.add(new NewsUserEventPair(participant, sortedEvents.get(0)));
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return news;
+    }
+
+
+    ;
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

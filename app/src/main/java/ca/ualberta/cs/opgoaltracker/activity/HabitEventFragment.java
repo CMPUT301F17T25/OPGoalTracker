@@ -39,6 +39,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -146,19 +147,7 @@ public class HabitEventFragment extends Fragment {
 
 
                 Intent intent = new Intent(getActivity(), EventInfoActivity.class);
-                intent.putExtra("type",selectedEvent.getHabitType());
-                intent.putExtra("comment",selectedEvent.getComment());
-                intent.putExtra("location",(selectedEvent.getLocation()==null));
-                if (selectedEvent.getComment()=="test picture") {
-                    //put extra picture
-                    Bitmap pic = BitmapFactory.decodeResource(getResources(),R.drawable.testpic);
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    pic.compress(Bitmap.CompressFormat.PNG,50,stream);
-                    intent.putExtra("picture",stream.toByteArray());
-                    // picture putExtra taken from
-                    //https://stackoverflow.com/questions/4352172/how-do-you-pass-images-bitmaps-between-android-activities-using-bundles/7890405#7890405
-                    //17-11-06
-                }
+                intent.putExtra("event",selectedEvent);
                 startActivityForResult(intent,0);
             }
         });
@@ -274,16 +263,22 @@ public class HabitEventFragment extends Fragment {
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode){ //if the activity was to create a new event
+            case 0:
+                if (resultCode== AppCompatActivity.RESULT_OK && data != null) {
+                    HabitEvent a = data.getParcelableExtra("event");
+                    displayList.add(a);
+                    HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
+                    final ListView listview = (ListView) view.findViewById(R.id.list_event);
+                    listview.setAdapter(adapter);
+                }
             case 1:
-                if (resultCode== AppCompatActivity.RESULT_OK) {
-                    Log.d("start", "end");
+                if (resultCode== AppCompatActivity.RESULT_OK && data != null) {
                     HabitEvent a = data.getParcelableExtra("event");
                     displayList.add(a);
                     HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
                     final ListView listview = (ListView) view.findViewById(R.id.list_event);
                     listview.setAdapter(adapter);
 
-                    Log.d("return", "event");
                 }
                 break;
         }

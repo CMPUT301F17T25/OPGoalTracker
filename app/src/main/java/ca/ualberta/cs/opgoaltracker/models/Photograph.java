@@ -6,8 +6,15 @@
 
 package ca.ualberta.cs.opgoaltracker.models;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+
+import java.io.ByteArrayOutputStream;
+
+import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 
 /**
  * This Photograph object is created from image setting propuse
@@ -20,15 +27,34 @@ public class Photograph implements Parcelable {
 
     private int height;
     private int width;
+    private int actualHeight;
+    private int actualWidth;
+    private Bitmap photo;
+
 
     /**
      * Basic Constructor for creating a photograph object
-     * @param height : int
-     * @param width : int
+     * @param p : Bitmap
      */
-    public Photograph(int height, int width){
-        this.height = height;
-        this.width = width;
+    public Photograph(Bitmap p,int a, int b) throws ImageTooLargeException {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        p.compress(Bitmap.CompressFormat.PNG,100,stream);
+        this.photo = p;
+        this.width = p.getWidth();
+        this.height= p.getHeight();
+        this.actualHeight=a;
+        this.actualWidth=b;
+
+    }
+
+
+    /**
+     * getter for the image in bigmap format
+     * @return Bitmap b
+     */
+    public Bitmap getBitMap(){
+        return photo;
     }
 
     /**
@@ -52,9 +78,12 @@ public class Photograph implements Parcelable {
      * @see Parcelable
      * @param in
      */
-    protected Photograph(Parcel in) {
-        height = in.readInt();
-        width = in.readInt();
+    public Photograph(Parcel in) {
+        this.height = in.readInt();
+        this.width = in.readInt();
+        this.actualHeight=in.readInt();
+        this.actualWidth=in.readInt();
+        this.photo = in.readParcelable(Bitmap.class.getClassLoader());
     }
 
     /**
@@ -75,8 +104,12 @@ public class Photograph implements Parcelable {
      */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(height);
-        dest.writeInt(width);
+        dest.writeInt(this.height);
+        dest.writeInt(this.width);
+        dest.writeInt(this.actualHeight);
+        dest.writeInt(this.actualWidth);
+        dest.writeParcelable((Parcelable)this.photo,flags);
+
     }
 
     /**
@@ -95,4 +128,7 @@ public class Photograph implements Parcelable {
             return new Photograph[size];
         }
     };
+    public int getActualHeight(){return actualHeight;}
+    public int getActualWidth(){return actualWidth;}
+
 }

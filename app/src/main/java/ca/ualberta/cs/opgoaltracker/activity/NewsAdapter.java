@@ -7,23 +7,25 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 
+import ca.ualberta.cs.opgoaltracker.models.NewsUserEventPair;
 import ca.ualberta.cs.opgoaltracker.R;
-import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 
 /**
  * Created by malon_000 on 2017-11-03.
      */
 
-class NewsAdapter extends ArrayAdapter<HabitEvent> {
-    public NewsAdapter(Context context, List<HabitEvent> objects) {
+class NewsAdapter extends ArrayAdapter<NewsUserEventPair> {
+    public NewsAdapter(Context context, List<NewsUserEventPair> objects) {
         super(context, R.layout.fragment_news, objects);
     }
 
@@ -33,19 +35,24 @@ class NewsAdapter extends ArrayAdapter<HabitEvent> {
         LayoutInflater EventInflater = LayoutInflater.from(getContext());
         View customView = EventInflater.inflate(R.layout.news_row,parent,false);
 
-        HabitEvent event = getItem(position);
+        NewsUserEventPair event = getItem(position);
         TextView EventType = (TextView) customView.findViewById(R.id.newsType);
         TextView EventComment = (TextView) customView.findViewById(R.id.newsComment);
-        //ImageView EventImage = (ImageView) customView.findViewById(R.id.newsImage);
-        //ImageView UserImage = (ImageView) customView.findViewById(R.id.UserIcon);
+        ImageView EventImage = (ImageView) customView.findViewById(R.id.newsImage);
+
+        ImageView UserImage = (ImageView) customView.findViewById(R.id.UserIcon);
         TextView UserName = (TextView) customView.findViewById(R.id.newsUser);
 
-        EventType.setText(event.getHabitType());
-        EventComment.setText(event.getComment());
-        //EvenImage.setImageResource(event.getPhoto());
+        EventType.setText(event.getEvent().getHabitType());
+        EventComment.setText(event.getEvent().getComment());
+        if (event.getEvent().getPhoto()!=null){
+            EventImage.setImageBitmap(Bitmap.createScaledBitmap(event.getEvent().getPhoto().getBitMap(),70,70,Boolean.FALSE));
+        }else{
+            EventImage.setImageDrawable(null);
+        }
 
         //UserImage.setImageResouce()
-        UserName.setText(event.getUser());
+        UserName.setText(event.getName().getId());
 
         return customView;
     }
