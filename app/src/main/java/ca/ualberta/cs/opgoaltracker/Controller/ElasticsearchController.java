@@ -20,6 +20,9 @@ import ca.ualberta.cs.opgoaltracker.models.Admin;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import io.searchbox.client.JestResult;
+import io.searchbox.core.Delete;
+import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -181,7 +184,7 @@ public class ElasticsearchController {
             verifySettings();
 
             for (Habit habit : habits) {
-                Index index = new Index.Builder(habit).index("team25").type("habit").build();
+                Index index = new Index.Builder(habit).index("team25").type("habit").id(habit.getId()).build();
 
                 try {
                     // where is the client?
@@ -189,7 +192,7 @@ public class ElasticsearchController {
 
                     if(result.isSucceeded())
                     {
-                        habit.setId(result.getId());
+                        result.getId();
                     } else {
                         Log.i("Error", "Elasticsearch was not able to add the habit");
                     }
@@ -225,6 +228,35 @@ public class ElasticsearchController {
                     habits.addAll(foundHabit);
 
                     return habits;
+                } else {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+
+                    return null;
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Delete habits matches query
+     */
+    public static class DeleteHabitsTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... delete_parameters) {
+            verifySettings();
+
+            DeleteByQuery delete = new DeleteByQuery.Builder(delete_parameters[0]).addIndex("team25").addType("habit").build();
+
+            try {
+                JestResult result = client.execute(delete);
+                if (result.isSucceeded())
+                {
+                    return null;
                 } else {
                     Log.i("Error", "Something went wrong when we tried to communicate with the server.");
 
@@ -282,7 +314,7 @@ public class ElasticsearchController {
             verifySettings();
 
             for (HabitEvent habitEvent : habitEvents) {
-                Index index = new Index.Builder(habitEvent).index("team25").type("habitevent").build();
+                Index index = new Index.Builder(habitEvent).index("team25").type("habitevent").id(habitEvent.getId()).build();
 
                 try {
                     // where is the client?
@@ -290,7 +322,7 @@ public class ElasticsearchController {
 
                     if(result.isSucceeded())
                     {
-                        habitEvent.setId(result.getId());
+                        result.getId();
                     } else {
                         Log.i("Error", "Elasticsearch was not able to add the habitEvent");
                     }
@@ -326,6 +358,35 @@ public class ElasticsearchController {
                     habitEvents.addAll(foundHabitEvent);
 
                     return habitEvents;
+                } else {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+
+                    return null;
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Delete habitEvents matches query
+     */
+    public static class DeleteHabitEventsTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... delete_parameters) {
+            verifySettings();
+
+            DeleteByQuery delete = new DeleteByQuery.Builder(delete_parameters[0]).addIndex("team25").addType("habitevent").build();
+
+            try {
+                JestResult result = client.execute(delete);
+                if (result.isSucceeded())
+                {
+                    return null;
                 } else {
                     Log.i("Error", "Something went wrong when we tried to communicate with the server.");
 

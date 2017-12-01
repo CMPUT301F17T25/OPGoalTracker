@@ -141,8 +141,8 @@ public class HabitDetailActivity extends AppCompatActivity {
         habit.setPeriod(period);
 
         // update this habit in Elasticsearch
-//        ElasticsearchController.UpdateHabitsTask updateHabitsTask = new ElasticsearchController.UpdateHabitsTask();
-//        updateHabitsTask.execute(habit);
+        ElasticsearchController.AddHabitsTask updateHabitsTask = new ElasticsearchController.AddHabitsTask();
+        updateHabitsTask.execute(habit);
 
 
         Intent intent = new Intent(this, MenuPage.class);
@@ -172,6 +172,15 @@ public class HabitDetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.habit_detail_delete) {
+            // delete habit from Elasticsearch
+            String query = "{\n" +
+                    "	\"query\": {\n" +
+                    "		\"term\": {\"_id\":\"" + habit.getId() + "\"}\n" +
+                    "	}\n" +
+                    "}";
+            ElasticsearchController.DeleteHabitsTask deleteHabitsTask = new ElasticsearchController.DeleteHabitsTask();
+            deleteHabitsTask.execute(query);
+
             // delete current Habit
             habitList.remove(position);
 

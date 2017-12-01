@@ -160,7 +160,7 @@ public class MyAccountFragment extends Fragment {
             btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
         } catch (FileNotFoundException e) {
             btn.setImageResource(R.drawable.newevent);
-        } 1catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

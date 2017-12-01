@@ -57,6 +57,8 @@ public class Habit implements Parcelable, Comparable<Habit> {
         if (reason.length()>admin.getReasonLength()){
             throw new StringTooLongException();
         }
+
+        this.id = java.util.UUID.randomUUID().toString();
         this.habitType = habitType;
         this.date = date;
         this.createDate = new Date();
