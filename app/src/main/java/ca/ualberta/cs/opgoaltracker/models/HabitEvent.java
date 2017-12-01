@@ -67,6 +67,14 @@ public class HabitEvent implements Parcelable {
         this.date = date;
         this.comment = comment;
     }
+    public Boolean changed(HabitEvent b){
+        if (b.getComment()==this.comment &&
+                b.getLocation()[0]==this.lat&&
+                this.getLocation()[1]==this.lng){
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
 
     /**
      * Basic Habit Type Getter
@@ -181,7 +189,11 @@ public class HabitEvent implements Parcelable {
         lat = in.readString();
         lng = in.readString();
         maxPhotoSize = in.readInt();
-        photo = in.readParcelable(Photograph.class.getClassLoader());
+        int hasPhoto = in.readInt();
+        if (hasPhoto==1){
+            photo = in.readParcelable(Photograph.class.getClassLoader());
+        }
+
     }
 
     @Override
@@ -198,7 +210,13 @@ public class HabitEvent implements Parcelable {
         dest.writeString(lat);
         dest.writeString(lng);
         dest.writeInt(maxPhotoSize);
-        dest.writeParcelable((Parcelable)photo,flags);
+        if (photo==null){
+            dest.writeInt(0);
+        }else{
+            dest.writeInt(1);
+            dest.writeParcelable((Parcelable)photo,flags);
+        }
+
     }
 
     @SuppressWarnings("unused")

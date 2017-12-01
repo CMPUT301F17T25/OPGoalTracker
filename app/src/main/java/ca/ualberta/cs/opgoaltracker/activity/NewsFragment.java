@@ -126,31 +126,17 @@ public class NewsFragment extends Fragment {
                     "}";
             ElasticsearchController.GetHabitsTask getHabitsTask = new ElasticsearchController.GetHabitsTask();
             getHabitsTask.execute(query);
+            ArrayList<Habit> habits = null;
             try {
-                ArrayList<Habit> habits = getHabitsTask.get();
-                for (Habit habit: habits){
-                    String query2="{\n" +
-                            "	\"query\": {\n" +
-                            "		\"term\": {\"habitType\":\"" + id + "\"}\n" +
-                            "	},\n" +
-                            "   \"sort\": { \"date\":{\"order\":\"desc\"}}"+
-                            "}";
-                    ElasticsearchController.GetHabitEventsTask getHabitEventsTask =
-                            new ElasticsearchController.GetHabitEventsTask();
-                    getHabitEventsTask.execute(query2);
-                    ArrayList<HabitEvent>sortedEvents = getHabitEventsTask.get();
-                    if (sortedEvents.isEmpty()==Boolean.FALSE) {
-                        toMap.add(sortedEvents.get(0));
-                        news.add(new NewsUserEventPair(participant, sortedEvents.get(0)));
-                    }
-                }
-
+                habits = getHabitsTask.get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-
+            for (Habit habit:habits){
+                news.add(new NewsUserEventPair(participant, habit.getLatest()));
+            }
         }
         return news;
     }

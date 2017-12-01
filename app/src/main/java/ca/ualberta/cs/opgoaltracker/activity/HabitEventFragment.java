@@ -6,24 +6,13 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,22 +25,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
-import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
-import ca.ualberta.cs.opgoaltracker.models.HabitEventList;
+import ca.ualberta.cs.opgoaltracker.models.HabitList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 
 /**
@@ -79,8 +66,11 @@ public class HabitEventFragment extends Fragment {
     private String mParam2;
     private View view;
 
+    private HabitEvent beforeDetail=null;
+
 
     private ArrayList<HabitEvent> displayList;
+    private ArrayList<HabitEvent> fullList;
     private ArrayList<String> habitList;
 
     private OnFragmentInteractionListener mListener;
@@ -128,8 +118,18 @@ public class HabitEventFragment extends Fragment {
         currentUser = arg.getParcelable("CURRENTUSER");
 
         displayList = new ArrayList<HabitEvent>();
-        habitList = new ArrayList<String>();
-        habitList.add("test");
+        fillDisplayList();
+        //fill displayList
+        Collections.sort(displayList, new Comparator<HabitEvent>() {
+            @Override
+            public int compare(HabitEvent habitEvent, HabitEvent t1) {
+                return -habitEvent.getDate().compareTo(t1.getDate());
+            }
+        });
+        habitList=new ArrayList<String>();
+        for (Habit h:currentUser.getHabitList().getArrayList()){
+            habitList.add(h.getHabitType());
+        }
         // add events to test the adapter
         // probly name another variable arraylist type to store all events
         //display list's stuff gets removed during search
@@ -144,11 +144,10 @@ public class HabitEventFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Object selected = listview.getItemAtPosition(i);
                 HabitEvent selectedEvent = (HabitEvent) selected;
-
-
+                beforeDetail=selectedEvent;
                 Intent intent = new Intent(getActivity(), EventInfoActivity.class);
                 intent.putExtra("event",selectedEvent);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent,31);
             }
         });
         //handles button
@@ -156,8 +155,13 @@ public class HabitEventFragment extends Fragment {
         add_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), HabitEventAddActivity.class);
-                startActivityForResult(intent,1);
+                if (habitList.isEmpty()){
+                    Toast.makeText(getActivity(),"Plase have atleast 1 habit type",Toast.LENGTH_LONG).show();
+                }else {
+                    Intent intent = new Intent(getActivity(), HabitEventAddActivity.class);
+                    intent.putStringArrayListExtra("hlist", habitList);
+                    startActivityForResult(intent, 30);
+                }
             }
         });
 
@@ -171,8 +175,20 @@ public class HabitEventFragment extends Fragment {
 
     }
 
-
-
+    private void fillDisplayList() {
+        for (Habit h:currentUser.getHabitList().getArrayList()){
+            for (HabitEvent e:h.getEventList()){
+                displayList.add(e);
+                fullList.add(e);
+            }
+        }
+        Collections.sort(displayList, new Comparator<HabitEvent>() {
+            @Override
+            public int compare(HabitEvent habitEvent, HabitEvent t1) {
+                return -habitEvent.getDate().compareTo(t1.getDate());
+            }
+        });
+    }
 
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -236,16 +252,42 @@ public class HabitEventFragment extends Fragment {
                 ArrayList<String> searchList = new ArrayList<String>();
                 searchList.add("");
                 searchList.addAll(habitList);
-                Spinner searchHabit = (Spinner)dialog.findViewById(R.id.search_spinner);
+                final Spinner searchHabit = (Spinner)dialog.findViewById(R.id.search_spinner);
                 ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, searchList);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 searchHabit.setAdapter(dataAdapter);
 
-                EditText message = (EditText) dialog.findViewById(R.id.search_event_text);
-                Button search = (Button) dialog.findViewById(R.id.search_search);
+                final EditText message = (EditText) dialog.findViewById(R.id.search_event_text);
+                message.setText("");
+                final Button search = (Button) dialog.findViewById(R.id.search_search);
                 search.setOnClickListener(new View.OnClickListener() {
                     @Override
+                    //// TODO: 2017-12-01 add search 
                     public void onClick(View view) {
+
+                        if (searchHabit.getSelectedItem()=="" && message.toString()!=""){
+                            displayList=new ArrayList<HabitEvent>();
+                            for (HabitEvent e:fullList){
+                                if (e.getHabitType()==searchHabit.getSelectedItem() &&
+                                        e.getComment().contains(message.toString())){
+                                    displayList.add(e);
+                                }
+                            }
+                        }else if (searchHabit.getSelectedItem()==""){
+                            displayList=new ArrayList<HabitEvent>();
+                            for (HabitEvent e:fullList) {
+                                if (e.getHabitType() == searchHabit.getSelectedItem()) {
+                                    displayList.add(e);
+                                }
+                            }
+                        }else if (message.toString()!=""){
+                            for (HabitEvent e:fullList) {
+                                displayList=new ArrayList<HabitEvent>();
+                                if (e.getComment().contains(message.toString())) {
+                                    displayList.add(e);
+                                }
+                            }
+                        }
                         dialog.dismiss();
 
                     }
@@ -262,25 +304,86 @@ public class HabitEventFragment extends Fragment {
         }
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode){ //if the activity was to create a new event
-            case 0:
-                if (resultCode== AppCompatActivity.RESULT_OK && data != null) {
-                    HabitEvent a = data.getParcelableExtra("event");
-                    displayList.add(a);
-                    HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
-                    final ListView listview = (ListView) view.findViewById(R.id.list_event);
-                    listview.setAdapter(adapter);
+        if (requestCode == 30) {
+            if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+                Log.d("this", "see this");
+                HabitEvent a = data.getParcelableExtra("event");
+                displayList.add(a);
+                fullList.add(a);
+                Collections.sort(displayList, new Comparator<HabitEvent>() {
+                    @Override
+                    public int compare(HabitEvent habitEvent, HabitEvent t1) {
+                        return -habitEvent.getDate().compareTo(t1.getDate());
+                    }
+                });
+                HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
+                final ListView listview = (ListView) view.findViewById(R.id.list_event);
+                listview.setAdapter(adapter);
+
+                HabitList userHabits = currentUser.getHabitList();
+                ArrayList<Habit> habitTypes = userHabits.getArrayList();
+                for (Habit habit:habitTypes){
+                    if (habit.getHabitType()==beforeDetail.getHabitType()){
+                        habit.newEvent(a);
+                    }
                 }
-            case 1:
-                if (resultCode== AppCompatActivity.RESULT_OK && data != null) {
-                    HabitEvent a = data.getParcelableExtra("event");
+                userHabits.setArrayList(habitTypes);
+                try {
+                    currentUser.setHabitList(userHabits);
+                } catch (UndefinedException e) {
+                    e.printStackTrace();
+                }
+                //// TODO: 2017-12-01  
+                //UPLOAD TO ELASTIC SEARCH
+                //update both the habit and the user
+                //ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+                //addUsersTask.execute(currentUser);
+            }
+        }
+        if(requestCode == 31) {
+            Log.d("this", "dont see this");
+            // if the activity was to edit/see info of event
+            if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
+                HabitEvent a = data.getParcelableExtra("event");
+                Boolean changedPhoto = data.getBooleanExtra("photo", Boolean.FALSE);
+                if (beforeDetail.changed(a) || changedPhoto == Boolean.TRUE) {
+                    //handles changed event
+                    displayList.remove(beforeDetail);
                     displayList.add(a);
+                    fullList.remove(beforeDetail);
+                    fullList.add(a);
+                    Collections.sort(displayList, new Comparator<HabitEvent>() {
+                        @Override
+                        public int compare(HabitEvent habitEvent, HabitEvent t1) {
+                            return -habitEvent.getDate().compareTo(t1.getDate());
+                        }
+                    });
                     HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
                     final ListView listview = (ListView) view.findViewById(R.id.list_event);
                     listview.setAdapter(adapter);
 
+                    HabitList userHabits = currentUser.getHabitList();
+                    ArrayList<Habit> habitTypes = userHabits.getArrayList();
+                    for (Habit habit : habitTypes) {
+                        if (habit.getHabitType() == beforeDetail.getHabitType()) {
+                            habit.removeEvent(beforeDetail);
+                            habit.newEvent(a);
+                        }
+                    }
+                    userHabits.setArrayList(habitTypes);
+                    try {
+                        currentUser.setHabitList(userHabits);
+                    } catch (UndefinedException e) {
+                        e.printStackTrace();
+                    }
+                    //// TODO: 2017-12-01 apply same upload as new habit event 
+                    //UPLOAD to ELASTIC SEARCH
+
                 }
-                break;
+
+            }
         }
+
+
     }
 }
