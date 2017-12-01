@@ -83,24 +83,14 @@ public class HabitList implements Parcelable {
     public void sort() {
         ArrayList<Habit> todo = new ArrayList<Habit>();
         ArrayList<Habit> notForToday = new ArrayList<Habit>();
-        Calendar thisDate = Calendar.getInstance();
-        Calendar currentDate = Calendar.getInstance();
 
         // sort habitArrayList by createDate in ascending order
         Collections.sort(this.habitArrayList);
 
         // for each habit in habitArrayList, check if it need to do today, and add it into proper ArrayList
         for(Habit habit : this.habitArrayList) {
-            thisDate.setTime(habit.getDate());
-
-            if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
-                    (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                            thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
-                if (habit.getPeriod().get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
-                    todo.add(habit);
-                } else {
-                    notForToday.add(habit);
-                }
+            if (habit.isTodo()) {
+                todo.add(habit);
             } else {
                 notForToday.add(habit);
             }

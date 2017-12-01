@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
@@ -139,6 +140,11 @@ public class HabitDetailActivity extends AppCompatActivity {
         habit.setDate(date);
         habit.setPeriod(period);
 
+        // update this habit in Elasticsearch
+        ElasticsearchController.AddHabitsTask updateHabitsTask = new ElasticsearchController.AddHabitsTask();
+        updateHabitsTask.execute(habit);
+
+
         Intent intent = new Intent(this, MenuPage.class);
         intent.putParcelableArrayListExtra("HabitList", habitList);
         setResult(RESULT_OK,intent);
@@ -166,6 +172,15 @@ public class HabitDetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.habit_detail_delete) {
+            // delete habit from Elasticsearch
+            String query = "{\n" +
+                    "	\"query\": {\n" +
+                    "		\"term\": {\"_id\":\"" + habit.getId() + "\"}\n" +
+                    "	}\n" +
+                    "}";
+            ElasticsearchController.DeleteHabitsTask deleteHabitsTask = new ElasticsearchController.DeleteHabitsTask();
+            deleteHabitsTask.execute(query);
+
             // delete current Habit
             habitList.remove(position);
 

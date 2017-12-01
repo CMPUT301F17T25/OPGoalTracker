@@ -11,6 +11,7 @@ import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
@@ -56,6 +57,8 @@ public class Habit implements Parcelable, Comparable<Habit> {
         if (reason.length()>admin.getReasonLength()){
             throw new StringTooLongException();
         }
+
+        this.id = java.util.UUID.randomUUID().toString();
         this.habitType = habitType;
         this.date = date;
         this.createDate = new Date();
@@ -230,6 +233,24 @@ public class Habit implements Parcelable, Comparable<Habit> {
      */
     public Date getCreateDate() {
         return createDate;
+    }
+
+    public boolean isTodo() {
+        Calendar thisDate = Calendar.getInstance();
+        thisDate.setTime(this.date);
+        Calendar currentDate = Calendar.getInstance();
+
+        if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
+                (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                        thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+            if (this.period.get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**

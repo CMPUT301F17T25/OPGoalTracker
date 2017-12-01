@@ -55,26 +55,24 @@ public class HabitAdapter extends BaseAdapter {
         TextView tvTitle = (TextView) v.findViewById(R.id.tv_title);
         TextView tvReason = (TextView) v.findViewById(R.id.tv_reason);
 
-        Habit thisHabit = habitList.get(position);
-        Calendar thisDate = Calendar.getInstance();
-        thisDate.setTime(thisHabit.getDate());
-        Calendar currentDate = Calendar.getInstance();
-
         // Set separator
-        if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
-                (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                        thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
-            if (thisHabit.getPeriod().get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
-                separator.setText("TO-DO");
-            } else {
-                separator.setText("Not For Today");
-            }
+        if (habitList.get(position).isTodo()) {
+            separator.setText("TO-DO");
         } else {
             separator.setText("Not For Today");
         }
+
+        // set separator visibility
+        if (position == 0) {
+            separator.setVisibility(View.VISIBLE);
+        } else if (habitList.get(position).isTodo() ^ habitList.get(position - 1).isTodo()) {
+            separator.setVisibility(View.VISIBLE);
+        } else {
+            separator.setVisibility(View.GONE);
+        }
         // Set text for other TextView
-        tvTitle.setText(thisHabit.getHabitType());
-        tvReason.setText(thisHabit.getReason());
+        tvTitle.setText(habitList.get(position).getHabitType());
+        tvReason.setText(habitList.get(position).getReason());
         return v ;
     }
 }

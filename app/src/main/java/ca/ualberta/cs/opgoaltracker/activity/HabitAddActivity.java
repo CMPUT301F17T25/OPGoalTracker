@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
@@ -102,6 +103,10 @@ public class HabitAddActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
+
+        // add this habit in Elasticsearch
+        ElasticsearchController.AddHabitsTask addHabitsTask = new ElasticsearchController.AddHabitsTask();
+        addHabitsTask.execute(habit);
 
         Intent intent = new Intent(this, MenuPage.class);
         intent.putExtra("Habit", habit);
