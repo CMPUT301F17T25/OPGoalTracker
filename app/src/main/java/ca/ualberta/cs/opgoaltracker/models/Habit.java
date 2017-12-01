@@ -35,6 +35,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
     private Date date;
     private Date createDate;
     private ArrayList<Boolean> period;
+    private ArrayList<HabitEvent> eventList;
     Admin admin = new Admin("admin");
 
     /**
@@ -64,6 +65,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         this.createDate = new Date();
         this.reason = reason;
         this.period = period;
+        this.eventList=new ArrayList<HabitEvent>();
     }
 
 
@@ -93,6 +95,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         out.writeLong(date.getTime());
         out.writeLong(createDate.getTime());
         out.writeList(period);
+        out.writeList(eventList);
     }
 
     /**
@@ -108,6 +111,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         date = new Date(in.readLong());
         createDate = new Date(in.readLong());
         period = in.readArrayList(null);
+        eventList=in.readArrayList(null);
 
     }
 
@@ -263,4 +267,17 @@ public class Habit implements Parcelable, Comparable<Habit> {
     public int compareTo(Habit compareHabit) {
         return getCreateDate().compareTo(compareHabit.getCreateDate());
     }
+
+
+    public ArrayList<HabitEvent> getEventList(){
+        return eventList;
+    }
+    public HabitEvent getLatest(){return eventList.get(eventList.size()-1);}
+    public void newEvent(HabitEvent a){
+        eventList.add(a);
+    }
+    public void removeEvent(HabitEvent a){
+        eventList.remove(a);
+    }
+
 }

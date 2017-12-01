@@ -79,9 +79,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event_add);
 
         //for test only
-        ArrayList<String> arrayListHabit = new ArrayList<String>();
-        arrayListHabit.add("test");
-        arrayListHabit.add("test1");
+        ArrayList<String> arrayListHabit=getIntent().getStringArrayListExtra("hlist");
 
         final Spinner habitList = (Spinner) findViewById(R.id.habit_spinner);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListHabit);
