@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
@@ -138,6 +139,11 @@ public class HabitDetailActivity extends AppCompatActivity {
 
         habit.setDate(date);
         habit.setPeriod(period);
+
+        // update this habit in Elasticsearch
+//        ElasticsearchController.UpdateHabitsTask updateHabitsTask = new ElasticsearchController.UpdateHabitsTask();
+//        updateHabitsTask.execute(habit);
+
 
         Intent intent = new Intent(this, MenuPage.class);
         intent.putParcelableArrayListExtra("HabitList", habitList);

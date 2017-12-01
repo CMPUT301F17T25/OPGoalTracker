@@ -85,15 +85,19 @@ public class ElasticsearchController {
                 {
                     List<Participant> foundParticipant = result.getSourceAsObjectList(Participant.class);
                     participants.addAll(foundParticipant);
+
+                    return participants;
                 } else {
                     Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+
+                    return null;
                 }
             }
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
 
-            return participants;
+                return null;
+            }
         }
     }
 
@@ -150,15 +154,19 @@ public class ElasticsearchController {
                 {
                     List<Admin> foundAdmin = result.getSourceAsObjectList(Admin.class);
                     admins.addAll(foundAdmin);
+
+                    return admins;
                 } else {
                     Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+
+                    return null;
                 }
             }
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
 
-            return admins;
+                return null;
+            }
         }
     }
 
@@ -215,15 +223,19 @@ public class ElasticsearchController {
                 {
                     List<Habit> foundHabit = result.getSourceAsObjectList(Habit.class);
                     habits.addAll(foundHabit);
+
+                    return habits;
                 } else {
                     Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+
+                    return null;
                 }
             }
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
 
-            return habits;
+                return null;
+            }
         }
     }
 
@@ -312,15 +324,19 @@ public class ElasticsearchController {
                 {
                     List<HabitEvent> foundHabitEvent = result.getSourceAsObjectList(HabitEvent.class);
                     habitEvents.addAll(foundHabitEvent);
+
+                    return habitEvents;
                 } else {
                     Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+
+                    return null;
                 }
             }
             catch (Exception e) {
                 Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
-            }
 
-            return habitEvents;
+                return null;
+            }
         }
     }
 

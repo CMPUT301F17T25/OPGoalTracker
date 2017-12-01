@@ -120,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
                 getParticipantsTask.execute(query);
 
                 try {
-                    if (getAdminsTask.get().isEmpty() == false) { // check if this is an admin user
+                    if (getAdminsTask.get() == null || getParticipantsTask.get() == null) { // check if connected to server
+                        Toast.makeText(MainActivity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+                    } else if (getAdminsTask.get().isEmpty() == false) { // check if this is an admin user
                         //TODO maybe passing currentUser rather than name
                         Intent adminIntent = new Intent(MainActivity.this, AdminActivity.class);
                         adminIntent.putExtra("ADMINID", name);
