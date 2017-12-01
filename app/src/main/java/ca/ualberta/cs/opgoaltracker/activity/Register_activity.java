@@ -90,7 +90,9 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
         getParticipantsTask.execute(query);
 
         try {
-            if (getAdminsTask.get().isEmpty() && getParticipantsTask.get().isEmpty()) { // if username not exists
+            if (getAdminsTask.get() == null || getParticipantsTask.get() == null) { // check if connected to server
+                Toast.makeText(Register_activity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+            } else if (getAdminsTask.get().isEmpty() && getParticipantsTask.get().isEmpty()) { // if username not exists
                 Participant newParticipant = new Participant(username);
                 ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
                 addUsersTask.execute(newParticipant);

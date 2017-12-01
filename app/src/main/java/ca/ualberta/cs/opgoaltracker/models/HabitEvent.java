@@ -34,6 +34,25 @@ public class HabitEvent implements Parcelable {
     private int maxPhotoSize = 65536;
 
     /**
+     * Base Constructor which create a Habit Event type <br>
+     *     the New Habit Event type has a restrict commetn length smaller than 20<br>
+     * @param habitType
+     * @param comment
+     * @param date
+     * @throws CommentTooLongException
+     */
+    public HabitEvent(String habitType, String comment, Date date) throws CommentTooLongException {
+        if(comment.length() > 20) {
+            throw new CommentTooLongException();
+        }
+
+        this.id = java.util.UUID.randomUUID().toString();
+        this.habitType = habitType;
+        this.date = date;
+        this.comment = comment;
+    }
+
+    /**
      * Set id for the HabitEvent object
      * @return id : String
      */
@@ -47,24 +66,6 @@ public class HabitEvent implements Parcelable {
      */
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * Base Constructor which create a Habit Event type <br>
-     *     the New Habit Event type has a restrict commetn length smaller than 20<br>
-     * @param habitType
-     * @param comment
-     * @param date
-     * @throws CommentTooLongException
-     */
-    public HabitEvent(String habitType, String comment, Date date) throws CommentTooLongException {
-        if(comment.length() > 20) {
-            throw new CommentTooLongException();
-        }
-
-        this.habitType = habitType;
-        this.date = date;
-        this.comment = comment;
     }
 
     /**
