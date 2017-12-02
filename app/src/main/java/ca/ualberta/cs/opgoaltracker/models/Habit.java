@@ -242,13 +242,13 @@ public class Habit implements Parcelable, Comparable<Habit> {
     }
 
     public boolean isTodo() {
-        Calendar thisDate = Calendar.getInstance();
-        thisDate.setTime(this.date);
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(this.date);
         Calendar currentDate = Calendar.getInstance();
 
-        if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
-                (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                        thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+        if ((startDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
+                (startDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                        startDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
             if (this.period.get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
                 return true;
             } else {
@@ -257,6 +257,62 @@ public class Habit implements Parcelable, Comparable<Habit> {
         } else {
             return false;
         }
+    }
+
+    public int getTotalDays() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(this.date);
+        Calendar currentDate = Calendar.getInstance();
+
+        int totalDays = 0;
+
+        while (startDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR) ||
+                (startDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                        startDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+            if (this.period.get(startDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if this date is in the period
+                totalDays++;
+            }
+            startDate.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return totalDays;
+    }
+
+    public int[] getProgress() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(this.date);
+        Calendar eventDate = Calendar.getInstance();
+
+        int finished = 0;
+        int notFinished;
+        int bonus = 0;
+        int [] progress = new int[3];
+
+        for (HabitEvent habitEvent : this.eventList) {
+            eventDate.setTime(habitEvent.getDate());
+
+            if (startDate.get(Calendar.YEAR) < eventDate.get(Calendar.YEAR) ||
+                    (startDate.get(Calendar.YEAR) == eventDate.get(Calendar.YEAR) &&
+                            startDate.get(Calendar.DAY_OF_YEAR) <= eventDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before this event date
+                if (this.period.get(eventDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if this event date was scheduled
+                    finished++;
+                } else {
+                    bonus++;
+                }
+            } else {
+                bonus++;
+            }
+        }
+
+        notFinished = getTotalDays() - finished;
+        if (notFinished < 0) {
+            notFinished = 0;
+        }
+        progress[0] = finished;
+        progress[1] = notFinished;
+        progress[2] = bonus;
+
+        return progress;
     }
 
     /**

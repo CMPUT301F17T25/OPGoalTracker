@@ -17,9 +17,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
@@ -88,6 +95,26 @@ public class HabitDetailActivity extends AppCompatActivity {
         checkBoxThur.setChecked(habit.getPeriod().get(4));
         checkBoxFri.setChecked(habit.getPeriod().get(5));
         checkBoxSat.setChecked(habit.getPeriod().get(6));
+
+        // pie chart code from: https://www.youtube.com/watch?v=iS7EgKnyDeY
+        // setup pie chart
+        int[] progress = habit.getProgress();
+        String[] sectorNames = {"Finished", "Not Finished", "Bonus"};
+
+        List<PieEntry> pieEntries = new ArrayList<>();
+        for (int i = 0; i < progress.length; i++) {
+            pieEntries.add(new PieEntry(progress[i], sectorNames[i]));
+        }
+
+        PieDataSet pieDataSet = new PieDataSet(pieEntries, "Habits progress");
+        pieDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        PieData pieData = new PieData(pieDataSet);
+
+        // get pie chart
+        PieChart pieChart = (PieChart) findViewById(R.id.pieChart);
+        pieChart.setData(pieData);
+        pieChart.animateY(1000);
+        pieChart.invalidate();
 
         // get selected date from CalendarView
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
