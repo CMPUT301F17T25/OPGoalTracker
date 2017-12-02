@@ -203,9 +203,13 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
                                     //update location every 10sec in 500m radius with both provider GPS and Network.
 
-                                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10 * 1000, 500, locationListener);
+                                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 500, locationListener);
                                     lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 500, locationListener);
+                                    Toast.makeText(HabitEventAddActivity.this,"Please wait while we retrieve your location",Toast.LENGTH_LONG);
+                                    Thread.sleep(10000);
+
                                     location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
                                 }
                                 String lat = Double.toString(location.getLatitude());
                                 String lng = Double.toString(location.getLongitude());
@@ -263,6 +267,8 @@ public class HabitEventAddActivity extends AppCompatActivity {
                     Log.d("failed", "null event");
                     setResult(AppCompatActivity.RESULT_CANCELED);
                     finish();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
 
