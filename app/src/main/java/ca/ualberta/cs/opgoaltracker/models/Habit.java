@@ -236,13 +236,13 @@ public class Habit implements Parcelable, Comparable<Habit> {
     }
 
     public boolean isTodo() {
-        Calendar thisDate = Calendar.getInstance();
-        thisDate.setTime(this.date);
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(this.date);
         Calendar currentDate = Calendar.getInstance();
 
-        if ((thisDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
-                (thisDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
-                        thisDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+        if ((startDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR)) ||
+                (startDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                        startDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
             if (this.period.get(currentDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if today in the week is in the habit period
                 return true;
             } else {
@@ -251,6 +251,25 @@ public class Habit implements Parcelable, Comparable<Habit> {
         } else {
             return false;
         }
+    }
+
+    public int getTotalDays() {
+        Calendar startDate = Calendar.getInstance();
+        startDate.setTime(this.date);
+        Calendar currentDate = Calendar.getInstance();
+
+        int totalDays = 0;
+
+        while (startDate.get(Calendar.YEAR) < currentDate.get(Calendar.YEAR) &&
+                (startDate.get(Calendar.YEAR) == currentDate.get(Calendar.YEAR) &&
+                        startDate.get(Calendar.DAY_OF_YEAR) <= currentDate.get(Calendar.DAY_OF_YEAR))) { // if habit start date is same or before today
+            if (this.period.get(startDate.get(Calendar.DAY_OF_WEEK) - 1)) { // if this date is in the period
+                totalDays++;
+            }
+            startDate.add(Calendar.DAY_OF_MONTH, 1);
+        }
+
+        return totalDays;
     }
 
     /**
