@@ -88,16 +88,14 @@
         
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/pieChart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_width="0dp"
+            android:layout_height="368dp"
             android:layout_marginTop="16dp"
             app:layout_constraintTop_toBottomOf="@+id/textProgressDetail"
-            android:layout_marginRight="16dp"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginLeft="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintHorizontal_bias="0.526"></com.github.mikephil.charting.charts.PieChart>
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"></com.github.mikephil.charting.charts.PieChart>
 
         <TextView
             android:id="@+id/textStartDateDetail"
