@@ -7,10 +7,12 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -38,14 +40,21 @@ class HabitEventAdapter extends ArrayAdapter<HabitEvent> {
         TextView EventType = (TextView) customView.findViewById(R.id.eventType);
         TextView EventComment = (TextView) customView.findViewById(R.id.eventComment);
         TextView EventDate = (TextView) customView.findViewById(R.id.eventDate);
-        //ImageView EventImage = (ImageView) customView.findViewById(R.id.newsImage);
+        ImageView EventImage = (ImageView) customView.findViewById(R.id.eventImage);
 
 
         EventType.setText(event.getHabitType());
         EventComment.setText(event.getComment());
         EventDate.setText(event.getDate().toString());
-        //EvenImage.setImageResource(event.getPhoto());
-
+        if (event.getPhoto()!=null) {
+            int scaledHeight = event.getPhoto().getActualHeight();
+            int scaledWidth = event.getPhoto().getActualWidth();
+            Bitmap bitmap = event.getPhoto().getBitMap();
+            EventImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap,
+                    scaledWidth,scaledHeight,Boolean.FALSE));
+        }else{
+            EventImage.setImageDrawable(null);
+        }
         return customView;
     }
 }

@@ -30,11 +30,13 @@ import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 public class Habit implements Parcelable, Comparable<Habit> {
 
     private String id;
+    private String owner;
     private String habitType;
     private String reason;
     private Date date;
     private Date createDate;
     private ArrayList<Boolean> period;
+    private ArrayList<HabitEvent> eventList;
     Admin admin = new Admin("admin");
 
     /**
@@ -64,6 +66,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         this.createDate = new Date();
         this.reason = reason;
         this.period = period;
+        this.eventList=new ArrayList<HabitEvent>();
     }
 
 
@@ -87,12 +90,14 @@ public class Habit implements Parcelable, Comparable<Habit> {
     @Override
     public void writeToParcel(Parcel out, int i) {
         out.writeString(id);
+        out.writeString(owner);
         out.writeString(habitType);
         out.writeString(reason);
         // Write long value of Date
         out.writeLong(date.getTime());
         out.writeLong(createDate.getTime());
         out.writeList(period);
+        out.writeList(eventList);
     }
 
     /**
@@ -102,13 +107,14 @@ public class Habit implements Parcelable, Comparable<Habit> {
      */
     private void readFromParcel(Parcel in) {
         id = in.readString();
+        owner = in.readString();
         habitType = in.readString();
         reason = in.readString();
         // Read Long value and convert to date
         date = new Date(in.readLong());
         createDate = new Date(in.readLong());
         period = in.readArrayList(null);
-
+        eventList=in.readArrayList(HabitEvent.class.getClassLoader());
     }
 
     /**
@@ -282,4 +288,17 @@ public class Habit implements Parcelable, Comparable<Habit> {
     public int compareTo(Habit compareHabit) {
         return getCreateDate().compareTo(compareHabit.getCreateDate());
     }
+
+    public void setOwner(String owner){this.owner=owner;}
+    public ArrayList<HabitEvent> getEventList(){
+        return eventList;
+    }
+    public HabitEvent getLatest(){return eventList.get(eventList.size()-1);}
+    public void newEvent(HabitEvent a){
+        eventList.add(a);
+    }
+    public void removeEvent(HabitEvent a){
+        eventList.remove(a);
+    }
+
 }

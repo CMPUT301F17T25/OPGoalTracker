@@ -135,6 +135,7 @@ public class HabitFragment extends Fragment {
             public void onClick(View view) {
                 // Click action
                 Intent intent = new Intent(getActivity(), HabitAddActivity.class);
+                intent.putExtra("user",currentUser.getId());
                 startActivityForResult(intent,REQUEST_CODE_ONE);
             }
         });
@@ -161,6 +162,7 @@ public class HabitFragment extends Fragment {
 //                intent.putExtra("Habit", (Parcelable) habitList.get(position));
                 intent.putParcelableArrayListExtra("HabitList", habitList.getArrayList());
                 intent.putExtra("position", position);
+                intent.putExtra("user",currentUser.getId());
                 startActivityForResult(intent, REQUEST_CODE_TWO);
             }
         });

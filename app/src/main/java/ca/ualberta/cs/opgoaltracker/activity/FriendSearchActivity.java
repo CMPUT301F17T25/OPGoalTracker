@@ -9,15 +9,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 
 /**
  * This is the search friend ID page.
@@ -30,9 +35,9 @@ import ca.ualberta.cs.opgoaltracker.models.Participant;
  */
 public class FriendSearchActivity extends AppCompatActivity {
     private EditText userID;
-    private ArrayList<Participant> followingList;
+    private ArrayList<ParticipantName> followingList;
     Participant currentUser;
-
+    Participant targetUser;
     /**
      * default onCreate method. Event for searchButton is defined inside.
      * @param savedInstanceState
@@ -49,14 +54,30 @@ public class FriendSearchActivity extends AppCompatActivity {
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //TODO: need elastic search to verify if userID is valid or not
 
                 String ID = userID.getText().toString();
-                Intent intent = new Intent(FriendSearchActivity.this, FriendFollowActivity.class);
-                intent.putExtra("ID",ID);
-                intent.putExtra("LOGINUSER", currentUser);
-                startActivity(intent);
+                String query = "{\n" +
+                        "	\"query\": {\n" +
+                        "		\"term\": {\"_id\":\"" + ID + "\"}\n" +
+                        "	}\n" +
+                        "}";
+                ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+                getParticipantsTask.execute(query);
 
+                try {
+                    if (getParticipantsTask.get() == null) { // check if connected to server
+                        Toast.makeText(FriendSearchActivity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+                    }else if(getParticipantsTask.get().isEmpty() == false){
+                        targetUser = getParticipantsTask.get().get(0);
+                        Intent intent = new Intent(FriendSearchActivity.this, FriendFollowActivity.class);
+                        Log.i("targetUser",targetUser.getId());
+                        intent.putExtra("targetUser",targetUser);
+                        intent.putExtra("LOGINUSER", currentUser);
+                        startActivity(intent);
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Failed to get the participant from the asyc object");
+                }
                 finish();
             }
         });

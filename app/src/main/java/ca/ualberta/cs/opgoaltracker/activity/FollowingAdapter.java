@@ -7,6 +7,9 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +18,19 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
+import ca.ualberta.cs.opgoaltracker.models.Photograph;
 import ca.ualberta.cs.opgoaltracker.models.User;
 
 /**
@@ -31,19 +41,27 @@ import ca.ualberta.cs.opgoaltracker.models.User;
  * @version 1.0
  *
  */
-public class FollowingAdapter extends ArrayAdapter<Participant> {
-    private ArrayList<Participant> friendList;
+public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
+    private ArrayList<ParticipantName> followingList;
+    private ArrayList<ParticipantName> targetFollowerList;
+    private ArrayList<String> locationList;
+    private Participant currentUser;
+    private ParticipantName followingName;
+    private Participant following;
+    private Photograph photo;
     Context mContext;
+    private int currentPosition;
 
     /**
      * Constructor for adapter
      * @param context
      * @param friendList
      */
-    public FollowingAdapter(Context context, ArrayList<Participant> friendList) {
+    public FollowingAdapter(Context context, ArrayList<ParticipantName> friendList,Participant currentUser) {
         super(context, R.layout.fragment_friend, friendList);
-        this.friendList = friendList;
-        this.mContext=context;
+        this.followingList = friendList;
+        this.mContext = context;
+        this.currentUser = currentUser;
     }
 
     /**
@@ -52,7 +70,7 @@ public class FollowingAdapter extends ArrayAdapter<Participant> {
      */
     @Override
     public int getCount() {
-        return friendList.size();
+        return followingList.size();
     }
 
     /**
@@ -61,8 +79,8 @@ public class FollowingAdapter extends ArrayAdapter<Participant> {
      * @return the participant at selected location
      */
     @Override
-    public Participant getItem(int pos) {
-        return friendList.get(pos);
+    public ParticipantName getItem(int pos) {
+        return followingList.get(pos);
     }
 
     /**
@@ -77,26 +95,81 @@ public class FollowingAdapter extends ArrayAdapter<Participant> {
     public View getView(final int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(getContext());
         View customView = inflater.inflate(R.layout.followed_item,parent,false);
-        Participant participant = getItem(position);
+        followingName = getItem(position);
+        currentPosition = position;
+        String query = "{\n" +
+                "	\"query\": {\n" +
+                "		\"term\": {\"_id\":\"" + followingName.getId() + "\"}\n" +
+                "	}\n" +
+                "}";
+        ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+        getParticipantsTask.execute(query);
+
+        try {
+            if (getParticipantsTask.get() == null) { // check if connected to server
+                Toast.makeText(customView.getContext(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+            }else if (getParticipantsTask.get().isEmpty() == false) {
+                following = getParticipantsTask.get().get(0);
+                targetFollowerList = following.getFollowerList();
+                followingList = currentUser.getFollowingList();
+                photo = following.getAvatar();
+                locationList = following.getLocation();
+            }
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the participant from the asyc object");
+        }
+
 
         TextView userName = (TextView) customView.findViewById(R.id.userName);
-        //TextView location = (TextView) customView.findViewById(R.id.location);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
-        //CheckBox like = (CheckBox) customView.findViewById(R.id.like);
+        TextView location = (TextView) customView.findViewById(R.id.location);
         Button unfollow = (Button) customView.findViewById(R.id.unfollow);
 
         unfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                friendList.remove(position); //or some other task
+                removeFollowing();
                 notifyDataSetChanged();
             }
         });
-        //participant need to change
-        userName.setText(participant.getId());
-        //picture.setImageResource(participant.getAvatar());
-        //like.setChecked(participant.like());
 
+        userName.setText(followingName.getId());
+        if (photo!=null){
+            picture.setImageBitmap(photo.getBitMap());
+        }
+        try {
+            String cityName;
+            Geocoder gcd = new Geocoder(customView.getContext(), Locale.getDefault());
+            if (locationList.get(0) != null && locationList.get(1)!=null){
+                List<Address> addresses = gcd.getFromLocation(Double.parseDouble(locationList.get(0)),
+                        Double.parseDouble(locationList.get(1)), 1);
+                if (addresses.size() > 0) {
+                    cityName = addresses.get(0).getLocality();
+                    location.setText(cityName);
+                }
+            }else{
+                location.setText("");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return customView;
+    }
+
+    public void removeFollowing(){
+        followingList.remove(currentPosition);
+        for (int i=0;i<targetFollowerList.size();i++){
+            if (targetFollowerList.get(i).equals(currentUser)){
+                targetFollowerList.remove(i);
+            }
+        }
+        update(currentUser,following);
+    }
+
+    public void update(Participant currentUser, Participant following){
+        ElasticsearchController.AddParticipantsTask addUsersTask1 = new ElasticsearchController.AddParticipantsTask();
+        addUsersTask1.execute(currentUser);
+        ElasticsearchController.AddParticipantsTask addUsersTask2 = new ElasticsearchController.AddParticipantsTask();
+        addUsersTask2.execute(following);
     }
 }

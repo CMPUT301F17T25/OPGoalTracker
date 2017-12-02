@@ -6,24 +6,38 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.content.Context;
+import android.icu.text.MessagePattern;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 
 /**
  * Created by song on 2017/11/24.
  */
 
 public class RequestListFragment extends Fragment {
-    private ArrayList<Participant> requestList;
+    private ArrayList<ParticipantName> requestList;
     private ListView listView;
     private RequestAdapter adapter;
     private Participant currentUser;
@@ -64,18 +78,14 @@ public class RequestListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_friend, container, false);
+        listView = (ListView) view.findViewById(R.id.friendlist);
         Bundle arg = getArguments();
         requestList = arg.getParcelableArrayList("requestList");
         currentUser= arg.getParcelable("LOGINUSER");
-        listView = (ListView) view.findViewById(R.id.friendlist);
         adapter = new RequestAdapter(getActivity(),requestList,currentUser);
 
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-        //test
-        if (requestList.isEmpty()){
-            requestList.add(new Participant("sdc"));
-        }
         return view;
     }
 }

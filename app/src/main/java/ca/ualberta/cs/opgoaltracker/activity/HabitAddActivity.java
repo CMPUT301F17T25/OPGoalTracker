@@ -42,6 +42,7 @@ public class HabitAddActivity extends AppCompatActivity {
     private Habit habit;
     private String title;
     private String reason;
+    private String owner;
     private Date date;
     private ArrayList<Boolean> period;
 
@@ -49,6 +50,9 @@ public class HabitAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_habit_add);
+
+        owner = getIntent().getStringExtra("user");
+
 
         titleBox = (EditText) findViewById(R.id.editTitleAdd);
         reasonBox = (EditText) findViewById(R.id.editReasonAdd);
@@ -94,6 +98,7 @@ public class HabitAddActivity extends AppCompatActivity {
 
         try {
             habit = new Habit(title, reason, date, period);
+            habit.setOwner(owner);
         } catch (StringTooLongException exc) {
             Toast.makeText(getApplicationContext(), "Too Many Characters",
                     Toast.LENGTH_SHORT).show();
@@ -103,7 +108,6 @@ public class HabitAddActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-
         // add this habit in Elasticsearch
         ElasticsearchController.AddHabitsTask addHabitsTask = new ElasticsearchController.AddHabitsTask();
         addHabitsTask.execute(habit);

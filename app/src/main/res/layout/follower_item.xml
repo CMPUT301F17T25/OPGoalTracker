@@ -41,6 +41,13 @@
             android:text="UserName"
             android:textColor="#2D9DC8"
             android:textSize="30dp" />
+
+        <Button
+            android:id="@+id/block"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="block" />
     </RelativeLayout>
 
 

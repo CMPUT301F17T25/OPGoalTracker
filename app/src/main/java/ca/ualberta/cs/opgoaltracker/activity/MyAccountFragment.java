@@ -125,6 +125,12 @@ public class MyAccountFragment extends Fragment {
             public void onClick(View view){
                 String com = comment.getText().toString();
                 currentUser.setComment(com);
+
+                if(BitmapFactory.decodeFile(picturePath).getByteCount() > 65536) {
+                    Toast.makeText(getActivity().getApplicationContext(), "Image should be under 65536 bytes",
+                            Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 

@@ -45,6 +45,7 @@ public class HabitDetailActivity extends AppCompatActivity {
     private Habit habit;
     private String title;
     private String reason;
+    private String owner;
     private Date date;
     private ArrayList<Boolean> period;
 
@@ -57,6 +58,7 @@ public class HabitDetailActivity extends AppCompatActivity {
 //        habit = (Habit) getIntent().getExtras().getParcelable("Habit");
         habitList = getIntent().getExtras().getParcelableArrayList("HabitList");
         position = getIntent().getIntExtra("position", 0);
+        owner = getIntent().getStringExtra("owner");
         habit = habitList.get(position);
 
         titleBox = (EditText) findViewById(R.id.editTitleDetail);
@@ -139,6 +141,7 @@ public class HabitDetailActivity extends AppCompatActivity {
 
         habit.setDate(date);
         habit.setPeriod(period);
+        habit.setOwner(owner);
 
         // update this habit in Elasticsearch
         ElasticsearchController.AddHabitsTask updateHabitsTask = new ElasticsearchController.AddHabitsTask();

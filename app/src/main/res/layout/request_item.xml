@@ -31,6 +31,15 @@
             android:textColor="#2D9DC8"
             android:textSize="30dp" />
 
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/userName"
+            android:layout_toEndOf="@+id/picture"
+            android:text="location"
+            android:textSize="30dp" />
+
         <Button
             android:id="@+id/accept"
             android:layout_width="wrap_content"
@@ -39,6 +48,5 @@
             android:text="accept" />
 
     </RelativeLayout>
-
 
 </LinearLayout>
