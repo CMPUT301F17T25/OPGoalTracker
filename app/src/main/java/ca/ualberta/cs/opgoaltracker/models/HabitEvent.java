@@ -58,10 +58,12 @@ public class HabitEvent implements Parcelable {
     }
     public Boolean changed(HabitEvent b){
         if (b.getComment()==this.comment &&
-                b.getLocation().get(0)==lat&&
-                b.getLocation().get(1)==lng){
+                b.getLocation().get(0).equals(lat)&&
+                b.getLocation().get(1).equals(lng)){
             return Boolean.FALSE;
-        }else if(b.getLocation().get(0)==null && lat==null) {
+        }else if(b.getComment()==this.comment &&
+                b.getLocation().get(0)==null &&
+                lat==null) {
             return Boolean.FALSE;
         }else {
             return Boolean.TRUE;
