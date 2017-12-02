@@ -6,6 +6,7 @@
 
 package ca.ualberta.cs.opgoaltracker.Controller;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -34,9 +35,16 @@ import io.searchbox.core.SearchResult;
 
 public class ElasticsearchController {
     private static JestDroidClient client;
+    
+    private static final String INDEX = "team25";
+    private static final String TYPE_PARTICIPANT = "participant";
+    private static final String TYPE_ADMIN = "admin";
+    private static final String TYPE_HABIT = "habit";
+    private static final String TYPE_HABITEVENT = "habitevent";
+    private static final long SLEEPTIME = 3000;
 
     /**
-     * Add participants to type "participant"
+     * Add participants to type TYPE_PARTICIPANT
      * Need to GetParticipantsTask to check if the participant exists before adding
      */
     public static class AddParticipantsTask extends AsyncTask<Participant, Void, Void> {
@@ -46,23 +54,32 @@ public class ElasticsearchController {
             verifySettings();
 
             for (Participant participant : participants) {
-                Index index = new Index.Builder(participant).index("team25").type("participant").id(participant.getId()).build();
+                Index index = new Index.Builder(participant).index(INDEX).type(TYPE_PARTICIPANT).id(participant.getId()).build();
 
-                try {
-                    // where is the client?
-                    DocumentResult result = client.execute(index);
+                DocumentResult result = null;
 
-                    if(result.isSucceeded())
-                    {
-                        result.getId();
-                    } else {
-                        Log.i("Error", "Elasticsearch was not able to add the Participant");
+                do { // if upload failed, thread will retry after several seconds
+                    try {
+                        // where is the client?
+                        result = client.execute(index);
+
+                        if(result.isSucceeded())
+                        {
+                            result.getId();
+                        } else {
+                            Log.i("Error", "Elasticsearch was not able to add the Participant");
+                        }
                     }
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the participants");
-                }
+                    catch (Exception e) {
+                        Log.i("Error", "The application failed to build and send the participants");
 
+                        try {
+                            Thread.sleep(SLEEPTIME);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } while (result == null);
             }
             return null;
         }
@@ -80,7 +97,7 @@ public class ElasticsearchController {
 
             ArrayList<Participant> participants = new ArrayList<Participant>();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex("team25").addType("participant").build();
+            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX).addType(TYPE_PARTICIPANT).build();
 
             try {
                 SearchResult result = client.execute(search);
@@ -105,7 +122,7 @@ public class ElasticsearchController {
     }
 
     /**
-     * Add admins to type "admin"
+     * Add admins to type TYPE_ADMIN
      * Need to GetAdminsTask to check if the admin exists before adding
      */
     public static class AddAdminsTask extends AsyncTask<Admin, Void, Void> {
@@ -115,23 +132,32 @@ public class ElasticsearchController {
             verifySettings();
 
             for (Admin admin : admins) {
-                Index index = new Index.Builder(admin).index("team25").type("admin").id(admin.getId()).build();
+                Index index = new Index.Builder(admin).index(INDEX).type(TYPE_ADMIN).id(admin.getId()).build();
 
-                try {
-                    // where is the client?
-                    DocumentResult result = client.execute(index);
+                DocumentResult result = null;
 
-                    if(result.isSucceeded())
-                    {
-                        result.getId();
-                    } else {
-                        Log.i("Error", "Elasticsearch was not able to add the Admin");
+                do { // if upload failed, thread will retry after several seconds
+                    try {
+                        // where is the client?
+                        result = client.execute(index);
+
+                        if(result.isSucceeded())
+                        {
+                            result.getId();
+                        } else {
+                            Log.i("Error", "Elasticsearch was not able to add the Admin");
+                        }
                     }
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the admins");
-                }
+                    catch (Exception e) {
+                        Log.i("Error", "The application failed to build and send the admins");
 
+                        try {
+                            Thread.sleep(SLEEPTIME);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } while (result == null);
             }
             return null;
         }
@@ -149,7 +175,7 @@ public class ElasticsearchController {
 
             ArrayList<Admin> admins = new ArrayList<Admin>();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex("team25").addType("admin").build();
+            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX).addType(TYPE_ADMIN).build();
 
             try {
                 SearchResult result = client.execute(search);
@@ -174,7 +200,7 @@ public class ElasticsearchController {
     }
 
     /**
-     * Add habits to type "habit"
+     * Add habits to type TYPE_HABIT
      * Set the habit added with id which was assigned by Elasticsearch
      */
     public static class AddHabitsTask extends AsyncTask<Habit, Void, Void> {
@@ -184,23 +210,32 @@ public class ElasticsearchController {
             verifySettings();
 
             for (Habit habit : habits) {
-                Index index = new Index.Builder(habit).index("team25").type("habit").id(habit.getId()).build();
+                Index index = new Index.Builder(habit).index(INDEX).type(TYPE_HABIT).id(habit.getId()).build();
 
-                try {
-                    // where is the client?
-                    DocumentResult result = client.execute(index);
+                DocumentResult result = null;
 
-                    if(result.isSucceeded())
-                    {
-                        result.getId();
-                    } else {
-                        Log.i("Error", "Elasticsearch was not able to add the habit");
+                do { // if upload failed, thread will retry after several seconds
+                    try {
+                        // where is the client?
+                        result = client.execute(index);
+
+                        if(result.isSucceeded())
+                        {
+                            result.getId();
+                        } else {
+                            Log.i("Error", "Elasticsearch was not able to add the habit");
+                        }
                     }
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the habits");
-                }
+                    catch (Exception e) {
+                        Log.i("Error", "The application failed to build and send the habits");
 
+                        try {
+                            Thread.sleep(SLEEPTIME);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } while (result == null);
             }
             return null;
         }
@@ -218,7 +253,7 @@ public class ElasticsearchController {
 
             ArrayList<Habit> habits = new ArrayList<Habit>();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex("team25").addType("habit").build();
+            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX).addType(TYPE_HABIT).build();
 
             try {
                 SearchResult result = client.execute(search);
@@ -250,24 +285,32 @@ public class ElasticsearchController {
         protected Void doInBackground(String... delete_parameters) {
             verifySettings();
 
-            DeleteByQuery delete = new DeleteByQuery.Builder(delete_parameters[0]).addIndex("team25").addType("habit").build();
+            DeleteByQuery delete = new DeleteByQuery.Builder(delete_parameters[0]).addIndex(INDEX).addType(TYPE_HABIT).build();
 
-            try {
-                JestResult result = client.execute(delete);
-                if (result.isSucceeded())
-                {
-                    return null;
-                } else {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+            JestResult result = null;
 
-                    return null;
+            do { // if upload failed, thread will retry after several seconds
+                try {
+                    result = client.execute(delete);
+                    if (result.isSucceeded())
+                    {
+                        Log.i("Succeed", "Successfully deleted Habit objects.");
+                    } else {
+                        Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+                    }
                 }
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
 
-                return null;
-            }
+                    try {
+                        Thread.sleep(SLEEPTIME);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } while (result == null);
+
+            return null;
         }
     }
 
@@ -281,7 +324,7 @@ public class ElasticsearchController {
             verifySettings();
 
             for (Habit habit : habits) {
-                Index index = new Index.Builder(habit).index("team25").type("habit").id(habit.getId()).build();
+                Index index = new Index.Builder(habit).index(INDEX).type(TYPE_HABIT).id(habit.getId()).build();
 
                 try {
                     // where is the client?
@@ -304,7 +347,7 @@ public class ElasticsearchController {
     }
 
     /**
-     * Add habitEvents to type "habitevent"
+     * Add habitEvents to type TYPE_HABITEVENT
      * Set the habitEvent added with id which was assigned by Elasticsearch
      */
     public static class AddHabitEventsTask extends AsyncTask<HabitEvent, Void, Void> {
@@ -314,23 +357,32 @@ public class ElasticsearchController {
             verifySettings();
 
             for (HabitEvent habitEvent : habitEvents) {
-                Index index = new Index.Builder(habitEvent).index("team25").type("habitevent").id(habitEvent.getId()).build();
+                Index index = new Index.Builder(habitEvent).index(INDEX).type(TYPE_HABITEVENT).id(habitEvent.getId()).build();
 
-                try {
-                    // where is the client?
-                    DocumentResult result = client.execute(index);
+                DocumentResult result = null;
 
-                    if(result.isSucceeded())
-                    {
-                        result.getId();
-                    } else {
-                        Log.i("Error", "Elasticsearch was not able to add the habitEvent");
+                do { // if upload failed, thread will retry after several seconds
+                    try {
+                        // where is the client?
+                        result = client.execute(index);
+
+                        if(result.isSucceeded())
+                        {
+                            result.getId();
+                        } else {
+                            Log.i("Error", "Elasticsearch was not able to add the habitEvent");
+                        }
                     }
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the habitEvents");
-                }
+                    catch (Exception e) {
+                        Log.i("Error", "The application failed to build and send the habitEvents");
 
+                        try {
+                            Thread.sleep(SLEEPTIME);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } while (result == null);
             }
             return null;
         }
@@ -348,7 +400,7 @@ public class ElasticsearchController {
 
             ArrayList<HabitEvent> habitEvents = new ArrayList<HabitEvent>();
 
-            Search search = new Search.Builder(search_parameters[0]).addIndex("team25").addType("habitevent").build();
+            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX).addType(TYPE_HABITEVENT).build();
 
             try {
                 SearchResult result = client.execute(search);
@@ -380,24 +432,32 @@ public class ElasticsearchController {
         protected Void doInBackground(String... delete_parameters) {
             verifySettings();
 
-            DeleteByQuery delete = new DeleteByQuery.Builder(delete_parameters[0]).addIndex("team25").addType("habitevent").build();
+            DeleteByQuery delete = new DeleteByQuery.Builder(delete_parameters[0]).addIndex(INDEX).addType(TYPE_HABITEVENT).build();
 
-            try {
-                JestResult result = client.execute(delete);
-                if (result.isSucceeded())
-                {
-                    return null;
-                } else {
-                    Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+            JestResult result = null;
 
-                    return null;
+            do { // if upload failed, thread will retry after 30 seconds
+                try {
+                    result = client.execute(delete);
+                    if (result.isSucceeded())
+                    {
+                        Log.i("Succeed", "Successfully deleted HabitEvent objects.");
+                    } else {
+                        Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+                    }
                 }
-            }
-            catch (Exception e) {
-                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+                catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
 
-                return null;
-            }
+                    try {
+                        Thread.sleep(SLEEPTIME);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } while (result == null);
+
+            return null;
         }
     }
 
@@ -411,7 +471,7 @@ public class ElasticsearchController {
             verifySettings();
 
             for (HabitEvent habitEvent : habitEvents) {
-                Index index = new Index.Builder(habitEvent).index("team25").type("habit").id(habitEvent.getId()).build();
+                Index index = new Index.Builder(habitEvent).index(INDEX).type(TYPE_HABIT).id(habitEvent.getId()).build();
 
                 try {
                     // where is the client?
