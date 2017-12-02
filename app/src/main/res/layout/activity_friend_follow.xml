@@ -33,18 +33,18 @@
             android:layout_centerHorizontal="true" />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
-            android:text="address"
+            android:text="location"
             android:layout_centerHorizontal="true"/>
 
         <Button
             android:id="@+id/follow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/address"
+            android:layout_below="@+id/location"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="38dp"
             android:text="follow" />
