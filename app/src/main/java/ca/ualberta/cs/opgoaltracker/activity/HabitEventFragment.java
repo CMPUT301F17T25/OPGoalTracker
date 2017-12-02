@@ -297,7 +297,12 @@ public class HabitEventFragment extends Fragment {
                             Log.d("window","4");
                             displayList=fullList;
                         }
-
+                        Collections.sort(displayList, new Comparator<HabitEvent>() {
+                            @Override
+                            public int compare(HabitEvent habitEvent, HabitEvent t1) {
+                                return -habitEvent.getDate().compareTo(t1.getDate());
+                            }
+                        });
                         HabitEventAdapter adapter = new HabitEventAdapter(getActivity(),displayList);
                         ListView listview=(ListView)getView().findViewById(R.id.list_event);
                         listview.setAdapter(adapter);
@@ -374,7 +379,46 @@ public class HabitEventFragment extends Fragment {
             if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
                 HabitEvent a = data.getParcelableExtra("event");
                 Boolean changedPhoto = data.getBooleanExtra("photo", Boolean.FALSE);
-                if (beforeDetail.changed(a) || changedPhoto == Boolean.TRUE) {
+                int delete = data.getIntExtra("delete",0);
+                if (delete==1){
+                    displayList.remove(beforeDetail);
+                    fullList.remove(beforeDetail);
+                    Collections.sort(displayList, new Comparator<HabitEvent>() {
+                        @Override
+                        public int compare(HabitEvent habitEvent, HabitEvent t1) {
+                            return -habitEvent.getDate().compareTo(t1.getDate());
+                        }
+                    });
+                    HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
+                    ListView listview = (ListView) view.findViewById(R.id.list_event);
+                    listview.setAdapter(adapter);
+
+                    HabitList userHabits = currentUser.getHabitList();
+                    ArrayList<Habit> habitTypes = userHabits.getArrayList();
+                    for (Habit habit : habitTypes) {
+                        if (habit.getHabitType().equals(beforeDetail.getHabitType())) {
+                            Log.d("change","changed");
+                            habit.removeEvent(beforeDetail);
+                            //update habit
+                            ElasticsearchController.AddHabitsTask addHabitsTask = new ElasticsearchController.AddHabitsTask();
+                            addHabitsTask.execute(habit);
+                        }
+                    }
+                    try {
+                        currentUser.setHabitList(userHabits);
+                    } catch (UndefinedException e) {
+                        e.printStackTrace();
+                    }
+                    //// TODO: 2017-12-01
+                    //UPLOAD TO ELASTIC SEARCH
+                    //update both the habit and the user
+                    Log.d("delete event","upload to server");
+                    ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+                    addUsersTask.execute(currentUser);
+
+
+
+                } else if (beforeDetail.changed(a) || changedPhoto == Boolean.TRUE) {
                     //// TODO: 2017-12-01 delete this
                     //handles changed event
                     displayList.remove(beforeDetail);

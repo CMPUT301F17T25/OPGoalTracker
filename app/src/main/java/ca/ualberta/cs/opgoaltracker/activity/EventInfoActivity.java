@@ -208,6 +208,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
                 if (good == Boolean.TRUE) {
                     Intent data = new Intent();
+                    data.putExtra("delete",0);
                     data.putExtra("event", newEvent);
                     data.putExtra("photo", changedPhoto);
                     setResult(AppCompatActivity.RESULT_OK, data);
@@ -238,7 +239,10 @@ public class EventInfoActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.event_event_delete:
-                return true;
+                Intent data = new Intent();
+                data.putExtra("delete", 1);
+                setResult(AppCompatActivity.RESULT_OK, data);
+                finish();
             // delete event
         }
         return super.onOptionsItemSelected(item);
