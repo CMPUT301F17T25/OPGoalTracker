@@ -124,16 +124,21 @@ public class NewsFragment extends Fragment {
             //UNSURE ABOUt THIS QUERY
             String query =
                     "{\n" +
+                    "   \"from\" : 0, \"size\" : 100," +
                     "	\"query\": {\n" +
-                    "		\"term\": {\"_owner\" : \"" + id + "\"}\n" +
+                    "		\"term\": {\"owner\" : \"" + id + "\"}\n" +
                     "	}\n" +
-                    "}";
+                    "}"; // "size": 100 is necessary to get more than 10 result
             ElasticsearchController.GetHabitsTask getHabitsTask = new ElasticsearchController.GetHabitsTask();
             getHabitsTask.execute(query);
             ArrayList<Habit> habits = null;
             try {
                 Log.d("event","try");
-                habits =getHabitsTask.get();
+                if (getHabitsTask.get() == null) { // check if connected to server
+                    Toast.makeText(getActivity(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+                } else {
+                    habits =getHabitsTask.get();
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {

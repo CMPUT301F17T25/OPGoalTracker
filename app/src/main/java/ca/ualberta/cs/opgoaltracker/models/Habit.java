@@ -30,11 +30,11 @@ import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 public class Habit implements Parcelable, Comparable<Habit> {
 
     private String id;
+    private String owner;
     private String habitType;
     private String reason;
     private Date date;
     private Date createDate;
-    private String owner;
     private ArrayList<Boolean> period;
     private ArrayList<HabitEvent> eventList;
     Admin admin = new Admin("admin");
@@ -90,6 +90,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
     @Override
     public void writeToParcel(Parcel out, int i) {
         out.writeString(id);
+        out.writeString(owner);
         out.writeString(habitType);
         out.writeString(reason);
         // Write long value of Date
@@ -106,6 +107,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
      */
     private void readFromParcel(Parcel in) {
         id = in.readString();
+        owner = in.readString();
         habitType = in.readString();
         reason = in.readString();
         // Read Long value and convert to date
