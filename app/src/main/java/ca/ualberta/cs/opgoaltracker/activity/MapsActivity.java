@@ -54,9 +54,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         for (int i = 0;i<n;i++ ){
             HabitEvent habitEventObject = displayList.get(i);
             ArrayList <String> locations = habitEventObject.getLocation();
+            if (! locations.contains(null)) {
 
-            LatLng habitEventPoints = new LatLng(Float.valueOf(locations.get(0)),Float.valueOf(locations.get(1)));
-            mMap.addMarker(new MarkerOptions().position(habitEventPoints).title(habitEventObject.toString()));
+                LatLng habitEventPoints = new LatLng(Float.valueOf(locations.get(0)), Float.valueOf(locations.get(1)));
+                mMap.addMarker(new MarkerOptions().position(habitEventPoints).title(habitEventObject.toString()));
+            }
 
         }
 
