@@ -349,12 +349,13 @@ public class HabitEventFragment extends Fragment {
                 //// TODO: 2017-12-01  
                 //UPLOAD TO ELASTIC SEARCH
                 //update both the habit and the user
-                Log.d("new event","upload to server");
+
                 if (a.getLocation().get(0)!=null) {
                     currentUser.setLocation(a.getLocation().get(0), a.getLocation().get(1));
                 }
                 ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
                 addUsersTask.execute(currentUser);
+                Log.d("new event","upload to server");
             }
         } else if(requestCode == 31) {
             // if the activity was to edit/see info of event

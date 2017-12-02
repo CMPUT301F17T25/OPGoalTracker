@@ -175,6 +175,8 @@ public class Participant implements Parcelable {
     protected Participant(Parcel in) {
         avatar = (Photograph) in.readValue(Photograph.class.getClassLoader());
         habitList = (HabitList) in.readValue(HabitList.class.getClassLoader());
+        lat = in.readString();
+        lng = in.readString();
         if (in.readByte() == 0x01) {
             followerList = new ArrayList<ParticipantName>();
             in.readList(followerList, ParticipantName.class.getClassLoader());
@@ -206,6 +208,8 @@ public class Participant implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(avatar);
         dest.writeValue(habitList);
+        dest.writeString(lat);
+        dest.writeString(lng);
         if (followerList == null) {
             dest.writeByte((byte) (0x00));
         } else {

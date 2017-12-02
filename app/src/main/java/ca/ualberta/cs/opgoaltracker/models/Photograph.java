@@ -10,9 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.v4.graphics.BitmapCompat;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 
@@ -29,7 +31,7 @@ public class Photograph implements Parcelable {
     private int width;
     private int actualHeight;
     private int actualWidth;
-    private Bitmap photo;
+    private byte[] photo;
 
 
     /**
@@ -39,8 +41,8 @@ public class Photograph implements Parcelable {
     public Photograph(Bitmap p,int a, int b) throws ImageTooLargeException {
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        p.compress(Bitmap.CompressFormat.PNG,100,stream);
-        this.photo = p;
+        p.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        photo = stream.toByteArray();
         this.width = p.getWidth();
         this.height= p.getHeight();
         this.actualHeight=a;
@@ -54,7 +56,8 @@ public class Photograph implements Parcelable {
      * @return Bitmap b
      */
     public Bitmap getBitMap(){
-        return photo;
+        Bitmap bmp = BitmapFactory.decodeByteArray(photo, 0, photo.length);
+        return bmp;
     }
 
     /**
@@ -83,7 +86,8 @@ public class Photograph implements Parcelable {
         this.width = in.readInt();
         this.actualHeight=in.readInt();
         this.actualWidth=in.readInt();
-        this.photo = in.readParcelable(Bitmap.class.getClassLoader());
+        photo = new byte[in.readInt()];
+        in.readByteArray(photo);
     }
 
     /**
@@ -108,7 +112,8 @@ public class Photograph implements Parcelable {
         dest.writeInt(this.width);
         dest.writeInt(this.actualHeight);
         dest.writeInt(this.actualWidth);
-        dest.writeParcelable((Parcelable)this.photo,flags);
+        dest.writeInt(photo.length);
+        dest.writeByteArray(photo);
 
     }
 
