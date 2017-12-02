@@ -65,21 +65,19 @@ public class FriendSearchActivity extends AppCompatActivity {
                 getParticipantsTask.execute(query);
 
                 try {
-                    if (getParticipantsTask.get().isEmpty() == false){
+                    if (getParticipantsTask.get() == null) { // check if connected to server
+                        Toast.makeText(FriendSearchActivity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+                    }else if(getParticipantsTask.get().isEmpty() == false){
                         targetUser = getParticipantsTask.get().get(0);
                         Intent intent = new Intent(FriendSearchActivity.this, FriendFollowActivity.class);
                         Log.i("targetUser",targetUser.getId());
                         intent.putExtra("targetUser",targetUser);
                         intent.putExtra("LOGINUSER", currentUser);
                         startActivity(intent);
-                    }else {
-                        Toast.makeText(FriendSearchActivity.this, "User Not Found!", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     Log.i("Error", "Failed to get the participant from the asyc object");
                 }
-
-
                 finish();
             }
         });

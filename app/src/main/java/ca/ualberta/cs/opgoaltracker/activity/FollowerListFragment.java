@@ -36,6 +36,7 @@ import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 public class FollowerListFragment extends Fragment {
 
     private ArrayList<ParticipantName>  followerList;
+    private Participant currentUser;
     private ListView listView;
     private FollowerAdapter adapter;
 
@@ -72,13 +73,15 @@ public class FollowerListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_friend, container, false);
+        listView = (ListView) view.findViewById(R.id.friendlist);
+
         Bundle arg = getArguments();
         followerList = arg.getParcelableArrayList("followerList");
+        currentUser = arg.getParcelable("LOGINUSER");
+        adapter = new FollowerAdapter(getActivity(),followerList,currentUser);
 
-        listView = (ListView) view.findViewById(R.id.friendlist);
-        adapter = new FollowerAdapter(getActivity(),followerList);
         listView.setAdapter(adapter);
-
+        adapter.notifyDataSetChanged();
         return view;
     }
 

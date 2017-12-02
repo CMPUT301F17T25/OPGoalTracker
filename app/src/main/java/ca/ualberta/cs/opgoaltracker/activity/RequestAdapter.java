@@ -6,6 +6,7 @@
 
 package ca.ualberta.cs.opgoaltracker.activity;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
+import ca.ualberta.cs.opgoaltracker.models.Photograph;
 
 /**
  * Created by song on 2017/11/23.
@@ -37,6 +40,7 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
     private ArrayList<ParticipantName> targetFollowingList;
     private ArrayList<ParticipantName> followerList;
     private int currentPosition;
+    private Photograph photo;
     Context mContext;
 
     /**
@@ -94,16 +98,18 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
         getParticipantsTask.execute(query);
 
         try {
-            newFollower = getParticipantsTask.get().get(0);
+            if (getParticipantsTask.get() == null) { // check if connected to server
+                Toast.makeText(convertView.getContext(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+            }else if (getParticipantsTask.get().isEmpty() == false){
+                newFollower = getParticipantsTask.get().get(0);
+                targetFollowingList = newFollower.getFollowingList();
+                photo = newFollower.getAvatar();
+                followerList = currentUser.getFollowerList();
+            }
         } catch (Exception e) {
             Log.i("Error", "Failed to get the participant from the asyc object");
         }
-        try {
-            targetFollowingList = newFollower.getFollowingList();
-            followerList = currentUser.getFollowerList();
-        } catch (UndefinedException e) {
-            e.printStackTrace();
-        }
+
         TextView userName = (TextView) customView.findViewById(R.id.userName);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
         Button accept = (Button) customView.findViewById(R.id.accept);
@@ -117,6 +123,10 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
         });
 
         userName.setText(newFollower.getId());
+        if (photo!=null){
+            picture.setImageBitmap(photo.getBitMap());
+        }
+
         return customView;
     }
 

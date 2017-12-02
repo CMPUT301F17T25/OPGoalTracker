@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
+import ca.ualberta.cs.opgoaltracker.models.Photograph;
 import ca.ualberta.cs.opgoaltracker.models.User;
 
 /**
@@ -41,6 +43,7 @@ public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
     private Participant currentUser;
     private ParticipantName followingName;
     private Participant following;
+    private Photograph photo;
     Context mContext;
     private int currentPosition;
 
@@ -98,16 +101,18 @@ public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
         getParticipantsTask.execute(query);
 
         try {
-            following = getParticipantsTask.get().get(0);
+            if (getParticipantsTask.get() == null) { // check if connected to server
+                Toast.makeText(convertView.getContext(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+            }else if (getParticipantsTask.get().isEmpty() == false) {
+                following = getParticipantsTask.get().get(0);
+                targetFollowerList = following.getFollowerList();
+                followingList = currentUser.getFollowingList();
+                photo = following.getAvatar();
+            }
         } catch (Exception e) {
             Log.i("Error", "Failed to get the participant from the asyc object");
         }
-        try {
-            targetFollowerList = following.getFollowerList();
-            followingList = currentUser.getFollowingList();
-        } catch (UndefinedException e) {
-            e.printStackTrace();
-        }
+
 
         TextView userName = (TextView) customView.findViewById(R.id.userName);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
@@ -122,7 +127,9 @@ public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
         });
 
         userName.setText(followingName.getId());
-        //picture.setImageResource(participant.getAvatar());
+        if (photo!=null){
+            picture.setImageBitmap(photo.getBitMap());
+        }
 
         return customView;
     }
@@ -134,8 +141,7 @@ public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
                 targetFollowerList.remove(i);
             }
         }
-        currentUser.setFollowingList(followingList);
-        update(following,currentUser);
+        update(currentUser,following);
     }
 
     public void update(Participant currentUser, Participant following){
