@@ -19,6 +19,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -117,6 +119,12 @@ public class NewsFragment extends Fragment {
 
     private ArrayList<NewsUserEventPair> getPairs(ArrayList<ParticipantName> followingList) {
         ArrayList<NewsUserEventPair> news = new ArrayList<NewsUserEventPair>();
+        Collections.sort(followingList, new Comparator<ParticipantName>() {
+            @Override
+            public int compare(ParticipantName participantName, ParticipantName t1) {
+                return participantName.getId().compareTo(t1.getId());
+            }
+        });
         //test
         for (ParticipantName participant : followingList){
             Log.d("search","now:"+participant.getId());
@@ -138,6 +146,13 @@ public class NewsFragment extends Fragment {
                     Toast.makeText(getActivity(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
                 } else {
                     habits =getHabitsTask.get();
+                    Collections.sort(habits, new Comparator<Habit>() {
+                        @Override
+                        public int compare(Habit habit, Habit t1) {
+                            return habit.getHabitType().compareTo(t1.getHabitType());
+                        }
+                    });
+
                     for (Habit habit:habits){
                         if (habit.getLatest()!=null) {
                             news.add(new NewsUserEventPair(participant, habit.getLatest()));
