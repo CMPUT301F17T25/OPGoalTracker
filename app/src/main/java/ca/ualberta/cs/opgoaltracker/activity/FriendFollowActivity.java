@@ -8,6 +8,8 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Intent;
 import android.icu.text.MessagePattern;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -16,7 +18,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
@@ -37,8 +42,9 @@ import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 public class FriendFollowActivity extends AppCompatActivity {
     private ArrayList<ParticipantName> targetRequestList;
     private ArrayList<ParticipantName> followingList;
-    Participant currentUser;
-    Participant targetUser;
+    private Participant currentUser;
+    private Participant targetUser;
+    private ArrayList<String> locationList;
     Boolean identicalFlag = true;
     Boolean followingListFlag = true;
     Boolean requestListFlag = true;
@@ -56,7 +62,24 @@ public class FriendFollowActivity extends AppCompatActivity {
 
 
         TextView name = (TextView)findViewById(R.id.name);
+        TextView location = (TextView)findViewById(R.id.location);
         name.setText(targetUser.getId());
+        locationList = targetUser.getLocation();
+        try {
+            String cityName;
+            Geocoder gcd = new Geocoder(FriendFollowActivity.this, Locale.getDefault());
+            if (locationList.get(0) != null && locationList.get(1)!=null){
+                List<Address> addresses = gcd.getFromLocation(Double.parseDouble(locationList.get(0)),
+                        Double.parseDouble(locationList.get(1)), 1);
+                if (addresses.size() > 0) {
+                    cityName = addresses.get(0).getLocality();
+                    location.setText(cityName);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         final Button followButton = (Button) findViewById(R.id.follow);
 
         followButton.setOnClickListener(new View.OnClickListener() {

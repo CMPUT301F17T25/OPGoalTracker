@@ -7,6 +7,8 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
@@ -41,8 +46,9 @@ public class FollowerAdapter extends ArrayAdapter<ParticipantName> {
     private ArrayList<ParticipantName> followerList;
     private ArrayList<ParticipantName> targetFollowingList;
     private Participant currentUser;
-    ParticipantName followerName;
-    Participant follower;
+    private ArrayList<String> locationList;
+    private ParticipantName followerName;
+    private Participant follower;
     private Photograph photo;
     private int currentPosition;
     Context mContext;
@@ -102,11 +108,13 @@ public class FollowerAdapter extends ArrayAdapter<ParticipantName> {
 
         try {
             if (getParticipantsTask.get() == null) { // check if connected to server
-                Toast.makeText(convertView.getContext(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(customView.getContext(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
             }else if (getParticipantsTask.get().isEmpty() == false){
                 follower = getParticipantsTask.get().get(0);
                 targetFollowingList = follower.getFollowingList();
                 photo = follower.getAvatar();
+                locationList = follower.getLocation();
+
                 followerList = currentUser.getFollowerList();
             }
         } catch (Exception e) {
@@ -116,7 +124,6 @@ public class FollowerAdapter extends ArrayAdapter<ParticipantName> {
         TextView location = (TextView) customView.findViewById(R.id.location);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
         Button block = (Button) customView.findViewById(R.id.block);
-
         block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +135,20 @@ public class FollowerAdapter extends ArrayAdapter<ParticipantName> {
         userName.setText(followerName.getId());
         if (photo!=null){
             picture.setImageBitmap(photo.getBitMap());
+        }
+        try {
+            String cityName;
+            Geocoder gcd = new Geocoder(customView.getContext(), Locale.getDefault());
+            if (locationList.get(0) != null && locationList.get(1)!=null){
+                List<Address> addresses = gcd.getFromLocation(Double.parseDouble(locationList.get(0)),
+                        Double.parseDouble(locationList.get(1)), 1);
+                if (addresses.size() > 0) {
+                    cityName = addresses.get(0).getLocality();
+                    location.setText(cityName);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return customView;
     }

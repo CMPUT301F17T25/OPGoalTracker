@@ -8,6 +8,8 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
@@ -39,6 +44,7 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
     private Participant newFollower;
     private ArrayList<ParticipantName> targetFollowingList;
     private ArrayList<ParticipantName> followerList;
+    private ArrayList<String> locationList;
     private int currentPosition;
     private Photograph photo;
     Context mContext;
@@ -105,12 +111,14 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
                 targetFollowingList = newFollower.getFollowingList();
                 photo = newFollower.getAvatar();
                 followerList = currentUser.getFollowerList();
+                locationList = newFollower.getLocation();
             }
         } catch (Exception e) {
             Log.i("Error", "Failed to get the participant from the asyc object");
         }
 
         TextView userName = (TextView) customView.findViewById(R.id.userName);
+        TextView location = (TextView) customView.findViewById(R.id.location);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
         Button accept = (Button) customView.findViewById(R.id.accept);
 
@@ -126,7 +134,22 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
         if (photo!=null){
             picture.setImageBitmap(photo.getBitMap());
         }
-
+        try {
+            String cityName;
+            Geocoder gcd = new Geocoder(convertView.getContext(), Locale.getDefault());
+            if (locationList.get(0) != null && locationList.get(1)!=null){
+                if (locationList.get(0) != null && locationList.get(1)!=null){
+                    List<Address> addresses = gcd.getFromLocation(Double.parseDouble(locationList.get(0)),
+                            Double.parseDouble(locationList.get(1)), 1);
+                    if (addresses.size() > 0) {
+                        cityName = addresses.get(0).getLocality();
+                        location.setText(cityName);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return customView;
     }
 
