@@ -137,18 +137,22 @@ public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
         if (photo!=null){
             picture.setImageBitmap(photo.getBitMap());
         }
-//        try {
-//            String cityName;
-//            Geocoder gcd = new Geocoder(convertView.getContext(), Locale.getDefault());
-//            List<Address> addresses = gcd.getFromLocation(Double.parseDouble(locationList.get(0)),
-//                    Double.parseDouble(locationList.get(1)), 1);
-//            if (addresses.size() > 0) {
-//                cityName = addresses.get(0).getLocality();
-//                location.setText(cityName);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String cityName;
+            Geocoder gcd = new Geocoder(convertView.getContext(), Locale.getDefault());
+            if (locationList.get(0) != null && locationList.get(1)!=null){
+                List<Address> addresses = gcd.getFromLocation(Double.parseDouble(locationList.get(0)),
+                        Double.parseDouble(locationList.get(1)), 1);
+                if (addresses.size() > 0) {
+                    cityName = addresses.get(0).getLocality();
+                    location.setText(cityName);
+                }
+            }else{
+                location.setText("");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return customView;
     }
 

@@ -75,6 +75,8 @@ public class FriendFollowActivity extends AppCompatActivity {
                     cityName = addresses.get(0).getLocality();
                     location.setText(cityName);
                 }
+            }else{
+                location.setText("");
             }
         } catch (IOException e) {
             e.printStackTrace();

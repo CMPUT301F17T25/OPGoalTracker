@@ -146,6 +146,8 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
                         location.setText(cityName);
                     }
                 }
+            }else{
+                location.setText("");
             }
         } catch (IOException e) {
             e.printStackTrace();
