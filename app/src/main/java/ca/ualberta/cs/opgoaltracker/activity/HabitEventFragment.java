@@ -178,8 +178,8 @@ public class HabitEventFragment extends Fragment {
     }
 
     private void fillDisplayList() {
-        for (Habit h:currentUser.getHabitList().getArrayList()){
-            for (HabitEvent e:h.getEventList()){
+        for (Habit h:currentUser.getHabitList().getArrayList()) {
+            for (HabitEvent e : h.getEventList()) {
                 displayList.add(e);
                 fullList.add(e);
             }

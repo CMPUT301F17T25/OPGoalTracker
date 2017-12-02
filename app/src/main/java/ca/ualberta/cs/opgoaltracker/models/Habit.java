@@ -330,7 +330,14 @@ public class Habit implements Parcelable, Comparable<Habit> {
     public ArrayList<HabitEvent> getEventList(){
         return eventList;
     }
-    public HabitEvent getLatest(){return eventList.get(eventList.size()-1);}
+    public HabitEvent getLatest() {
+        if (eventList.size() > 0) {
+            return eventList.get(eventList.size() - 1);
+        }
+        else{
+            return null;
+        }
+    }
     public void newEvent(HabitEvent a){
         eventList.add(a);
     }

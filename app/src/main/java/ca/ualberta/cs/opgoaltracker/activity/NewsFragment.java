@@ -138,18 +138,23 @@ public class NewsFragment extends Fragment {
                     Toast.makeText(getActivity(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
                 } else {
                     habits =getHabitsTask.get();
+                    for (Habit habit:habits){
+                        if (habit.getLatest()!=null) {
+                            news.add(new NewsUserEventPair(participant, habit.getLatest()));
+                        }
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-            for (Habit habit:habits){
-                news.add(new NewsUserEventPair(participant, habit.getLatest()));
-            }
+
         }
         if (news.size()==0){
             Log.d("event","none");
+            Toast.makeText(getContext(),"Your news page is empty, either we couldn't contact the server or you have no followees, start following people in the friends tab",
+                    Toast.LENGTH_LONG).show();
         }else{Log.d("event","once");}
         return news;
     }
