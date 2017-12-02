@@ -105,7 +105,7 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
 
         try {
             if (getParticipantsTask.get() == null) { // check if connected to server
-                Toast.makeText(convertView.getContext(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(customView.getContext(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
             }else if (getParticipantsTask.get().isEmpty() == false){
                 newFollower = getParticipantsTask.get().get(0);
                 targetFollowingList = newFollower.getFollowingList();
@@ -136,7 +136,7 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
         }
         try {
             String cityName;
-            Geocoder gcd = new Geocoder(convertView.getContext(), Locale.getDefault());
+            Geocoder gcd = new Geocoder(customView.getContext(), Locale.getDefault());
             if (locationList.get(0) != null && locationList.get(1)!=null){
                 if (locationList.get(0) != null && locationList.get(1)!=null){
                     List<Address> addresses = gcd.getFromLocation(Double.parseDouble(locationList.get(0)),
