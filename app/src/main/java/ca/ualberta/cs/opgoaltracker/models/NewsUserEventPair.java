@@ -16,6 +16,7 @@ import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
 public class NewsUserEventPair {
     ParticipantName name;
     HabitEvent event;
+    Photograph icon;
 
     public NewsUserEventPair(ParticipantName name, HabitEvent event){
         this.name = name;

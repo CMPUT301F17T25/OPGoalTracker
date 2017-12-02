@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -146,6 +147,8 @@ public class HabitEventAddActivity extends AppCompatActivity {
                             newEvent.setLocation(lat,lng);
                             String place = eventAddress +" in "+ a.getLocality();
                             Toast.makeText(HabitEventAddActivity.this,place,Toast.LENGTH_LONG).show();
+                            String p = lat + " " + lng;
+                            Toast.makeText(HabitEventAddActivity.this, p, Toast.LENGTH_LONG).show();
 
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -172,6 +175,38 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
                                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if (location==null) {
+                                    final LocationListener locationListener = new LocationListener() {
+                                        @Override
+                                        public void onLocationChanged(final Location location) {
+
+                                            // getting location of user
+                                            final double latitude = location.getLatitude();
+                                            final double longitude = location.getLongitude();
+                                            //do something with Lat and Lng
+                                        }
+
+                                        @Override
+                                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                                        }
+
+                                        @Override
+                                        public void onProviderEnabled(String provider) {
+                                            //when user enables the GPS setting, this method is triggered.
+                                        }
+
+                                        @Override
+                                        public void onProviderDisabled(String provider) {
+                                            //when no provider is available in this case GPS provider, trigger your gpsDialog here.
+                                        }
+                                    };
+
+                                    //update location every 10sec in 500m radius with both provider GPS and Network.
+
+                                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10 * 1000, 500, locationListener);
+                                    lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 500, locationListener);
+                                    location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                }
                                 String lat = Double.toString(location.getLatitude());
                                 String lng = Double.toString(location.getLongitude());
                                 newEvent.setLocation(lat, lng);
