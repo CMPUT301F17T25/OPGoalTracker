@@ -34,6 +34,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
     private String reason;
     private Date date;
     private Date createDate;
+    private String owner;
     private ArrayList<Boolean> period;
     private ArrayList<HabitEvent> eventList;
     Admin admin = new Admin("admin");
@@ -267,7 +268,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         return getCreateDate().compareTo(compareHabit.getCreateDate());
     }
 
-
+    public void setOwner(String owner){this.owner=owner;}
     public ArrayList<HabitEvent> getEventList(){
         return eventList;
     }

@@ -69,6 +69,7 @@ public class HabitEventFragment extends Fragment {
     private HabitEvent beforeDetail=null;
 
 
+
     private ArrayList<HabitEvent> displayList;
     private ArrayList<HabitEvent> fullList;
     private ArrayList<String> habitList;
@@ -266,29 +267,40 @@ public class HabitEventFragment extends Fragment {
                     //// TODO: 2017-12-01 add search 
                     public void onClick(View view) {
 
-                        if (searchHabit.getSelectedItem()=="" && message.toString()!=""){
+                        if (!searchHabit.getSelectedItem().equals("") && !message.getText().toString().equals("")){
+                            Log.d("window","first");
                             displayList=new ArrayList<HabitEvent>();
                             for (HabitEvent e:fullList){
-                                if (e.getHabitType()==searchHabit.getSelectedItem() &&
+                                if (e.getHabitType().equals(searchHabit.getSelectedItem()) &&
                                         e.getComment().contains(message.toString())){
                                     displayList.add(e);
                                 }
                             }
-                        }else if (searchHabit.getSelectedItem()==""){
+                        }else if (!searchHabit.getSelectedItem().equals("")){
+                            Log.d("window","2");
                             displayList=new ArrayList<HabitEvent>();
                             for (HabitEvent e:fullList) {
-                                if (e.getHabitType() == searchHabit.getSelectedItem()) {
+                                if (e.getHabitType().equals(searchHabit.getSelectedItem())) {
                                     displayList.add(e);
                                 }
                             }
-                        }else if (message.toString()!=""){
+                        }else if (!message.getText().toString().equals("")){
+                            Log.d("window","3");
+                            Log.d("window",message.getText().toString());
+                            displayList=new ArrayList<HabitEvent>();
                             for (HabitEvent e:fullList) {
-                                displayList=new ArrayList<HabitEvent>();
-                                if (e.getComment().contains(message.toString())) {
+                                if (e.getComment().contains(message.getText().toString())) {
                                     displayList.add(e);
                                 }
                             }
+                        }else{
+                            Log.d("window","4");
+                            displayList=fullList;
                         }
+
+                        HabitEventAdapter adapter = new HabitEventAdapter(getActivity(),displayList);
+                        ListView listview=(ListView)getView().findViewById(R.id.list_event);
+                        listview.setAdapter(adapter);
                         dialog.dismiss();
 
                     }
@@ -377,7 +389,7 @@ public class HabitEventFragment extends Fragment {
                         }
                     });
                     HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
-                    final ListView listview = (ListView) view.findViewById(R.id.list_event);
+                    ListView listview = (ListView) view.findViewById(R.id.list_event);
                     listview.setAdapter(adapter);
 
                     HabitList userHabits = currentUser.getHabitList();

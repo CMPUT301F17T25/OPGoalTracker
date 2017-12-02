@@ -97,9 +97,11 @@ public class NewsFragment extends Fragment {
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
         ArrayList<ParticipantName> followingList;
+        Log.d("hello","yes");
 
         try {
             followingList = currentUser.getFollowingList();
+
         } catch (UndefinedException e) {
             e.printStackTrace();
             followingList = new ArrayList<ParticipantName>();
@@ -117,18 +119,21 @@ public class NewsFragment extends Fragment {
         ArrayList<NewsUserEventPair> news = new ArrayList<NewsUserEventPair>();
         //test
         for (ParticipantName participant : followingList){
+            Log.d("search","now:"+participant.getId());
             String id = participant.getId();
             //UNSURE ABOUt THIS QUERY
-            String query = "{\n" +
+            String query =
+                    "{\n" +
                     "	\"query\": {\n" +
-                    "		\"term\": {\"id\":\"" + id + "\"}\n" +
+                    "		\"term\": {\"_owner\" : \"" + id + "\"}\n" +
                     "	}\n" +
                     "}";
             ElasticsearchController.GetHabitsTask getHabitsTask = new ElasticsearchController.GetHabitsTask();
             getHabitsTask.execute(query);
             ArrayList<Habit> habits = null;
             try {
-                habits = getHabitsTask.get();
+                Log.d("event","try");
+                habits =getHabitsTask.get();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
@@ -138,6 +143,9 @@ public class NewsFragment extends Fragment {
                 news.add(new NewsUserEventPair(participant, habit.getLatest()));
             }
         }
+        if (news.size()==0){
+            Log.d("event","none");
+        }else{Log.d("event","once");}
         return news;
     }
 
