@@ -48,6 +48,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.jar.Manifest;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.Controller.LatitudeAndLongitudeWithPincode;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
@@ -214,6 +215,10 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
                     if (good == Boolean.TRUE) {
                         Intent data = new Intent();
+
+                        ElasticsearchController.AddHabitEventsTask addEvent= new ElasticsearchController.AddHabitEventsTask();
+                        addEvent.execute(newEvent);
+
                         data.putExtra("event", newEvent);
                         setResult(AppCompatActivity.RESULT_OK, data);
                         Log.d("last",newEvent.getComment());

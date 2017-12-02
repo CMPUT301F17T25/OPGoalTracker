@@ -112,7 +112,7 @@ public class EventInfoActivity extends AppCompatActivity {
         EditText comment = (EditText) findViewById(R.id.new_event_comment);
         comment.setText(selected.getComment());
         CheckBox location = (CheckBox) findViewById(R.id.gps_checkbox);
-        if (selected.getLocation()[0] != null && selected.getLocation()[1] != null) {
+        if (selected.getLocation().get(0) != null && selected.getLocation().get(1) != null) {
             location.setChecked(Boolean.TRUE);
         }
         Button saveChanges = (Button) findViewById(R.id.create_event);
@@ -162,7 +162,7 @@ public class EventInfoActivity extends AppCompatActivity {
                     Log.d("gps", "before first");
                     if (gpsLocation.isChecked()) {
                         Log.d("gps", "before second");
-                        newEvent.setLocation(selected.getLocation()[0], selected.getLocation()[1]);
+                        newEvent.setLocation(selected.getLocation().get(0), selected.getLocation().get(1));
                     }
                     // taken from https://stackoverflow.com/questions/2227292/how-to-get-latitude-and-longitude-of-the-mobile-device-in-android
                     // 2017-11-29

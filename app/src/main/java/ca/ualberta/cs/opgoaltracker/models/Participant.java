@@ -12,6 +12,7 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
+import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 
 /**
@@ -31,6 +32,8 @@ public class Participant implements Parcelable {
     private ArrayList<ParticipantName> requestList;
     private String id;
     private String comment;
+    private String lat;
+    private String lng;
 
     public String getComment() {
         return comment;
@@ -237,6 +240,17 @@ public class Participant implements Parcelable {
             return new Participant[size];
         }
     };
+
+    public void setLocation(String lat, String lng){
+        this.lat = lat;
+        this.lng = lng;
+    }
+    public ArrayList<String> getLocation(){
+        ArrayList<String> e = new ArrayList<String>();
+        e.add(lat);
+        e.add(lng);
+        return e;
+    }
 
 
 }

@@ -9,7 +9,9 @@ package ca.ualberta.cs.opgoaltracker.models;
 import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
@@ -51,14 +53,19 @@ public class HabitEvent implements Parcelable {
         this.habitType = habitType;
         this.date = date;
         this.comment = comment;
+        this.lat=null;
+        this.lng=null;
     }
     public Boolean changed(HabitEvent b){
         if (b.getComment()==this.comment &&
-                b.getLocation()[0]==this.lat&&
-                this.getLocation()[1]==this.lng){
+                b.getLocation().get(0)==lat&&
+                b.getLocation().get(1)==lng){
             return Boolean.FALSE;
+        }else if(b.getLocation().get(0)==null && lat==null) {
+            return Boolean.FALSE;
+        }else {
+            return Boolean.TRUE;
         }
-        return Boolean.TRUE;
     }
 
     /**
@@ -113,8 +120,12 @@ public class HabitEvent implements Parcelable {
      * Basic Habit Event Location getter
      * @return String : location
      */
-    public String[] getLocation() {
-        return new String[] {lat,lng};
+    public ArrayList<String> getLocation() {
+        ArrayList<String> r=new ArrayList<String>();
+        r.add(lat);
+        r.add(lng);
+
+        return r;
     }
 
     /**

@@ -111,8 +111,7 @@ public class Habit implements Parcelable, Comparable<Habit> {
         date = new Date(in.readLong());
         createDate = new Date(in.readLong());
         period = in.readArrayList(null);
-        eventList=in.readArrayList(null);
-
+        eventList=in.readArrayList(HabitEvent.class.getClassLoader());
     }
 
     /**

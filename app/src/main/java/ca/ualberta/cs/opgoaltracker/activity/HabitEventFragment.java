@@ -118,6 +118,7 @@ public class HabitEventFragment extends Fragment {
         currentUser = arg.getParcelable("CURRENTUSER");
 
         displayList = new ArrayList<HabitEvent>();
+        fullList = new ArrayList<HabitEvent>();
         fillDisplayList();
         //fill displayList
         Collections.sort(displayList, new Comparator<HabitEvent>() {
@@ -306,25 +307,37 @@ public class HabitEventFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 30) {
             if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
-                Log.d("this", "see this");
                 HabitEvent a = data.getParcelableExtra("event");
+                // add new event to the display list
                 displayList.add(a);
                 fullList.add(a);
+
+                //sort the display list
                 Collections.sort(displayList, new Comparator<HabitEvent>() {
                     @Override
                     public int compare(HabitEvent habitEvent, HabitEvent t1) {
                         return -habitEvent.getDate().compareTo(t1.getDate());
                     }
                 });
+
+                //display the updated event list
                 HabitEventAdapter adapter = new HabitEventAdapter(getActivity(), displayList);
                 final ListView listview = (ListView) view.findViewById(R.id.list_event);
                 listview.setAdapter(adapter);
 
+
                 HabitList userHabits = currentUser.getHabitList();
                 ArrayList<Habit> habitTypes = userHabits.getArrayList();
                 for (Habit habit:habitTypes){
-                    if (habit.getHabitType()==beforeDetail.getHabitType()){
+
+                    if (habit.getHabitType().equals(a.getHabitType())){
+                        Log.d("new event","added to event");
                         habit.newEvent(a);
+                        //updates the habit on the server
+                        ElasticsearchController.AddHabitsTask addHabitsTask = new ElasticsearchController.AddHabitsTask();
+                        addHabitsTask.execute(habit);
+
+                        break;
                     }
                 }
                 userHabits.setArrayList(habitTypes);
@@ -336,17 +349,18 @@ public class HabitEventFragment extends Fragment {
                 //// TODO: 2017-12-01  
                 //UPLOAD TO ELASTIC SEARCH
                 //update both the habit and the user
-                //ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
-                //addUsersTask.execute(currentUser);
+                Log.d("new event","upload to server");
+                currentUser.setLocation(a.getLocation().get(0),a.getLocation().get(1));
+                ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+                addUsersTask.execute(currentUser);
             }
-        }
-        if(requestCode == 31) {
-            Log.d("this", "dont see this");
+        } else if(requestCode == 31) {
             // if the activity was to edit/see info of event
             if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
                 HabitEvent a = data.getParcelableExtra("event");
                 Boolean changedPhoto = data.getBooleanExtra("photo", Boolean.FALSE);
-                if (beforeDetail.changed(a) || changedPhoto == Boolean.TRUE) {
+                if (beforeDetail.changed(a)==Boolean.TRUE || changedPhoto == Boolean.TRUE) {
+                    //// TODO: 2017-12-01 delete this
                     //handles changed event
                     displayList.remove(beforeDetail);
                     displayList.add(a);
@@ -368,6 +382,9 @@ public class HabitEventFragment extends Fragment {
                         if (habit.getHabitType() == beforeDetail.getHabitType()) {
                             habit.removeEvent(beforeDetail);
                             habit.newEvent(a);
+                            //update habit
+                            ElasticsearchController.AddHabitsTask addHabitsTask = new ElasticsearchController.AddHabitsTask();
+                            addHabitsTask.execute(habit);
                         }
                     }
                     userHabits.setArrayList(habitTypes);
@@ -376,8 +393,16 @@ public class HabitEventFragment extends Fragment {
                     } catch (UndefinedException e) {
                         e.printStackTrace();
                     }
+                    try {
+                        currentUser.setHabitList(userHabits);
+                    } catch (UndefinedException e) {
+                        e.printStackTrace();
+                    }
                     //// TODO: 2017-12-01 apply same upload as new habit event 
                     //UPLOAD to ELASTIC SEARCH
+                    currentUser.setLocation(a.getLocation().get(0),a.getLocation().get(1));
+                    ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+                    addUsersTask.execute(currentUser);
 
                 }
 
