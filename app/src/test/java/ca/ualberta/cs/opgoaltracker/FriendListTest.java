@@ -49,7 +49,7 @@ public class FriendListTest extends ActivityInstrumentationTestCase2 {
         Participant c = new Participant("test3");
         followingList.add(c);
 
-        currentUser.setFollowingList(followingList);
+        //currentUser.setFollowingList(followingList);
 
         Participant d = followingList.get(1);
         assertEquals(d.getId(),b.getId());

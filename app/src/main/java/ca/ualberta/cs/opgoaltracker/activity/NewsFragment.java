@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -61,6 +64,8 @@ public class NewsFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -82,11 +87,13 @@ public class NewsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,7 +102,7 @@ public class NewsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_news, container, false);
         ((MenuPage) getActivity())
                 .setActionBarTitle("News");
-        //((MenuPage) getActivity()).setActionBar();
+
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
         ArrayList<ParticipantName> followingList;
@@ -156,6 +163,7 @@ public class NewsFragment extends Fragment {
                     for (Habit habit:habits){
                         if (habit.getLatest()!=null) {
                             news.add(new NewsUserEventPair(participant, habit.getLatest()));
+                            toMap.add(habit.getLatest());
                         }
                     }
                 }
@@ -214,5 +222,18 @@ public class NewsFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_news, menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.news_map) {
+            return Boolean.FALSE;
+        }
+        return Boolean.FALSE;
     }
 }

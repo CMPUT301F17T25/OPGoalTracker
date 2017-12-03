@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 Yongjia Huang, Dichong Song, Mingwei Li, Donglin Han, Long Ma,CMPUT301F17T25 CMPUT301, University of Alberta, All Rights Reserved.
+  ~ You may use distribut, or modify this code under terms and conditions of the ode of Student Behavior at University of Alberta
+  ~ You may find a copy of the license in this project. Otherwise please contact jajayongjia@gmail.com
+  -->
+
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/news_map"
+        android:icon="@drawable/ic_map_48dp"
+        android:title=""
+        app:showAsAction="always"/>
+
+</menu>
