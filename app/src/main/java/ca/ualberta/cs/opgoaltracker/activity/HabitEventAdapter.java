@@ -8,6 +8,9 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +28,7 @@ import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
  */
 
 class HabitEventAdapter extends ArrayAdapter<HabitEvent> {
+    private static final int SCALED_IMAGE_WIDTH = 500;
 
     public HabitEventAdapter(Context context, List<HabitEvent> objects) {
         super(context, R.layout.fragment_habit_event, objects);
@@ -47,14 +51,46 @@ class HabitEventAdapter extends ArrayAdapter<HabitEvent> {
         EventComment.setText(event.getComment());
         EventDate.setText(event.getDate().toString());
         if (event.getPhoto()!=null) {
-            int scaledHeight = event.getPhoto().getActualHeight();
-            int scaledWidth = event.getPhoto().getActualWidth();
             Bitmap bitmap = event.getPhoto().getBitMap();
-            EventImage.setImageBitmap(Bitmap.createScaledBitmap(bitmap,
-                    scaledWidth,scaledHeight,Boolean.FALSE));
+            bitmap = scaleBitmap(bitmap, 1000, 500);
+
+            EventImage.setImageBitmap(bitmap);
         }else{
             EventImage.setImageDrawable(null);
         }
         return customView;
+    }
+
+    /**
+     * Rescale the bitmap to a fixed height with remaining same aspect ratio
+     * Revised from: https://stackoverflow.com/questions/15440647/scaled-bitmap-maintaining-aspect-ratio
+     * @param originalImage
+     * @param width
+     * @param height
+     * @return
+     */
+    public Bitmap scaleBitmap(Bitmap originalImage, int width, int height) {
+        Bitmap background = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_8888);
+
+        float originalWidth = originalImage.getWidth();
+        float originalHeight = originalImage.getHeight();
+
+        Canvas canvas = new Canvas(background);
+
+        float scale = height / originalHeight;
+
+        float xTranslation = (width - originalWidth * scale) / 2.0f;
+        float yTranslation = 0.0f;
+
+        Matrix transformation = new Matrix();
+        transformation.postTranslate(xTranslation, yTranslation);
+        transformation.preScale(scale, scale);
+
+        Paint paint = new Paint();
+        paint.setFilterBitmap(true);
+
+        canvas.drawBitmap(originalImage, transformation, paint);
+
+        return background;
     }
 }

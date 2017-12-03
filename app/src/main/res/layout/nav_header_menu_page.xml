@@ -24,7 +24,7 @@
         android:layout_width="74dp"
         android:layout_height="70dp"
         android:scaleType="fitXY"
-        app:srcCompat="@drawable/my_picture" />
+        app:srcCompat="@drawable/newevent" />
 
     <TextView
         android:id="@+id/menuPageId"

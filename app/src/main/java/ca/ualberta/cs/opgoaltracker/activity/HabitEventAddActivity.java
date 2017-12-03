@@ -72,6 +72,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
     Bitmap picture;
     View view;
     String habitType;
+    String filePath;
     private LatitudeAndLongitudeWithPincode convertedAddress;
 
     @Override
@@ -227,28 +228,12 @@ public class HabitEventAddActivity extends AppCompatActivity {
                         try {
                             Drawable draw =getImage.getDrawable();
                             Bitmap p = ((BitmapDrawable)draw).getBitmap();
-                            newEvent.setPhoto(new Photograph(p,p.getHeight(),p.getWidth()));
+                            newEvent.setPhoto(new Photograph(filePath));
                         } catch (ImageTooLargeException e) {
                             Log.d("exception","catch first");
-                            Drawable draw =getImage.getDrawable();
-                            Bitmap p = ((BitmapDrawable)draw).getBitmap();
-                            int x = p.getHeight();
-                            int previousHeight= p.getHeight();
-                            int y = p.getWidth();
-                            int previousWidth = p.getWidth();
-                            int size = x * y * 24 / 8;
-                            float a = size/65536;
-
-                            Bitmap newPic = Bitmap.createScaledBitmap(p, (int)(x/a), (int)(y/a), false);
-                            try {
-                                newEvent.setPhoto(new Photograph(newPic,previousHeight,previousWidth));
-                                Log.d("put picture","resized pic");
-                            } catch (ImageTooLargeException e1) {
-                                e1.printStackTrace();
-                            }
-                            Toast.makeText(HabitEventAddActivity.this, "Your picture was resized to be within the acceptable size",
-                                    Toast.LENGTH_LONG).show();
-
+                            Toast.makeText(HabitEventAddActivity.this, "Image should be under 65536 bytes",
+                                    Toast.LENGTH_SHORT).show();
+                            return;
                         }
                     }
 
@@ -313,7 +298,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
                         cursor.moveToFirst();
 
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String filePath = cursor.getString(columnIndex);
+                        filePath = cursor.getString(columnIndex);
                         cursor.close();
 
                         //taken from https://stackoverflow.com/questions/2507898/how-to-pick-an-image-from-gallery-sd-card-for-my-app

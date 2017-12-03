@@ -9,6 +9,7 @@ package ca.ualberta.cs.opgoaltracker.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,8 +35,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
+import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Photograph;
 
 
 /**
@@ -126,17 +131,27 @@ public class MyAccountFragment extends Fragment {
                 String com = comment.getText().toString();
                 currentUser.setComment(com);
 
-                if(BitmapFactory.decodeFile(picturePath).getByteCount() > 65536) {
+                try {
+                    Photograph avatar = new Photograph(picturePath);
+                    currentUser.setAvatar(avatar);
+                    btn.setImageBitmap(currentUser.getAvatar().getBitMap());
+
+                    // upload currentUser
+                    ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
+                    addUsersTask.execute(currentUser);
+                    } catch (ImageTooLargeException e) {
                     Toast.makeText(getActivity().getApplicationContext(), "Image should be under 65536 bytes",
                             Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
 
         btn = (ImageButton) view.findViewById(R.id.head_portrait);
+        if (currentUser.getAvatar() != null) {
+            btn.setImageBitmap(currentUser.getAvatar().getBitMap());
+        }
 
-        loadFromFile();
+//        loadFromFile();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,20 +171,20 @@ public class MyAccountFragment extends Fragment {
 
     }
 
-    private void loadFromFile() {
-        try {
-            FileInputStream fis = getContext().openFileInput(FILENAME);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            Gson gson = new Gson();
-            // Taken from https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples 2017-09-19
-            picturePath = gson.fromJson(in, String.class);
-            btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-        } catch (FileNotFoundException e) {
-            btn.setImageResource(R.drawable.newevent);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    private void loadFromFile() {
+//        try {
+//            FileInputStream fis = getContext().openFileInput(FILENAME);
+//            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+//            Gson gson = new Gson();
+//            // Taken from https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples 2017-09-19
+//            picturePath = gson.fromJson(in, String.class);
+//            btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//        } catch (FileNotFoundException e) {
+//            btn.setImageResource(R.drawable.newevent);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -190,30 +205,30 @@ public class MyAccountFragment extends Fragment {
                 btn.setImageBitmap(BitmapFactory.decodeFile(picturePath));
                 Toast.makeText(getActivity().getApplicationContext(), picturePath, Toast.LENGTH_SHORT).show();
 
-                saveInFile();
+//                saveInFile();
             } catch (Exception e){
 
             }
         }
     }
 
-    private void saveInFile() {
-        try {
-            FileOutputStream fos = getContext().openFileOutput(FILENAME, getContext().MODE_PRIVATE);
-            // https://developer.android.com/reference/android/content/Context.html
-            // MODE_APPEND File creation mode: for use with openFileOutput(String, int), if the file already exists then write data to the end of the existing file instead of erasing it.
-            // MODE_PRIVATE File creation mode: the default mode, where the created file can only be accessed by the calling application (or all applications sharing the same user ID).
-            OutputStreamWriter writer = new OutputStreamWriter(fos);
-            Gson gson = new Gson();
-            gson.toJson(picturePath, writer);
-            writer.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private void saveInFile() {
+//        try {
+//            FileOutputStream fos = getContext().openFileOutput(FILENAME, getContext().MODE_PRIVATE);
+//            // https://developer.android.com/reference/android/content/Context.html
+//            // MODE_APPEND File creation mode: for use with openFileOutput(String, int), if the file already exists then write data to the end of the existing file instead of erasing it.
+//            // MODE_PRIVATE File creation mode: the default mode, where the created file can only be accessed by the calling application (or all applications sharing the same user ID).
+//            OutputStreamWriter writer = new OutputStreamWriter(fos);
+//            Gson gson = new Gson();
+//            gson.toJson(picturePath, writer);
+//            writer.flush();
+//            fos.close();
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

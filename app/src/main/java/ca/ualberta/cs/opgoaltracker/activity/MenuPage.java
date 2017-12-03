@@ -116,12 +116,15 @@ public class MenuPage extends AppCompatActivity
 
         // https://stackoverflow.com/questions/33540090/textview-from-navigationview-header-returning-null
         button = (ImageButton) navigationView.getHeaderView(0).findViewById(R.id.menu_profile_image);
-        loadFromFile();
+//        loadFromFile();
+        if (currentUser.getAvatar() != null) {
+            button.setImageBitmap(currentUser.getAvatar().getBitMap());
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadFromFile();
+//                loadFromFile();
             }
         });
     }
@@ -142,6 +145,11 @@ public class MenuPage extends AppCompatActivity
 
             @Override
             public void onDrawerOpened(View v) {
+                // refresh avatar that on the drawer
+                if (currentUser.getAvatar() != null) {
+                    button.setImageBitmap(currentUser.getAvatar().getBitMap());
+                }
+
                 comment.setText(currentUser.getComment());
                 super.onDrawerOpened(v);
             }
@@ -156,21 +164,21 @@ public class MenuPage extends AppCompatActivity
     public void onResume() {
         super.onResume();
         comment.setText(currentUser.getComment());
-        loadFromFile();
+//        loadFromFile();
     }
 
-    public void loadFromFile() {
-        try {
-            FileInputStream fis = openFileInput(FILENAME);
-            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
-            Gson gson = new Gson();
-            // Taken from https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples 2017-09-19
-            picturePath = gson.fromJson(in, String.class);
-            button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-        } catch (FileNotFoundException e) {
-            button.setImageResource(R.drawable.newevent);
-        }
-    }
+//    public void loadFromFile() {
+//        try {
+//            FileInputStream fis = openFileInput(FILENAME);
+//            BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+//            Gson gson = new Gson();
+//            // Taken from https://github.com/google/gson/blob/master/UserGuide.md#TOC-Collections-Examples 2017-09-19
+//            picturePath = gson.fromJson(in, String.class);
+//            button.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+//        } catch (FileNotFoundException e) {
+//            button.setImageResource(R.drawable.newevent);
+//        }
+//    }
 
     /**
      * Default Navigation Drawer onBackPressed method.
@@ -194,7 +202,7 @@ public class MenuPage extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_page, menu);
+//        getMenuInflater().inflate(R.menu.menu_page, menu);
         return true;
     }
 
