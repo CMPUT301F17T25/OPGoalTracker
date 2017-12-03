@@ -57,6 +57,7 @@ public class NewsFragment extends Fragment {
     View view;
     private Participant currentUser;
     private ArrayList<HabitEvent> toMap;
+    ArrayList<NewsUserEventPair> pairList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -115,7 +116,7 @@ public class NewsFragment extends Fragment {
             e.printStackTrace();
             followingList = new ArrayList<ParticipantName>();
         }
-        ArrayList<NewsUserEventPair> pairList = getPairs(followingList);
+        pairList = getPairs(followingList);
         NewsAdapter adapter = new NewsAdapter(getContext(),pairList);
         ListView listview=(ListView)view.findViewById(R.id.newsList);
         listview.setAdapter(adapter);
@@ -232,7 +233,13 @@ public class NewsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.news_map) {
-            return Boolean.FALSE;
+            Intent intent = new Intent(getActivity(),MapsActivity.class);
+            ArrayList<HabitEvent> display = new ArrayList<HabitEvent>();
+            for (int i = 0; i < pairList.size(); i++) {
+                    display.add(pairList.get(i).getEvent());
+                }
+            intent.putExtra("DISPLAYLIST",display);
+            startActivity(intent);
         }
         return Boolean.FALSE;
     }
