@@ -265,8 +265,8 @@ public class HabitEventAddActivity extends AppCompatActivity {
                     }
                 } catch (CommentTooLongException e) {
                     Log.d("failed", "null event");
-                    setResult(AppCompatActivity.RESULT_CANCELED);
-                    finish();
+                    Toast.makeText(HabitEventAddActivity.this,"Your comment is too long",Toast.LENGTH_SHORT);
+                    return;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

@@ -56,7 +56,6 @@ public class NewsFragment extends Fragment {
     private String mParam2;
     View view;
     private Participant currentUser;
-    private ArrayList<HabitEvent> toMap;
     ArrayList<NewsUserEventPair> pairList;
 
     private OnFragmentInteractionListener mListener;
@@ -164,7 +163,6 @@ public class NewsFragment extends Fragment {
                     for (Habit habit:habits){
                         if (habit.getLatest()!=null) {
                             news.add(new NewsUserEventPair(participant, habit.getLatest()));
-                            toMap.add(habit.getLatest());
                         }
                     }
                 }
