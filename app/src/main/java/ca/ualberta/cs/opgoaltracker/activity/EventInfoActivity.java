@@ -64,6 +64,7 @@ import ca.ualberta.cs.opgoaltracker.models.Photograph;
  */
 public class EventInfoActivity extends AppCompatActivity {
     Boolean changedPhoto = Boolean.FALSE;
+    String filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class EventInfoActivity extends AppCompatActivity {
         if (selected.getPhoto() != null) {
             Bitmap picture = selected.getPhoto().getBitMap();
             getImage.setImageBitmap(Bitmap.createScaledBitmap(picture,
-                    selected.getPhoto().getActualWidth(), selected.getPhoto().getActualHeight(), Boolean.FALSE));
+                    selected.getPhoto().getWidth(), selected.getPhoto().getHeight(), Boolean.FALSE));
         }
         getImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,37 +172,21 @@ public class EventInfoActivity extends AppCompatActivity {
 
                 //handles picture
                 if (selected.getPhoto() != null && changedPhoto == Boolean.FALSE) {
-                    try {
-                        newEvent.setPhoto(selected.getPhoto());
-                    } catch (ImageTooLargeException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+                    newEvent.setPhoto(selected.getPhoto());
+//                    } catch (ImageTooLargeException e) {
+//                        e.printStackTrace();
+//                    }
                 } else if (changedPhoto == Boolean.TRUE) {
                     try {
                         Drawable draw = getImage.getDrawable();
                         Bitmap p = ((BitmapDrawable) draw).getBitmap();
-                        newEvent.setPhoto(new Photograph(p, p.getHeight(), p.getWidth()));
+                        newEvent.setPhoto(new Photograph(filePath));
                     } catch (ImageTooLargeException e) {
                         Log.d("exception", "catch first");
-                        Drawable draw = getImage.getDrawable();
-                        Bitmap p = ((BitmapDrawable) draw).getBitmap();
-                        int x = p.getHeight();
-                        int previousHeight = p.getHeight();
-                        int y = p.getWidth();
-                        int previousWidth = p.getWidth();
-                        int size = x * y * 24 / 8;
-                        float a = size / 65536;
-
-                        Bitmap newPic = Bitmap.createScaledBitmap(p, (int) (x / a), (int) (y / a), false);
-                        try {
-                            newEvent.setPhoto(new Photograph(newPic, previousHeight, previousWidth));
-                            Log.d("put picture", "resized pic");
-                        } catch (ImageTooLargeException e1) {
-                            Log.d("tried", "failed resize");
-                            e1.printStackTrace();
-                        }
-                        Toast.makeText(EventInfoActivity.this, "Your picture was resized to be within the acceptable size",
-                                Toast.LENGTH_LONG).show();
+                        Toast.makeText(EventInfoActivity.this, "Image should be under 65536 bytes",
+                                Toast.LENGTH_SHORT).show();
+                        return;
 
                     }
                 }
@@ -270,7 +255,7 @@ public class EventInfoActivity extends AppCompatActivity {
                         cursor.moveToFirst();
 
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String filePath = cursor.getString(columnIndex);
+                        filePath = cursor.getString(columnIndex);
                         cursor.close();
 
                         //taken from https://stackoverflow.com/questions/2507898/how-to-pick-an-image-from-gallery-sd-card-for-my-app

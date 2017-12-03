@@ -14,7 +14,8 @@
     <ImageButton
         android:id="@+id/new_event_picture"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
+        android:scaleType="fitCenter"
         app:srcCompat="@drawable/newevent" />
 
     <TextView

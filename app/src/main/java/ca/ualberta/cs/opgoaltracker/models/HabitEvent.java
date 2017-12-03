@@ -34,7 +34,6 @@ public class HabitEvent implements Parcelable {
     private Photograph photo;
     private String lat;
     private String lng;
-    private int maxPhotoSize = 65536;
 
     /**
      * Base Constructor which create a Habit Event type <br>
@@ -161,14 +160,8 @@ public class HabitEvent implements Parcelable {
     /**
      *  Basic Habit Event Photo setter
      * @param photo Photograph
-     * @throws ImageTooLargeException
      */
-    public void setPhoto(Photograph photo) throws ImageTooLargeException {
-        // Assuming 24bits/pixel. Note that 8bits/byte.
-        int photoSize = photo.getBitMap().getByteCount();
-        if( photoSize > this.maxPhotoSize){
-            throw new ImageTooLargeException();
-        }
+    public void setPhoto(Photograph photo) {
         this.photo = photo;
     }
 
@@ -202,7 +195,6 @@ public class HabitEvent implements Parcelable {
         date = tmpDate != -1 ? new Date(tmpDate) : null;
         lat = in.readString();
         lng = in.readString();
-        maxPhotoSize = in.readInt();
         int hasPhoto = in.readInt();
         if (hasPhoto==1){
             photo = in.readParcelable(Photograph.class.getClassLoader());
@@ -223,7 +215,6 @@ public class HabitEvent implements Parcelable {
         dest.writeLong(date != null ? date.getTime() : -1L);
         dest.writeString(lat);
         dest.writeString(lng);
-        dest.writeInt(maxPhotoSize);
         if (photo==null){
             dest.writeInt(0);
         }else{
