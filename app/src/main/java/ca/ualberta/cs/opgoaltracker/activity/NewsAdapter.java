@@ -43,6 +43,10 @@ class NewsAdapter extends ArrayAdapter<NewsUserEventPair> {
         ImageView UserImage = (ImageView) customView.findViewById(R.id.UserIcon);
         TextView UserName = (TextView) customView.findViewById(R.id.newsUser);
 
+        if (event.getIcon()!=null){
+            UserImage.setImageBitmap(event.getIcon().getBitMap());
+        }
+
         EventType.setText(event.getEvent().getHabitType());
         EventComment.setText(event.getEvent().getComment());
         if (event.getEvent().getPhoto()!=null){
@@ -52,7 +56,7 @@ class NewsAdapter extends ArrayAdapter<NewsUserEventPair> {
         }
 
         //UserImage.setImageResouce()
-        UserName.setText(event.getName().getId());
+        UserName.setText(event.getName());
 
         return customView;
     }

@@ -169,9 +169,15 @@ public class HabitEventAddActivity extends AppCompatActivity {
                                 good = Boolean.FALSE;
                                 ActivityCompat.requestPermissions(HabitEventAddActivity.this, new String[]{
                                         android.Manifest.permission.ACCESS_FINE_LOCATION}, 52);
-                                ;
+                            }else if (ContextCompat.checkSelfPermission(HabitEventAddActivity.this,
+                                    android.Manifest.permission.ACCESS_COARSE_LOCATION)!=
+                                    PackageManager.PERMISSION_GRANTED ){
+                                good = Boolean.FALSE;
+                                ActivityCompat.requestPermissions(HabitEventAddActivity.this, new String[]{
+                                        android.Manifest.permission.ACCESS_COARSE_LOCATION}, 53);
+                            }
 
-                            }else {
+                            else {
                                 Log.d("gps", "before second");
 
                                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -184,7 +190,6 @@ public class HabitEventAddActivity extends AppCompatActivity {
                                             // getting location of user
                                             final double latitude = location.getLatitude();
                                             final double longitude = location.getLongitude();
-                                            //do something with Lat and Lng
                                         }
 
                                         @Override
@@ -201,13 +206,15 @@ public class HabitEventAddActivity extends AppCompatActivity {
                                             //when no provider is available in this case GPS provider, trigger your gpsDialog here.
                                         }
                                     };
+                                    // Used https://stackoverflow.com/questions/42218419/how-do-i-implement-the-locationlistener as reference
+                                    //2017-12-01
 
                                     //update location every 10sec in 500m radius with both provider GPS and Network.
 
                                     lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 500, locationListener);
                                     lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 500, locationListener);
-                                    Toast.makeText(HabitEventAddActivity.this,"Please wait while we retrieve your location",Toast.LENGTH_LONG);
-                                    Thread.sleep(10000);
+                                    Toast.makeText(HabitEventAddActivity.this,"Please wait while we retrieve your location",Toast.LENGTH_LONG).show();
+                                    Thread.sleep(1000);
 
                                     location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
@@ -219,7 +226,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
                                 Toast.makeText(HabitEventAddActivity.this, place, Toast.LENGTH_LONG).show();
                             }
                             // taken from https://stackoverflow.com/questions/2227292/how-to-get-latitude-and-longitude-of-the-mobile-device-in-android
-                            // 2017-11-29
+                            // 2017-11-22
                         }
                     }
 

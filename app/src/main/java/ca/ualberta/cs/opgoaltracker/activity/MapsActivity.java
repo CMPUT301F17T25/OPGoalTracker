@@ -1,8 +1,10 @@
 package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,6 +14,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -66,6 +70,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Add a marker in Sydney and move the camera
         int n = displayList.size();
 
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        if (location==null){
+
+        }
+
+        Circle mCircle = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(location.getLatitude(),location.getLongitude()))
+                .radius(5000)
+                .clickable(Boolean.FALSE));
 
         for (int i = 0; i < n; i++) {
             HabitEvent habitEventObject = displayList.get(i);

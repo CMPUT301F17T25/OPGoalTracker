@@ -14,20 +14,23 @@ import ca.ualberta.cs.opgoaltracker.models.ParticipantName;
  */
 
 public class NewsUserEventPair {
-    ParticipantName name;
+    String name;
     HabitEvent event;
     Photograph icon;
 
-    public NewsUserEventPair(ParticipantName name, HabitEvent event){
+    public NewsUserEventPair(String name, HabitEvent event, Photograph avatar){
         this.name = name;
         this.event = event;
+        this.icon = avatar;
     }
 
-    public ParticipantName getName() {
+    public String getName() {
         return name;
     }
 
     public HabitEvent getEvent() {
         return event;
     }
+
+    public Photograph getIcon(){return icon;}
 }

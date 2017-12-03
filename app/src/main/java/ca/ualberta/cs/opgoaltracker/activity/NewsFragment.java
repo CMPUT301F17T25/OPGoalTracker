@@ -8,9 +8,12 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -136,6 +139,33 @@ public class NewsFragment extends Fragment {
         for (ParticipantName participant : followingList){
             Log.d("search","now:"+participant.getId());
             String id = participant.getId();
+            String query = "{\n" +
+                    "	\"query\": {\n" +
+                    "		\"term\": {\"_id\":\"" + participant.getId() + "\"}\n" +
+                    "	}\n" +
+                    "}";
+            ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+            getParticipantsTask.execute(query);
+            try {
+                ArrayList<Participant> followeeList = getParticipantsTask.get();
+                if (getParticipantsTask.get() == null) { // check if connected to server
+                    Toast.makeText(getContext(), "Can not Connect to Server", Toast.LENGTH_SHORT).show();
+                }else if (followeeList.isEmpty() == false){
+                    for (Participant followee: followeeList){
+                        for (Habit followeeHabit :followee.getHabitList().getArrayList()){
+                            news.add(new NewsUserEventPair(followee.getId(),followeeHabit.getLatest(),followee.getAvatar()));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+
+            /**
+
             //UNSURE ABOUt THIS QUERY
             String query =
                     "{\n" +
@@ -171,7 +201,7 @@ public class NewsFragment extends Fragment {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-
+            */
         }
         if (news.size()==0){
             Log.d("event","none");

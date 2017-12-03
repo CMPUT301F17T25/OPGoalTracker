@@ -174,17 +174,10 @@ public class HabitEvent implements Parcelable {
         this.lng = lng;
     }
 
-    /**
-     *  Basic Habit Event User getter
-     * @return : String
-     */
-    public String getUser(){
-        return "User return";
-    }
 
     @Override
     public String toString(){
-        return habitType+comment;
+        return habitType+" of the type "+comment;
     }
 
     protected HabitEvent(Parcel in) {

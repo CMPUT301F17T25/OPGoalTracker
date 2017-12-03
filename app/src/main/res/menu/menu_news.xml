@@ -11,6 +11,6 @@
         android:id="@+id/news_map"
         android:icon="@drawable/ic_map_48dp"
         android:title=""
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 
 </menu>
