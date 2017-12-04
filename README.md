@@ -1,6 +1,8 @@
 # OPGoalTracker
 
-Demo video: https://youtu.be/Z6zFEfzxTY8
+![](https://i.imgur.com/RNjsNKw.png)
+
+[Demo video](https://youtu.be/0qjeJ5fqjCs)
 
 This is a habit tracker App used to motivate user to achive their habit.
 
