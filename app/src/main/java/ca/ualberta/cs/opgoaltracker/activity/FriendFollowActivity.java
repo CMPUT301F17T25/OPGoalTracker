@@ -112,9 +112,9 @@ public class FriendFollowActivity extends AppCompatActivity {
                 }
                 if(identicalFlag && followingListFlag && requestListFlag){
                     targetRequestList.add(new ParticipantName(currentUser));
-
                     ElasticsearchController.AddParticipantsTask addAnotherUsersTask = new ElasticsearchController.AddParticipantsTask();
                     addAnotherUsersTask.execute(targetUser);
+                    Toast.makeText(FriendFollowActivity.this, "Request have been sent", Toast.LENGTH_SHORT).show();
                 }
                 Intent intent = new Intent(FriendFollowActivity.this, MenuPage.class);
                 intent.putExtra("NEWFOLLOWUSER", currentUser);

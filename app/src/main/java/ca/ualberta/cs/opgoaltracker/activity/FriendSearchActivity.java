@@ -65,6 +65,7 @@ public class FriendSearchActivity extends AppCompatActivity {
                 getParticipantsTask.execute(query);
 
                 try {
+
                     if (getParticipantsTask.get() == null) { // check if connected to server
                         Toast.makeText(FriendSearchActivity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
                     }else if(getParticipantsTask.get().isEmpty() == false){
@@ -74,6 +75,8 @@ public class FriendSearchActivity extends AppCompatActivity {
                         intent.putExtra("targetUser",targetUser);
                         intent.putExtra("LOGINUSER", currentUser);
                         startActivity(intent);
+                    }else{
+                        Toast.makeText(FriendSearchActivity.this, "No user can be found", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     Log.i("Error", "Failed to get the participant from the asyc object");
