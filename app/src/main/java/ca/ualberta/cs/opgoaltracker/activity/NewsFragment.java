@@ -170,7 +170,9 @@ public class NewsFragment extends Fragment {
                 }else if (followeeList.isEmpty() == false){
                     for (Participant followee: followeeList){
                         for (Habit followeeHabit :followee.getHabitList().getArrayList()){
-                            news.add(new NewsUserEventPair(followee.getId(),followeeHabit.getLatest(),followee.getAvatar()));
+                            if (followeeHabit.getLatest()!=null) {
+                                news.add(new NewsUserEventPair(followee.getId(), followeeHabit.getLatest(), followee.getAvatar()));
+                            }
                         }
                     }
                 }

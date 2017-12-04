@@ -37,25 +37,25 @@ import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-// For an older version of new fragment
-// no longer works
-// PLease see NewsTestOnline instead
+
+//Does not take into account if log in fails due to server problem
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class NewsTest {
+public class NewsTestOnline {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void newsTest() {
+    public void newsTestOnline() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.userID), isDisplayed()));
-        appCompatEditText.perform(replaceText("111"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("test1"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.signin), withText("Sign In"), isDisplayed()));
         appCompatButton.perform(click());
+
 
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Open navigation drawer"),
@@ -64,29 +64,48 @@ public class NewsTest {
         appCompatImageButton.perform(click());
 
         ViewInteraction appCompatCheckedTextView = onView(
-                allOf(withId(R.id.design_menu_item_text), withText("Social"), isDisplayed()));
+                allOf(withId(R.id.design_menu_item_text), withText("Habit Event"), isDisplayed()));
         appCompatCheckedTextView.perform(click());
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.newsComment), withText("this is first test"),
+        ViewInteraction appCompatImageButton2 = onView(
+                allOf(withContentDescription("Open navigation drawer"),
+                        withParent(withId(R.id.toolbar)),
+                        isDisplayed()));
+        appCompatImageButton2.perform(click());
+
+        ViewInteraction appCompatCheckedTextView2 = onView(
+                allOf(withId(R.id.design_menu_item_text), withText("Social"), isDisplayed()));
+        appCompatCheckedTextView2.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.newsUser), withText("test"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         1),
-                                2),
+                                0),
                         isDisplayed()));
-        textView2.check(matches(withText("this is first test")));
+        textView.check(matches(withText("test")));
+
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.newsType), withText("test habit"),
+                        childAtPosition(
+                                childAtPosition(
+                                        IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                        1),
+                                1),
+                        isDisplayed()));
+        textView2.check(matches(withText("test habit")));
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.newsComment), withText("this is second test"),
+                allOf(withId(R.id.newsComment), withText("testing news"),
                         childAtPosition(
                                 childAtPosition(
                                         IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
                                         1),
                                 2),
                         isDisplayed()));
-        textView3.check(matches(withText("this is second test")));
-
+        textView3.check(matches(withText("testing news")));
 
     }
 
