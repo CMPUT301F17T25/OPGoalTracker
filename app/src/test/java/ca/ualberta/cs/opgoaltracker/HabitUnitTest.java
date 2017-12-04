@@ -42,17 +42,17 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         String reason = "i like it";
         Date today = new Date();
         ArrayList<Boolean> period = new ArrayList<>();
-        Habit habit = new Habit(habitType,reason, today,period);
+        Habit habit = new Habit(habitType,reason, today,period, 20, 30);
 
         assertEquals(habit.getHabitType(), habitType);
         assertEquals(habit.getReason(), reason);
 
         habitType = "swim";
-        habit.setHabitType(habitType);
+        habit.setHabitType(habitType, 20);
         assertEquals(habit.getHabitType(), habitType);
 
         reason = "no reason";
-        habit.setReason(reason);
+        habit.setReason(reason, 20);
         assertEquals(habit.getReason(), reason);
     }
 
@@ -63,7 +63,7 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         Date date = new java.util.Date();
         Date today = new Date();
         ArrayList<Boolean> period = new ArrayList<>();
-        Habit habit = new Habit(habitType,reason, today,period);
+        Habit habit = new Habit(habitType,reason, today,period, 20, 30);
     }
 
     @Test(expected = NoTitleException.class)
@@ -73,10 +73,10 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         Date date = new java.util.Date();
         Date today = new Date();
         ArrayList<Boolean> period = new ArrayList<>();
-        Habit habit = new Habit(habitType,reason, today,period);
+        Habit habit = new Habit(habitType,reason, today,period, 20, 30);
 
         habitType="";
-        habit.setHabitType(habitType);
+        habit.setHabitType(habitType, 20);
     }
 
     @Test(expected = StringTooLongException.class)
@@ -85,7 +85,7 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         String reason = "i like it";
         Date today = new Date();
         ArrayList<Boolean> period = new ArrayList<>();
-        Habit habit = new Habit(habitType,reason, today,period);
+        Habit habit = new Habit(habitType,reason, today,period, 20, 30);
     }
 
     @Test(expected = StringTooLongException.class)
@@ -94,7 +94,7 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         String reason =  "11111111111111111111111111111111111111111111111111111";
         Date today = new Date();
         ArrayList<Boolean> period = new ArrayList<>();
-        Habit habit = new Habit(habitType,reason, today,period);
+        Habit habit = new Habit(habitType,reason, today,period, 20, 30);
     }
 
     @Test(expected = StringTooLongException.class)
@@ -103,9 +103,9 @@ public class HabitUnitTest  extends ActivityInstrumentationTestCase2 {
         String reason = "i like it";
         Date today = new Date();
         ArrayList<Boolean> period = new ArrayList<>();
-        Habit habit = new Habit(habitType,reason, today,period);
+        Habit habit = new Habit(habitType,reason, today,period, 20, 30);
 
         reason = "111111111111111111111111111111";
-        habit.setReason(reason);
+        habit.setReason(reason, 30);
     }
 }

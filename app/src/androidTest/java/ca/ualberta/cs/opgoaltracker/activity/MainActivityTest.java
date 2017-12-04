@@ -56,11 +56,11 @@ public class MainActivityTest {
     public void setUp() throws Exception {
         long startTime;
         long intervalTime = 36000;
-        testHabitList = testUser.getHabitList();
+        testHabitList = testUser.getHabitList().getArrayList();
         Date today = new Date();
         ArrayList<Boolean> period = new ArrayList<Boolean>();
         try {
-            testHabit = new Habit("Testing Habit", "Just for testing.", today, period);
+            testHabit = new Habit("Testing Habit", "Just for testing.", today, period, 20, 30);
         } catch (StringTooLongException exc) {
             return;
         } catch (NoTitleException exc) {

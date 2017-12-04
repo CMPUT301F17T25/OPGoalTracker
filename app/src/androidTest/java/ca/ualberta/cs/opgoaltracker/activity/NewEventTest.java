@@ -94,15 +94,15 @@ public class NewEventTest {
                         isDisplayed()));
         textView.check(matches(withText("test")));
 
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.eventType), withText("test"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.list_event),
-                                        0),
-                                0),
-                        isDisplayed()));
-        textView2.check(matches(isDisplayed()));
+//        ViewInteraction textView2 = onView(
+//                allOf(withId(R.id.eventType), withText("test"),
+//                        childAtPosition(
+//                                childAtPosition(
+//                                        withId(R.id.list_event),
+//                                        0),
+//                                0),
+//                        isDisplayed()));
+//        textView2.check(matches(isDisplayed()));
 
     }
 

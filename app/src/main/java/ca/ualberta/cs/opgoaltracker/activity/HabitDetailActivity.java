@@ -33,6 +33,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 public class HabitDetailActivity extends AppCompatActivity {
 
@@ -55,7 +56,7 @@ public class HabitDetailActivity extends AppCompatActivity {
     private String owner;
     private Date date;
     private ArrayList<Boolean> period;
-
+    private Restriction restriction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class HabitDetailActivity extends AppCompatActivity {
         habitList = getIntent().getExtras().getParcelableArrayList("HabitList");
         position = getIntent().getIntExtra("position", 0);
         owner = getIntent().getStringExtra("owner");
+        restriction = getIntent().getParcelableExtra("restriction");
         habit = habitList.get(position);
 
         titleBox = (EditText) findViewById(R.id.editTitleDetail);
@@ -147,9 +149,10 @@ public class HabitDetailActivity extends AppCompatActivity {
         period.add(checkBoxSat.isChecked());
 
         try {
-            habit.setHabitType(title);
+            habit.setHabitType(title, restriction.getTitleSize());
         } catch (StringTooLongException exc) {
-            Toast.makeText(getApplicationContext(), "Too Many Characters",
+            String titleLimit = String.valueOf(restriction.getTitleSize());
+            Toast.makeText(getApplicationContext(), "Title No More Than " + titleLimit + " Characters",
                     Toast.LENGTH_SHORT).show();
             return;
         } catch (NoTitleException exc) {
@@ -159,9 +162,10 @@ public class HabitDetailActivity extends AppCompatActivity {
         }
 
         try {
-            habit.setReason(reason);
+            habit.setReason(reason, restriction.getReasonSize());
         } catch (StringTooLongException exc) {
-            Toast.makeText(getApplicationContext(), "Too Many Characters",
+            String reasonLimit = String.valueOf(restriction.getReasonSize());
+            Toast.makeText(getApplicationContext(), "Reason No More Than " + reasonLimit + " Characters",
                     Toast.LENGTH_SHORT).show();
             return;
         }

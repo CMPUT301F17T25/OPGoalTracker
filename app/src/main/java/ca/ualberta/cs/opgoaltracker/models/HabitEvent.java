@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
-import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 
 /**
  * This Habit Event describe a single Habit Event which belongs to a Habit Type<br>
@@ -41,10 +40,11 @@ public class HabitEvent implements Parcelable {
      * @param habitType
      * @param comment
      * @param date
+     * @param commentSize
      * @throws CommentTooLongException
      */
-    public HabitEvent(String habitType, String comment, Date date) throws CommentTooLongException {
-        if(comment.length() > 20) {
+    public HabitEvent(String habitType, String comment, Date date, int commentSize) throws CommentTooLongException {
+        if(comment.length() > commentSize) {
             throw new CommentTooLongException();
         }
 
@@ -146,10 +146,11 @@ public class HabitEvent implements Parcelable {
     /**
      *  Basic Habit Event Comment Setter
      * @param comment String
+     * @param commentSize String
      * @throws CommentTooLongException
      */
-    public void setComment(String comment) throws CommentTooLongException {
-        if(comment.length() > 20) {
+    public void setComment(String comment, int commentSize) throws CommentTooLongException {
+        if(comment.length() > commentSize) {
             throw new CommentTooLongException();
         }
         this.comment = comment;

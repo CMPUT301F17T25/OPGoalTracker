@@ -27,8 +27,8 @@
             android:id="@+id/picture_size_edittext"
             android:layout_width="128dp"
             android:layout_height="41dp"
-            android:inputType="textPersonName"
-            android:text="65535"/>
+            android:hint="65535"
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/bytes"
@@ -53,8 +53,8 @@
             android:layout_width="130dp"
             android:layout_height="41dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="20"/>
+            android:hint="20"
+            android:inputType="textPersonName" />
 
         <TextView
             android:id="@+id/characters"
@@ -79,8 +79,8 @@
             android:layout_width="130dp"
             android:layout_height="43dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="30"/>
+            android:hint="30"
+            android:inputType="textPersonName" />
 
         <TextView
             android:layout_width="83dp"
@@ -104,8 +104,8 @@
             android:layout_width="139dp"
             android:layout_height="40dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="20" />
+            android:hint="20"
+            android:inputType="textPersonName" />
 
         <TextView
             android:layout_width="73dp"

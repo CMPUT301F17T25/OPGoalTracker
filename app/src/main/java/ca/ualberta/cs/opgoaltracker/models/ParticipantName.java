@@ -9,11 +9,6 @@ package ca.ualberta.cs.opgoaltracker.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
-
-import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
-import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
-
 /**
  * Created by song on 2017/11/30.
  */

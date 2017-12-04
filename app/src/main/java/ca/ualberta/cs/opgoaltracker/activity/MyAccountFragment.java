@@ -40,6 +40,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
 import ca.ualberta.cs.opgoaltracker.models.Photograph;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 
 /**
@@ -68,6 +69,7 @@ public class MyAccountFragment extends Fragment {
     TextView id;
     ImageButton btn;
     String picturePath;
+    Restriction restriction;
 
     private OnFragmentInteractionListener mListener;
 
@@ -111,6 +113,7 @@ public class MyAccountFragment extends Fragment {
                 .setActionBarTitle("My Account");
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
+        restriction = arg.getParcelable("RESTRICTION");
         comment = (TextView) view.findViewById(R.id.comment);
         id = (TextView) view.findViewById(R.id.profilePageId);
         id.setText(currentUser.getId());
@@ -132,7 +135,7 @@ public class MyAccountFragment extends Fragment {
                 currentUser.setComment(com);
 
                 try {
-                    Photograph avatar = new Photograph(picturePath);
+                    Photograph avatar = new Photograph(picturePath, restriction.getPictureSize());
                     currentUser.setAvatar(avatar);
                     btn.setImageBitmap(currentUser.getAvatar().getBitMap());
 
@@ -140,7 +143,8 @@ public class MyAccountFragment extends Fragment {
                     ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
                     addUsersTask.execute(currentUser);
                     } catch (ImageTooLargeException e) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Image should be under 65536 bytes",
+                    String imageLimit = String.valueOf(restriction.getPictureSize());
+                    Toast.makeText(getActivity().getApplicationContext(), "Image should be under " + imageLimit + " bytes",
                             Toast.LENGTH_SHORT).show();
                 }
             }

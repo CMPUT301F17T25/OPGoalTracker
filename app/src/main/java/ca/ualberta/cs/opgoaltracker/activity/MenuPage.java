@@ -35,7 +35,7 @@ import java.io.InputStreamReader;
 
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
-
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 
 /**
@@ -68,6 +68,7 @@ public class MenuPage extends AppCompatActivity
     TextView id;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
+    Restriction restriction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,16 +76,19 @@ public class MenuPage extends AppCompatActivity
         setContentView(R.layout.activity_menu_page);
 
         currentUser = getIntent().getParcelableExtra("LOGINUSER");
+        restriction = getIntent().getParcelableExtra("Restriction for Participant");
         if (currentUser == null){
             currentUser = getIntent().getParcelableExtra("NEWFOLLOWUSER");
                 Bundle args = new Bundle();
                 args.putParcelable("CURRENTUSER", currentUser);
+                args.putParcelable("RESTRICTION", restriction);
                 friendFragment.setArguments(args);
                 getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, friendFragment).commit();
         }
         else {
             Bundle args = new Bundle();
             args.putParcelable("CURRENTUSER", currentUser);
+            args.putParcelable("RESTRICTION", restriction);
             habitFragment.setArguments(args);
             getSupportFragmentManager().beginTransaction().replace(R.id.relativeLayout_1, habitFragment).commit();
         }
@@ -240,6 +244,7 @@ public class MenuPage extends AppCompatActivity
         int id = item.getItemId();
         Bundle args = new Bundle();
         args.putParcelable("CURRENTUSER",currentUser);
+        args.putParcelable("RESTRICTION", restriction);
 
         if (id == R.id.habit) {
             this.setTitle("Habit");

@@ -18,6 +18,7 @@ import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.exception.MismatchedHabitTypeException;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.HabitEventList;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 /**
  * Created by donglin3 on 10/22/17.
@@ -49,7 +50,7 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
         String habitTypeA = "typeA";
         String comment = "hello";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date, 20);
 
         String habitTypeB = "typeB";
         HabitEventList habitEventList = new HabitEventList(habitTypeB);
@@ -60,7 +61,7 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
         String habitTypeA = "typeA";
         String comment = "hello";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date,20);
 
         HabitEventList habitEventList = new HabitEventList(habitTypeA);
         habitEventList.addHabitEvent(habitEvent);
@@ -79,7 +80,7 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
         String keyword = "hello";
         String comment = "hello world";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date, 20);
 
         HabitEventList habitEventList = new HabitEventList(habitTypeA);
         habitEventList.addHabitEvent(habitEvent);
@@ -93,7 +94,7 @@ public class HabitEventListUnitTest extends ActivityInstrumentationTestCase2 {
         String keyword = "nihao";
         String comment = "hello world";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date);
+        HabitEvent habitEvent = new HabitEvent(habitTypeA, comment, date, 20);
 
         HabitEventList habitEventList = new HabitEventList(habitTypeA);
         habitEventList.addHabitEvent(habitEvent);

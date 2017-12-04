@@ -47,6 +47,7 @@ import ca.ualberta.cs.opgoaltracker.exception.CommentTooLongException;
 import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Photograph;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 /**
  * Created by malon_000 on 2017-11-06.
@@ -66,6 +67,7 @@ import ca.ualberta.cs.opgoaltracker.models.Photograph;
 public class EventInfoActivity extends AppCompatActivity {
     Boolean changedPhoto = Boolean.FALSE;
     String filePath;
+    private Restriction restriction;
 
 
     /**
@@ -88,6 +90,7 @@ public class EventInfoActivity extends AppCompatActivity {
         gpsLocation.setText("Has location stored, uncheck to delet location of this event");
 
         final HabitEvent selected = getIntent().getParcelableExtra("event");
+        restriction = getIntent().getParcelableExtra("RESTRICTION");
 
         //set picture
         final ImageButton getImage = (ImageButton) findViewById(R.id.new_event_picture);
@@ -154,7 +157,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 //creates a new event based on information given
                 HabitEvent newEvent = null;
                 try {
-                    newEvent = new HabitEvent(selectedHabit, eventComment, new Date());
+                    newEvent = new HabitEvent(selectedHabit, eventComment, new Date(), restriction.getCommentSize());
                 } catch (CommentTooLongException e) {
                     e.printStackTrace();
                     Toast.makeText(EventInfoActivity.this, "Your comment is too long", Toast.LENGTH_SHORT).show();
@@ -210,10 +213,11 @@ public class EventInfoActivity extends AppCompatActivity {
                     try {
                         Drawable draw = getImage.getDrawable();
                         Bitmap p = ((BitmapDrawable) draw).getBitmap();
-                        newEvent.setPhoto(new Photograph(filePath));
+                        newEvent.setPhoto(new Photograph(filePath, restriction.getPictureSize()));
                     } catch (ImageTooLargeException e) {
                         Log.d("exception", "catch first");
-                        Toast.makeText(EventInfoActivity.this, "Image should be under 65536 bytes",
+                        String imageLimit = String.valueOf(restriction.getPictureSize());
+                        Toast.makeText(EventInfoActivity.this, "Image should be under " + imageLimit + " bytes",
                                 Toast.LENGTH_SHORT).show();
                         return;
 

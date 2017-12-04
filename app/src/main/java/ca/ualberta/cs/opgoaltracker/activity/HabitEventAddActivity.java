@@ -57,6 +57,7 @@ import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Photograph;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 /**
  * This is the activity that allows users to create a new habit event
@@ -73,6 +74,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
     View view;
     String habitType;
     String filePath;
+    private Restriction restriction;
     private LatitudeAndLongitudeWithPincode convertedAddress;
 
 
@@ -90,6 +92,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
         //gets the habit list
         ArrayList<String> arrayListHabit=getIntent().getStringArrayListExtra("hlist");
+        restriction = getIntent().getParcelableExtra("RESTRICTION");
 
         final Spinner habitList = (Spinner) findViewById(R.id.habit_spinner);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, arrayListHabit);
@@ -150,9 +153,9 @@ public class HabitEventAddActivity extends AppCompatActivity {
                 try {
                     String eventComment = comment.getText().toString();
                     String selectedHabit = habitList.getSelectedItem().toString();
-                    //Attempts to create the habit event
-                    //commenttoolong exception caught further bellow
-                    newEvent = new HabitEvent(selectedHabit, eventComment, new Date());
+
+                    //for some reason eventComment triggers commenttoolongexception
+                    newEvent = new HabitEvent(selectedHabit, eventComment, new Date(), restriction.getCommentSize());
 
                     String eventAddress = address.getText().toString();
                     if (!eventAddress.isEmpty()) {
@@ -261,10 +264,11 @@ public class HabitEventAddActivity extends AppCompatActivity {
                             //try to ge tthe picture
                             Drawable draw =getImage.getDrawable();
                             Bitmap p = ((BitmapDrawable)draw).getBitmap();
-                            newEvent.setPhoto(new Photograph(filePath));
+                            newEvent.setPhoto(new Photograph(filePath, restriction.getPictureSize()));
                         } catch (ImageTooLargeException e) {
                             Log.d("exception","catch first");
-                            Toast.makeText(HabitEventAddActivity.this, "Image should be under 65536 bytes",
+                            String imageLimit = String.valueOf(restriction.getPictureSize());
+                            Toast.makeText(HabitEventAddActivity.this, "Image should be under " + imageLimit + " bytes",
                                     Toast.LENGTH_SHORT).show();
                             return;
                         }

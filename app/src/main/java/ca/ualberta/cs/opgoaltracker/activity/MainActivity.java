@@ -23,6 +23,7 @@ import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Admin;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 
 /**
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private String name;
     private String name2;
     private ArrayList<Admin> adminList;
+    private Restriction restriction;
 
 
     /**
@@ -118,20 +120,28 @@ public class MainActivity extends AppCompatActivity {
                 // query server in type "participant"
                 ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
                 getParticipantsTask.execute(query);
+                // fetch restriction
+                ElasticsearchController.GetRestrictionTask getRestrictionTask = new ElasticsearchController.GetRestrictionTask();
+                getRestrictionTask.execute();
 
                 try {
-                    if (getAdminsTask.get() == null || getParticipantsTask.get() == null) { // check if connected to server
+                    if (getAdminsTask.get() == null || getParticipantsTask.get() == null || getRestrictionTask.get() == null) { // check if connected to server
                         Toast.makeText(MainActivity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
                     } else if (getAdminsTask.get().isEmpty() == false) { // check if this is an admin user
+                        restriction = getRestrictionTask.get().get(0);
+
                         //TODO maybe passing currentUser rather than name
                         Intent adminIntent = new Intent(MainActivity.this, AdminActivity.class);
                         adminIntent.putExtra("ADMINID", name);
+                        adminIntent.putExtra("Restriction for Admin", restriction);
                         startActivity(adminIntent);
                     } else if (getParticipantsTask.get().isEmpty() == false) { // if not an admin, check if this is a participant user
                         currentUser = getParticipantsTask.get().get(0); // currentUser size is 0 if there is no ID matched
+                        restriction = getRestrictionTask.get().get(0);
 
                         Intent i = new Intent(MainActivity.this, MenuPage.class);
                         i.putExtra("LOGINUSER", currentUser);
+                        i.putExtra("Restriction for Participant", restriction);
                         startActivity(i);
                     } else { // if not admin nor participant, show Toast
                         Toast.makeText(MainActivity.this, "Invalid User ID !", Toast.LENGTH_SHORT).show();

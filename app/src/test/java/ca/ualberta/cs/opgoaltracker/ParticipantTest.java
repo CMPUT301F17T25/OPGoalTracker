@@ -41,8 +41,6 @@ public class ParticipantTest extends ActivityInstrumentationTestCase2 {
         Participant participant = new Participant("normal");
         assertEquals(participant.getId(),"normal");
         ArrayList<Participant> followerList = new ArrayList<Participant>();
-        participant.setFollowerList(followerList);
-        participant.getFollowerList();
     }
     @Test(expected = UndefinedException.class)
     public void testgetNoAvatar() throws UndefinedException{
@@ -52,13 +50,13 @@ public class ParticipantTest extends ActivityInstrumentationTestCase2 {
     @Test(expected = ImageTooLargeException.class)
     public void testtooLargePicture() throws ImageTooLargeException {
         Participant participant = new Participant("largePicture");
-        Photograph avatar = new Photograph(33333,33333);
+        Photograph avatar = new Photograph("res/drawable/ic_launcher.png", 65535);
         participant.setAvatar(avatar);
     }
     @Test
     public void testnormalPicture() throws ImageTooLargeException{
         Participant participant = new Participant("largePicture");
-        Photograph avatar = new Photograph(33,33);
+        Photograph avatar = new Photograph("res/drawable/newevent.png", 65535);
         participant.setAvatar(avatar);
     }
 

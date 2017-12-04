@@ -48,7 +48,6 @@
         <activity android:name=".activity.HabitDetailActivity" />
         <activity android:name=".activity.FriendSearchActivity" />
         <activity android:name=".activity.FriendFollowActivity" />
-        <activity android:name=".activity.NewsActivity" />
         <activity android:name=".activity.HabitEventAddActivity" />
         <activity android:name=".activity.EventInfoActivity" />
         <activity

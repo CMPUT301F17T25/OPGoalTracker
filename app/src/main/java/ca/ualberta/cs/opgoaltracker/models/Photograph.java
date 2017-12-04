@@ -36,13 +36,14 @@ public class Photograph implements Parcelable {
     /**
      * Basic Constructor for creating a photograph object
      * @param picturePath : path of selected picture
+     * @param pictureSize : picture size restriction
      */
-    public Photograph(String picturePath) throws ImageTooLargeException {
+    public Photograph(String picturePath, int pictureSize) throws ImageTooLargeException {
         Bitmap p = BitmapFactory.decodeFile(picturePath);
         File file = new File(picturePath);
         long length = file.length();
 
-        if (length > 65535) {
+        if (length > pictureSize) {
             throw new ImageTooLargeException();
         }
 

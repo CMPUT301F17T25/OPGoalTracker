@@ -40,6 +40,7 @@ import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.HabitList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 /**
  * This is the fragment that displays a user's own habit event
@@ -60,6 +61,7 @@ public class HabitEventFragment extends Fragment {
     private MenuItem searchButton;
     private MenuItem mapButton;
     private Participant currentUser;
+    private Restriction restriction;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -129,6 +131,7 @@ public class HabitEventFragment extends Fragment {
                 .setActionBarTitle("Habit Event");
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
+        restriction = arg.getParcelable("RESTRICTION");
 
         displayList = new ArrayList<HabitEvent>();
         fullList = new ArrayList<HabitEvent>();
@@ -168,6 +171,7 @@ public class HabitEventFragment extends Fragment {
                 beforeDetail=selectedEvent;
                 Intent intent = new Intent(getActivity(), EventInfoActivity.class);
                 intent.putExtra("event",selectedEvent);
+                intent.putExtra("RESTRICTION", restriction);
                 startActivityForResult(intent,31);
             }
         });
@@ -187,6 +191,7 @@ public class HabitEventFragment extends Fragment {
                 }else {
                     Intent intent = new Intent(getActivity(), HabitEventAddActivity.class);
                     intent.putStringArrayListExtra("hlist", habitList);
+                    intent.putExtra("RESTRICTION", restriction);
                     startActivityForResult(intent, 30);
                 }
             }
