@@ -100,6 +100,11 @@ public class HabitEventFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * OnCreate Function
+     * @param savedInstanceState : savedInstaceState
+     * @see Fragment
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
@@ -110,6 +115,13 @@ public class HabitEventFragment extends Fragment {
         }
     }
 
+    /**
+     * creates the view
+     * @param inflater: layout inflater
+     * @param container: container
+     * @param savedInstanceState: bundle
+     * @see Fragment
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -145,6 +157,13 @@ public class HabitEventFragment extends Fragment {
 
         //handles listview clicks
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            /**
+             * When clicks on a item in the listview
+             * goes into habitevent detail screen
+             * @param adapterView: adapterview
+             * @param view: the view
+             * @param i,l : position of the click
+             */
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Object selected = listview.getItemAtPosition(i);
@@ -159,6 +178,12 @@ public class HabitEventFragment extends Fragment {
         //handles button
         FloatingActionButton add_event = (FloatingActionButton) view.findViewById(R.id.new_event);
         add_event.setOnClickListener(new View.OnClickListener() {
+            /**
+             * handles the button to create new habit events
+             * puts data into intent
+             * starts habitEventAddActivity
+             * @param view: view
+             */
             @Override
             public void onClick(View view) {
                 if (habitList.isEmpty()){
@@ -182,6 +207,9 @@ public class HabitEventFragment extends Fragment {
 
     }
 
+    /**
+     * fills the displaylist with event of the user
+     */
     private void fillDisplayList() {
         for (Habit h:currentUser.getHabitList().getArrayList()) {
             for (HabitEvent e : h.getEventList()) {
@@ -189,7 +217,12 @@ public class HabitEventFragment extends Fragment {
                 fullList.add(e);
             }
         }
+        //sorts the event by date
         Collections.sort(displayList, new Comparator<HabitEvent>() {
+            /**
+             * comparator for habitevents, sort by newest first
+             * @param t1: habit event to compare to
+             */
             @Override
             public int compare(HabitEvent habitEvent, HabitEvent t1) {
                 return -habitEvent.getDate().compareTo(t1.getDate());
@@ -205,6 +238,12 @@ public class HabitEventFragment extends Fragment {
         }
     }
 
+
+    /**
+     * implements the fragment
+     * @param context: the context
+     * @see Fragment
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -216,6 +255,10 @@ public class HabitEventFragment extends Fragment {
         }
     }
 
+    /**
+     * implements the fragment
+     * @see Fragment
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -240,6 +283,13 @@ public class HabitEventFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
+    /**
+     * implements the menu bar
+     * @param menu: menu of the fragment
+     * @param inflater: inflater to inflate the menu
+     * @see Fragment
+     */
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
@@ -247,11 +297,18 @@ public class HabitEventFragment extends Fragment {
     }
 
 
-
+    /**
+     * implements handling of the button on the options on menu bar
+     * @param item: the selected button
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.event_menu_search :
+                //handles searching through events
+                //creates a pop up dialog asking for search window
+                //search will only filter currently displayed info
+                //to reset back to all habitevents, enter nothing and hit search
                 final Dialog dialog = new Dialog(getContext());
                 dialog.setContentView(R.layout.dialog_search);
                 dialog.setTitle("Search Events");
@@ -269,10 +326,15 @@ public class HabitEventFragment extends Fragment {
                 final Button search = (Button) dialog.findViewById(R.id.search_search);
                 search.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    //// TODO: 2017-12-01 add search 
+                    /**
+                     * handles the clicking of the search button
+                     * @param view: the view
+                     */
                     public void onClick(View view) {
-
+                        // if both are empty
+                        //reset displayList to fullList
                         if (!searchHabit.getSelectedItem().equals("") && !message.getText().toString().equals("")){
+                            //handles if both options are empty
                             Log.d("window","first");
                             displayList=new ArrayList<HabitEvent>();
                             for (HabitEvent e:fullList){
@@ -282,6 +344,8 @@ public class HabitEventFragment extends Fragment {
                                 }
                             }
                         }else if (!searchHabit.getSelectedItem().equals("")){
+                            //if search based on habit type
+                            //search for event of that habit type
                             Log.d("window","2");
                             displayList=new ArrayList<HabitEvent>();
                             for (HabitEvent e:fullList) {
@@ -290,6 +354,8 @@ public class HabitEventFragment extends Fragment {
                                 }
                             }
                         }else if (!message.getText().toString().equals("")){
+                            //if search based on term
+                            //searches in event's comment
                             Log.d("window","3");
                             Log.d("window",message.getText().toString());
                             displayList=new ArrayList<HabitEvent>();
@@ -302,6 +368,7 @@ public class HabitEventFragment extends Fragment {
                             Log.d("window","4");
                             displayList=fullList;
                         }
+                        // sort the displayList again by newest event first
                         Collections.sort(displayList, new Comparator<HabitEvent>() {
                             @Override
                             public int compare(HabitEvent habitEvent, HabitEvent t1) {
@@ -317,6 +384,8 @@ public class HabitEventFragment extends Fragment {
                 });
                 dialog.show();
                 return true;
+            //if map button clicked
+            // starts the map activity and parse the event list
             case R.id.event_menu_map:
                 Intent intent = new Intent(getActivity(),MapsActivity.class);
                 intent.putExtra("DISPLAYLIST",displayList);
@@ -326,8 +395,17 @@ public class HabitEventFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    /**
+     * handles return from activities
+     * @param requestCode: the request code assigned to the activity
+     * @param resultCode: a code assigned to indicated if the result is ok or not
+     * @param data: data parsed back
+     * @see Fragment
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 30) {
+            //if the activity was to create a new event
             if (resultCode == AppCompatActivity.RESULT_OK && data != null) {
                 HabitEvent a = data.getParcelableExtra("event");
                 // add new event to the display list
@@ -347,7 +425,7 @@ public class HabitEventFragment extends Fragment {
                 final ListView listview = (ListView) view.findViewById(R.id.list_event);
                 listview.setAdapter(adapter);
 
-
+                //adds the event to its habit object
                 HabitList userHabits = currentUser.getHabitList();
                 ArrayList<Habit> habitTypes = userHabits.getArrayList();
                 for (Habit habit:habitTypes){
@@ -375,6 +453,7 @@ public class HabitEventFragment extends Fragment {
                 if (a.getLocation().get(0)!=null) {
                     currentUser.setLocation(a.getLocation().get(0), a.getLocation().get(1));
                 }
+                //uploads to elasticsearch servers
                 ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
                 addUsersTask.execute(currentUser);
                 Log.d("new event","upload to server");
@@ -385,9 +464,11 @@ public class HabitEventFragment extends Fragment {
                 HabitEvent a = data.getParcelableExtra("event");
                 Boolean changedPhoto = data.getBooleanExtra("photo", Boolean.FALSE);
                 int delete = data.getIntExtra("delete",0);
+                // if the user decided to delete the event
                 if (delete==1){
                     displayList.remove(beforeDetail);
                     fullList.remove(beforeDetail);
+                    //remove the event from the list of events displayed
                     Collections.sort(displayList, new Comparator<HabitEvent>() {
                         @Override
                         public int compare(HabitEvent habitEvent, HabitEvent t1) {

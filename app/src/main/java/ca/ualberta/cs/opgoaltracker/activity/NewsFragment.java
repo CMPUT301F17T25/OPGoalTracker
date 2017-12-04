@@ -86,7 +86,11 @@ public class NewsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    /**
+     * Used to create the fragment
+     * @param savedInstanceState
+     * @see Fragment
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +101,14 @@ public class NewsFragment extends Fragment {
         }
     }
 
-
+    /**
+     * creates the view
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @see Fragment
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -127,6 +138,12 @@ public class NewsFragment extends Fragment {
 
     }
 
+    /**
+     * gets the habitevent and users the participant follows
+     *
+     * @param followingList participant's following list
+     * @return news list
+     */
     private ArrayList<NewsUserEventPair> getPairs(ArrayList<ParticipantName> followingList) {
         ArrayList<NewsUserEventPair> news = new ArrayList<NewsUserEventPair>();
         Collections.sort(followingList, new Comparator<ParticipantName>() {
@@ -153,7 +170,9 @@ public class NewsFragment extends Fragment {
                 }else if (followeeList.isEmpty() == false){
                     for (Participant followee: followeeList){
                         for (Habit followeeHabit :followee.getHabitList().getArrayList()){
-                            news.add(new NewsUserEventPair(followee.getId(),followeeHabit.getLatest(),followee.getAvatar()));
+                            if (followeeHabit.getLatest()!=null) {
+                                news.add(new NewsUserEventPair(followee.getId(), followeeHabit.getLatest(), followee.getAvatar()));
+                            }
                         }
                     }
                 }
@@ -204,6 +223,7 @@ public class NewsFragment extends Fragment {
             */
         }
         if (news.size()==0){
+            //If failed to get any results
             Log.d("event","none");
             Toast.makeText(getContext(),"Your news page is empty, either we couldn't contact the server or you have no followees, start following people in the friends tab",
                     Toast.LENGTH_LONG).show();
@@ -221,6 +241,12 @@ public class NewsFragment extends Fragment {
         }
     }
 
+    /**
+     * part of fragment implementation
+     *
+     * @param context
+     * @see Fragment
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -232,6 +258,11 @@ public class NewsFragment extends Fragment {
         }
     }
 
+    /**
+     * part of fragment implementation
+     *
+     * @see Fragment
+     */
     @Override
     public void onDetach() {
         super.onDetach();
@@ -253,11 +284,22 @@ public class NewsFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+
+    /**
+     * creates menu
+     *
+     * @param menu
+     * @param inflater
+     */
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_news, menu);
     }
+    /**
+     * handles if the map button in the menu is clicked
+     * @param item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.news_map) {
