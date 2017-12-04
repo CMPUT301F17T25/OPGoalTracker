@@ -17,10 +17,18 @@ package ca.ualberta.cs.opgoaltracker.models;
 public class Admin{
     private String id;
 
+    /**
+     * Create Admin object with inputted id
+     * @param id
+     */
     public Admin(String id) {
         this.id = id;
     }
 
+    /**
+     * Basic getter for id
+     * @return
+     */
     public String getId() {
         return id;
     }
