@@ -8,6 +8,7 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,29 @@ import java.util.List;
 import ca.ualberta.cs.opgoaltracker.models.NewsUserEventPair;
 import ca.ualberta.cs.opgoaltracker.R;
 
-/**
- * Created by malon_000 on 2017-11-03.
-     */
 
+
+/**
+ * This is the first login page when this app is lanched.
+ * <br>
+ * This page allows user to enter their user ID and press login button to login, and allows user to click register and jump into the register page
+ * <br>
+ * @author Long Ma
+ * @version 3.0
+ * @see ArrayAdapter
+ * @since 1.0
+ */
 class NewsAdapter extends ArrayAdapter<NewsUserEventPair> {
     public NewsAdapter(Context context, List<NewsUserEventPair> objects) {
         super(context, R.layout.fragment_news, objects);
     }
 
+    /**
+     * implements the adapter
+     * @param position
+     * @param convertView
+     * @param parent
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         //use elastic search to get user's info but for since this is just a test

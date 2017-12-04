@@ -77,13 +77,20 @@ public class HabitEventAddActivity extends AppCompatActivity {
     private Restriction restriction;
     private LatitudeAndLongitudeWithPincode convertedAddress;
 
+
+    /**
+     * Handles the activity in which new habitEvents are created
+     * receive a string arraylist containing all the habit types the user has
+     * returns a new habitevent object according to what the user enters
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_add);
 
-        //for test only
+        //gets the habit list
         ArrayList<String> arrayListHabit=getIntent().getStringArrayListExtra("hlist");
         restriction = getIntent().getParcelableExtra("RESTRICTION");
 
@@ -99,6 +106,11 @@ public class HabitEventAddActivity extends AppCompatActivity {
         //Currently requires permission to be given manually, will change to ask for permission later
         final ImageButton getImage = (ImageButton) findViewById(R.id.new_event_picture);
         getImage.setOnClickListener(new View.OnClickListener() {
+            /**
+             * implements the imageButton
+             * get images from storage
+             * @param view: the view
+             */
             @Override
             public void onClick(View view) {
                 /**
@@ -113,6 +125,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
                 } else {
+                    //If permission to access storage not already given, request it
                     ActivityCompat.requestPermissions(HabitEventAddActivity.this, new String[]{
                             android.Manifest.permission.READ_EXTERNAL_STORAGE}, 51);
 
@@ -125,7 +138,11 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
         Button createEvent = (Button) findViewById(R.id.create_event);
         createEvent.setOnClickListener(new View.OnClickListener() {
-
+            /**
+             * Handles if the user believes all the information about the new habit event has been entered
+             * creates a new habit event and ends the activity
+             * @param view: the view
+             */
             @Override
             public void onClick(View view) {
                 Boolean good = Boolean.TRUE;
@@ -136,14 +153,16 @@ public class HabitEventAddActivity extends AppCompatActivity {
                 try {
                     String eventComment = comment.getText().toString();
                     String selectedHabit = habitList.getSelectedItem().toString();
+
                     //for some reason eventComment triggers commenttoolongexception
                     newEvent = new HabitEvent(selectedHabit, eventComment, new Date(), restriction.getCommentSize());
 
                     String eventAddress = address.getText().toString();
                     if (!eventAddress.isEmpty()) {
-                        Log.d("gps", "dont see this");
+                        //handles if the user enters an address to add to the habit event
                         Geocoder geocoder = new Geocoder(HabitEventAddActivity.this);
                         try {
+                            //Gets the location of the address entered
                             List<Address> ad = geocoder.getFromLocationName(eventAddress, 1);
                             Address a = ad.get(0);
                             String lat = Double.toString(a.getLatitude());
@@ -161,11 +180,11 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
 
 
-                        Log.d("location", "location");
                     }else{
+                        //If the enter location is empty, check is the upload current location is checked
                         CheckBox gpsLocation = (CheckBox)findViewById(R.id.gps_checkbox);
-                        Log.d("gps", "before first");
                         if (gpsLocation.isChecked()){
+                            //If checked, check if permission are given to get the phone's location
                             if (ContextCompat.checkSelfPermission(HabitEventAddActivity.this,
                                     android.Manifest.permission.ACCESS_FINE_LOCATION)!=
                                     PackageManager.PERMISSION_GRANTED ){
@@ -181,10 +200,11 @@ public class HabitEventAddActivity extends AppCompatActivity {
                             }
 
                             else {
-                                Log.d("gps", "before second");
-
+                                //If permissions given, get the location
                                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
                                 Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                //handles is the location manager has not already obtained the location
+                                //requests a check on location
                                 if (location==null) {
                                     final LocationListener locationListener = new LocationListener() {
                                         @Override
@@ -222,6 +242,11 @@ public class HabitEventAddActivity extends AppCompatActivity {
                                     location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
                                 }
+                                if (location==null){
+                                    Toast.makeText(HabitEventAddActivity.this,"cannot get your current location",Toast.LENGTH_LONG);
+                                    return;
+                                }
+                                // transform the longitude and latitude to string and save into the event
                                 String lat = Double.toString(location.getLatitude());
                                 String lng = Double.toString(location.getLongitude());
                                 newEvent.setLocation(lat, lng);
@@ -236,6 +261,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
                     //handles picture
                     if (setPicture) {
                         try {
+                            //try to ge tthe picture
                             Drawable draw =getImage.getDrawable();
                             Bitmap p = ((BitmapDrawable)draw).getBitmap();
                             newEvent.setPhoto(new Photograph(filePath, restriction.getPictureSize()));
@@ -249,6 +275,7 @@ public class HabitEventAddActivity extends AppCompatActivity {
                     }
 
                     if (good == Boolean.TRUE) {
+                        //If the program determins that the habit event is created without any problem
                         Intent data = new Intent();
 
                         ElasticsearchController.AddHabitEventsTask addEvent= new ElasticsearchController.AddHabitEventsTask();
@@ -257,9 +284,11 @@ public class HabitEventAddActivity extends AppCompatActivity {
                         data.putExtra("event", newEvent);
                         setResult(AppCompatActivity.RESULT_OK, data);
                         Log.d("last",newEvent.getComment());
+                        //parse the new habit event back to the fragment where it will be uploaded
                         finish();
                     }
                 } catch (CommentTooLongException e) {
+                    //catches the habitevent comment too long exception
                     Log.d("failed", "null event");
                     Toast.makeText(HabitEventAddActivity.this,"Your comment is too long",Toast.LENGTH_SHORT);
                     return;
@@ -273,16 +302,23 @@ public class HabitEventAddActivity extends AppCompatActivity {
 
     }
 
-    //NEEDED TO REQUEST PERMISSION
+    /**
+     * When returning from requesting a permission from the user
+     * @param requestCode : request code given to determine which permission were asked for
+     * @param permission: String array
+     * @param grantedResults: array to store if permission granted or not
+     */
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permission, @NonNull int[] grantedResults) {
         switch (requestCode){
             case 51:
+                //if given permission to check storage
                 if (grantedResults.length > 0 && grantedResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
                 }
 
             case 52:
+                // if given permission to check
                 if (grantedResults.length > 0 && grantedResults[0] == PackageManager.PERMISSION_GRANTED){
                     Toast.makeText(HabitEventAddActivity.this,"FINE_LOCATION permission granted",Toast.LENGTH_LONG).show();
                 }
@@ -293,6 +329,13 @@ public class HabitEventAddActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * handles return from activity for result
+     * activity created from this activity is to get photo
+     * @param requestCode: a code to determine which activity returning from
+     * @param resultCode: code to determine if results are good or not
+     * @param data: data returned from the activity
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case 2:
@@ -325,6 +368,8 @@ public class HabitEventAddActivity extends AppCompatActivity {
                 }
         }
     }
+
+    //Old version of the code left incase the new version does not work
 
 /**
     private class GetCoordinates extends AsyncTask<String,Void,String> {

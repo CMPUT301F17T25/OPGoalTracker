@@ -24,6 +24,7 @@ import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -68,11 +69,20 @@ public class EventInfoActivity extends AppCompatActivity {
     String filePath;
     private Restriction restriction;
 
+
+    /**
+     * When the app is created
+     * Handles the UI
+     *
+     * @param savedInstanceState
+     * @see AppCompatActivity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_add);
 
+        //Changes to the UI and textBox to fit what the habitevent's current informations are
         TextView enterLocation = (TextView) findViewById(R.id.location_text);
         enterLocation.setText("Enter an address to change the location of this event");
 
@@ -90,6 +100,12 @@ public class EventInfoActivity extends AppCompatActivity {
                     selected.getPhoto().getWidth(), selected.getPhoto().getHeight(), Boolean.FALSE));
         }
         getImage.setOnClickListener(new View.OnClickListener() {
+            /**
+             * Handles when a picture is selected
+             * Starts a picture selection if permissions are granted, else request permissions
+             *
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 /**
@@ -123,7 +139,11 @@ public class EventInfoActivity extends AppCompatActivity {
         saveChanges.setText("Save Changes");
         Button createEvent = (Button) findViewById(R.id.create_event);
         createEvent.setOnClickListener(new View.OnClickListener() {
-
+            /**
+             * Handles when the participant clicks save button
+             *
+             * @param view
+             */
             @Override
             public void onClick(View view) {
                 Boolean good = Boolean.TRUE;
@@ -134,17 +154,21 @@ public class EventInfoActivity extends AppCompatActivity {
 
                 String eventComment = comment.getText().toString();
                 String selectedHabit = selected.getHabitType();
-                //for some reason eventComment triggers commenttoolongexception
+                //creates a new event based on information given
                 HabitEvent newEvent = null;
                 try {
                     newEvent = new HabitEvent(selectedHabit, eventComment, new Date(), restriction.getCommentSize());
                 } catch (CommentTooLongException e) {
                     e.printStackTrace();
+                    Toast.makeText(EventInfoActivity.this, "Your comment is too long", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+
+                //handles the location aspect of the event
                 String eventAddress = address.getText().toString();
                 if (!eventAddress.isEmpty()) {
-                    Log.d("gps", "dont see this");
+                    // if a new address is entered
                     Geocoder geocoder = new Geocoder(EventInfoActivity.this);
                     try {
                         List<Address> ad = geocoder.getFromLocationName(eventAddress, 1);
@@ -165,11 +189,15 @@ public class EventInfoActivity extends AppCompatActivity {
                     CheckBox gpsLocation = (CheckBox) findViewById(R.id.gps_checkbox);
                     Log.d("gps", "before first");
                     if (gpsLocation.isChecked()) {
+                        //if the checkbox is still checked, the participant did not want to remove the location
+                        //keep the old location coordinates
                         Log.d("gps", "before second");
                         newEvent.setLocation(selected.getLocation().get(0), selected.getLocation().get(1));
                     }
                     // taken from https://stackoverflow.com/questions/2227292/how-to-get-latitude-and-longitude-of-the-mobile-device-in-android
                     // 2017-11-29
+
+                    //if the checkbox is unchecked, the coordinates are removed
                 }
 
 
@@ -181,6 +209,7 @@ public class EventInfoActivity extends AppCompatActivity {
 //                        e.printStackTrace();
 //                    }
                 } else if (changedPhoto == Boolean.TRUE) {
+                    // handles is the picture was changed
                     try {
                         Drawable draw = getImage.getDrawable();
                         Bitmap p = ((BitmapDrawable) draw).getBitmap();
@@ -196,6 +225,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 }
 
                 if (good == Boolean.TRUE) {
+                    //if the new event created is correct, return it
                     Intent data = new Intent();
                     data.putExtra("delete",0);
                     data.putExtra("event", newEvent);
@@ -214,7 +244,11 @@ public class EventInfoActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * creates the menu
+     *
+     * @param menu
+     */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -222,7 +256,12 @@ public class EventInfoActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-
+    /**
+     * Handles when a item on the menu is pressed
+     * since there is only 1 button in this fragment, handles the map button and calls the new activity
+     *
+     * @param item menu item
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -237,9 +276,18 @@ public class EventInfoActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * handles when return from asking for permission
+     *
+     * @param requestCode
+     * @param permission
+     * @param grantedResults
+     */
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permission, @NonNull int[] grantedResults) {
         switch (requestCode) {
             case 51:
+                // if the request was to get permission to access storage
                 if (grantedResults.length > 0 && grantedResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                     startActivityForResult(intent, 2);
@@ -247,6 +295,14 @@ public class EventInfoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * responds to when activities ends and comes back to this activity
+     * most notably get the photo from photo selection
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case 2:
@@ -254,6 +310,7 @@ public class EventInfoActivity extends AppCompatActivity {
                 //GET RESULT FROM SELECT PICTURE
                 if (resultCode == RESULT_OK && null != data) {
                     try {
+                        //gets the new photo
                         changedPhoto = true;
                         Uri uri = data.getData();
                         String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -271,6 +328,7 @@ public class EventInfoActivity extends AppCompatActivity {
 
                         Bitmap picture = BitmapFactory.decodeFile(filePath);
                         ImageButton getImage = (ImageButton) findViewById(R.id.new_event_picture);
+                        //puts the new photo onto the imagebutton
                         getImage.setImageBitmap(picture);
                         changedPhoto=Boolean.TRUE;
 
