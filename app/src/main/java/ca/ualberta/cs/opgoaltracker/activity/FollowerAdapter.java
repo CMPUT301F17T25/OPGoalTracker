@@ -119,6 +119,7 @@ public class FollowerAdapter extends ArrayAdapter<ParticipantName> {
         TextView location = (TextView) customView.findViewById(R.id.location);
         ImageView picture = (ImageView) customView.findViewById(R.id.picture);
         Button block = (Button) customView.findViewById(R.id.block);
+
         block.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,6 +127,8 @@ public class FollowerAdapter extends ArrayAdapter<ParticipantName> {
                 notifyDataSetChanged();
             }
         });
+
+        userName.setText(followerName.getId());
         //get participant's photo and show it in list
         if (photo!=null){
             Bitmap bitmap = photo.getBitMap();

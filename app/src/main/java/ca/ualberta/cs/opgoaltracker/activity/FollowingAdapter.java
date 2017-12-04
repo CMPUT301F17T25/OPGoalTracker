@@ -68,6 +68,14 @@ public class FollowingAdapter extends ArrayAdapter<ParticipantName> {
         this.currentUser = currentUser;
     }
 
+    /**
+     * getCount method
+     * @return size of followingList
+     */
+    @Override
+    public int getCount() {
+        return followingList.size();
+    }
 
     /**
      * getItem method
