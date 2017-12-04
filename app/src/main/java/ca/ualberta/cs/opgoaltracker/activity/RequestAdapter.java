@@ -8,6 +8,10 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
@@ -59,15 +63,6 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
         this.requestList = requestList;
         this.currentUser = currentUser;
         this.mContext=context;
-    }
-
-    /**
-     * getCount method
-     * @return size of followingList
-     */
-    @Override
-    public int getCount() {
-        return requestList.size();
     }
 
     /**
@@ -131,9 +126,14 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
         });
 
         userName.setText(newFollower.getId());
+        //get participant's photo and show it in list
         if (photo!=null){
-            picture.setImageBitmap(photo.getBitMap());
+            Bitmap bitmap = photo.getBitMap();
+            bitmap = scaleBitmap(bitmap, 80, 80);
+            picture.setImageBitmap(bitmap);
         }
+
+        //get the most recent location of participant and show it in list
         try {
             String cityName;
             Geocoder gcd = new Geocoder(customView.getContext(), Locale.getDefault());
@@ -154,19 +154,56 @@ public class RequestAdapter extends ArrayAdapter<ParticipantName> {
         }
         return customView;
     }
-
+    /**
+     * Add the selected follower participant into following list
+     */
     public void acceptRequest(){
         requestList.remove(currentPosition);
         followerList.add(newFollowerName);
         targetFollowingList.add(new ParticipantName(currentUser));
         update(currentUser, newFollower);
     }
-
+    /**
+     * Update currentUser and newFollower participant
+     * @param currentUser
+     * @param newFollower
+     */
     public void update(Participant currentUser, Participant newFollower){
         ElasticsearchController.AddParticipantsTask addUsersTask1 = new ElasticsearchController.AddParticipantsTask();
         addUsersTask1.execute(currentUser);
         ElasticsearchController.AddParticipantsTask addUsersTask2 = new ElasticsearchController.AddParticipantsTask();
         addUsersTask2.execute(newFollower);
     }
+    /**
+     * Rescale the bitmap to a fixed height with remaining same aspect ratio
+     * Revised from: https://stackoverflow.com/questions/15440647/scaled-bitmap-maintaining-aspect-ratio
+     * @param originalImage
+     * @param width
+     * @param height
+     * @return
+     */
+    public Bitmap scaleBitmap(Bitmap originalImage, int width, int height) {
+        Bitmap background = Bitmap.createBitmap((int)width, (int)height, Bitmap.Config.ARGB_8888);
 
+        float originalWidth = originalImage.getWidth();
+        float originalHeight = originalImage.getHeight();
+
+        Canvas canvas = new Canvas(background);
+
+        float scale = height / originalHeight;
+
+        float xTranslation = (width - originalWidth * scale) / 2.0f;
+        float yTranslation = 0.0f;
+
+        Matrix transformation = new Matrix();
+        transformation.postTranslate(xTranslation, yTranslation);
+        transformation.preScale(scale, scale);
+
+        Paint paint = new Paint();
+        paint.setFilterBitmap(true);
+
+        canvas.drawBitmap(originalImage, transformation, paint);
+
+        return background;
+    }
 }

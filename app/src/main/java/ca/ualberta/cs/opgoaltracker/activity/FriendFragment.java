@@ -22,9 +22,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
@@ -129,15 +131,28 @@ public class FriendFragment extends Fragment {
         thirdTab.setIcon(R.drawable.ic_launcher); // set an icon for the second tab
         tabLayout.addTab(thirdTab); // add  the tab  in the TabLayout
 
-        if (currentUser == null){
-            currentUser = new Participant("111");
-        }
+        String ID = currentUser.getId();
+        String query = "{\n" +
+                "	\"query\": {\n" +
+                "		\"term\": {\"_id\":\"" + ID + "\"}\n" +
+                "	}\n" +
+                "}";
+        ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+        getParticipantsTask.execute(query);
+
         try {
-            followingList = currentUser.getFollowingList();
-            followerList = currentUser.getFollowerList();
-            requestList = currentUser.getRequestList();
-        }catch(UndefinedException e){
-            e.printStackTrace();
+            if (getParticipantsTask.get() == null) { // check if connected to server
+                Toast.makeText(getActivity(), "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+            }else if(getParticipantsTask.get().isEmpty() == false){
+                currentUser = getParticipantsTask.get().get(0);
+                followingList=currentUser.getFollowingList();
+                followerList=currentUser.getFollowerList();
+                requestList=currentUser.getRequestList();
+            }else{
+                Toast.makeText(getActivity(), "No user can be found", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.i("Error", "Failed to get the participant from the asyc object");
         }
 
         final Bundle bundle = new Bundle();
