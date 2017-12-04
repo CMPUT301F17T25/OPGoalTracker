@@ -11,6 +11,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,17 @@ import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
  * Created by malon_000 on 2017-11-03.
  */
 
+
+/**
+ * This is an adapter to put habitevents onto listview
+ * Used in HabitEventFragment
+ *
+ * @author Long Ma
+ * @version 3.0
+ * @see ArrayAdapter
+ * @see HabitEventFragment
+ * @since 3.0
+ */
 class HabitEventAdapter extends ArrayAdapter<HabitEvent> {
     private static final int SCALED_IMAGE_WIDTH = 500;
 
@@ -34,6 +47,12 @@ class HabitEventAdapter extends ArrayAdapter<HabitEvent> {
         super(context, R.layout.fragment_habit_event, objects);
     }
 
+    /**
+     * sets the view of the adapter
+     * @param position: position of the view
+     * @param convertView
+     * @param parent
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
         //use elastic search to get user's info but for since this is just a test

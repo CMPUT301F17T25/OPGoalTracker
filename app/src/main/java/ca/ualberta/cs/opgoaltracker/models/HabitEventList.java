@@ -16,6 +16,7 @@ import ca.ualberta.cs.opgoaltracker.exception.MismatchedHabitTypeException;
 /**
  * This HabitEvent List Object contains a list of Habit Event<br>
  *     The ArrayList contains HabitEvent Type Object as instances<br>
+ *         Is not used as of final version;
  * @author Donglin Han, Yongjia Huang
  * @version 3.0
  * @see Parcelable
