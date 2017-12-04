@@ -48,14 +48,14 @@ public class HabitEventUnitTest extends ActivityInstrumentationTestCase2 {
         String habitType = "";
         String comment = "hellooooooooooooimmmmmmmmmmmmmmmmmmdoneeeeeeeeeeeeeeeeeeeeeeeeeeee";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitType, comment, date);
+        HabitEvent habitEvent = new HabitEvent(habitType, comment, date, 20);
     }
 
     public void testNormalComment() throws CommentTooLongException{
         String habitType = "";
         String comment = "hello";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitType, comment, date);
+        HabitEvent habitEvent = new HabitEvent(habitType, comment, date, 20);
         assertEquals(habitEvent.getComment(), comment);
     }
 
@@ -64,8 +64,8 @@ public class HabitEventUnitTest extends ActivityInstrumentationTestCase2 {
         String habitType = "";
         String comment = "";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitType, comment, date);
-        Photograph photo = new Photograph(12345, 67890);
+        HabitEvent habitEvent = new HabitEvent(habitType, comment, date, 20);
+        Photograph photo = new Photograph("res/drawable/newevent.png", 65535);
         habitEvent.setPhoto(photo);
     }
 
@@ -73,8 +73,8 @@ public class HabitEventUnitTest extends ActivityInstrumentationTestCase2 {
         String habitType = "";
         String comment = "";
         Date date = new java.util.Date();
-        HabitEvent habitEvent = new HabitEvent(habitType, comment, date);
-        Photograph photo = new Photograph(123, 67);
+        HabitEvent habitEvent = new HabitEvent(habitType, comment, date, 20);
+        Photograph photo = new Photograph("res/drawable/newevent.png", 65535);
         habitEvent.setPhoto(photo);
         assertEquals(habitEvent.getPhoto(), photo);
     }

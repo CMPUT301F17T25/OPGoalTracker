@@ -34,19 +34,5 @@ public class AdminUnitTest extends ActivityInstrumentationTestCase2 {
     @Test
     public void testNormalAdminTest(){
         Admin admin = new Admin("admin");
-        assertEquals(admin.getCommentLength(),20);
-        assertEquals(admin.getPicSize(),65536);
-        assertEquals(admin.getReasonLength(),30);
-        assertEquals(admin.getTitleLength(),20);
-
-        admin.setCommentLength(30);
-        admin.setPicSize(10000);
-        admin.setReasonLength(100);
-        admin.setTitleLength(50);
-
-        assertEquals(admin.getCommentLength(),30);
-        assertEquals(admin.getPicSize(),10000);
-        assertEquals(admin.getReasonLength(),100);
-        assertEquals(admin.getTitleLength(),50);
     }
 }
