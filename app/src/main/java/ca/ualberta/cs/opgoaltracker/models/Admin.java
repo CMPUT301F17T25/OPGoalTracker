@@ -14,63 +14,15 @@ package ca.ualberta.cs.opgoaltracker.models;
  * @see User
  * @since 1.0
  */
-public class Admin extends User{
+public class Admin{
+    private String id;
 
     public Admin(String id) {
-        super(id);
+        this.id = id;
     }
 
-    private int picSize = 65536;
-    private int titleLength = 20;
-    private int reasonLength = 30;
-    private int commentLength = 20;
-
-    /**
-     * Basic PicSize getter
-     * @return int PicSize
-     */
-    public int getPicSize(){return this.picSize;}
-
-    /**
-     * Basic Title Length getter
-     * @return int titlelenght
-     */
-    public int getTitleLength(){return this.titleLength;}
-
-    /**
-     * Basic Reason lenght getter
-     * @return int reason length
-     */
-    public int getReasonLength(){return this.reasonLength;}
-
-    /**
-     * Basic CommentLenght getter
-     * @return int commentLenght
-     */
-    public int getCommentLength(){return this.commentLength;}
-
-    /**
-     * Basic picSize setter
-     * @param picSize int
-     */
-    public void setPicSize(int picSize){this.picSize = picSize;}
-
-    /**
-     * Basic titleLenght Setter
-     * @param titleLength int
-     */
-    public void setTitleLength(int titleLength){this.titleLength = titleLength;}
-
-    /**
-     * Basic reasonLength setter
-     * @param reasonLength int
-     */
-    public void setReasonLength(int reasonLength){this.reasonLength = reasonLength;}
-
-    /**
-     * Basic commentLength setter
-     * @param commentLength int
-     */
-    public void setCommentLength(int commentLength){this.commentLength = commentLength;}
+    public String getId() {
+        return id;
+    }
 
 }

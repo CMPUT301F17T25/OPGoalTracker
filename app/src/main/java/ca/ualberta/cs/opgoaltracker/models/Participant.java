@@ -11,8 +11,6 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-import ca.ualberta.cs.opgoaltracker.exception.ImageTooLargeException;
-import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 
 /**
@@ -68,13 +66,8 @@ public class Participant implements Parcelable {
     /**
      * Basic avatar settter
      * @param avatar : Photograph
-     * @throws ImageTooLargeException
      */
-    public void setAvatar(Photograph avatar) throws ImageTooLargeException {
-        int avatarSize = avatar.getHeight() * avatar.getWidth() * 24 / 8;
-        if( avatarSize > 65336){
-            throw new ImageTooLargeException();
-        }
+    public void setAvatar(Photograph avatar) {
         this.avatar=avatar;
     }
 

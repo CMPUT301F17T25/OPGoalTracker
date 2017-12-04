@@ -21,6 +21,7 @@ import ca.ualberta.cs.opgoaltracker.models.Admin;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitEvent;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DeleteByQuery;
@@ -41,6 +42,8 @@ public class ElasticsearchController {
     private static final String TYPE_ADMIN = "admin";
     private static final String TYPE_HABIT = "habit";
     private static final String TYPE_HABITEVENT = "habitevent";
+    private static final String TYPE_RESTRICTION = "restriction";
+    private static final String ID_RESTRICTION = "restriction";
     private static final long SLEEPTIME = 3000;
 
     /**
@@ -200,8 +203,44 @@ public class ElasticsearchController {
     }
 
     /**
-     * Add habits to type TYPE_HABIT
-     * Set the habit added with id which was assigned by Elasticsearch
+     * Delete admins matches query
+     */
+    public static class DeleteAdminsTask extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... delete_parameters) {
+            verifySettings();
+
+            DeleteByQuery delete = new DeleteByQuery.Builder(delete_parameters[0]).addIndex(INDEX).addType(TYPE_ADMIN).build();
+
+            JestResult result = null;
+
+            do { // if upload failed, thread will retry after 30 seconds
+                try {
+                    result = client.execute(delete);
+                    if (result.isSucceeded())
+                    {
+                        Log.i("Succeed", "Successfully deleted Admin objects.");
+                    } else {
+                        Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+                    }
+                }
+                catch (Exception e) {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+
+                    try {
+                        Thread.sleep(SLEEPTIME);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            } while (result == null);
+
+            return null;
+        }
+    }
+
+    /**
+     * Add or update habits to type TYPE_HABIT
      */
     public static class AddHabitsTask extends AsyncTask<Habit, Void, Void> {
 
@@ -315,40 +354,7 @@ public class ElasticsearchController {
     }
 
     /**
-     * Update specific habits
-     */
-    public static class UpdateHabitsTask extends AsyncTask<Habit, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Habit... habits) {
-            verifySettings();
-
-            for (Habit habit : habits) {
-                Index index = new Index.Builder(habit).index(INDEX).type(TYPE_HABIT).id(habit.getId()).build();
-
-                try {
-                    // where is the client?
-                    DocumentResult result = client.execute(index);
-
-                    if(result.isSucceeded())
-                    {
-                        result.getId();
-                    } else {
-                        Log.i("Error", "Elasticsearch was not able to add the habit");
-                    }
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the habits");
-                }
-
-            }
-            return null;
-        }
-    }
-
-    /**
-     * Add habitEvents to type TYPE_HABITEVENT
-     * Set the habitEvent added with id which was assigned by Elasticsearch
+     * Add or update habitEvents to type TYPE_HABITEVENT
      */
     public static class AddHabitEventsTask extends AsyncTask<HabitEvent, Void, Void> {
 
@@ -461,43 +467,98 @@ public class ElasticsearchController {
         }
     }
 
+
     /**
-     * Update specific habits
+     * Add or update restriction to type TYPE_RESTRICTION
      */
-    public static class UpdateHabitEventsTask extends AsyncTask<HabitEvent, Void, Void> {
+    public static class AddRestrictionTask extends AsyncTask<Restriction, Void, Void> {
 
         @Override
-        protected Void doInBackground(HabitEvent... habitEvents) {
+        protected Void doInBackground(Restriction... restrictions) {
             verifySettings();
 
-            for (HabitEvent habitEvent : habitEvents) {
-                Index index = new Index.Builder(habitEvent).index(INDEX).type(TYPE_HABIT).id(habitEvent.getId()).build();
+            for (Restriction restriction : restrictions) {
+                Index index = new Index.Builder(restriction).index(INDEX).type(TYPE_RESTRICTION).id(ID_RESTRICTION).build();
 
-                try {
-                    // where is the client?
-                    DocumentResult result = client.execute(index);
+                DocumentResult result = null;
 
-                    if(result.isSucceeded())
-                    {
-                        result.getId();
-                    } else {
-                        Log.i("Error", "Elasticsearch was not able to add the habitEvent");
+                do { // if upload failed, thread will retry after several seconds
+                    try {
+                        // where is the client?
+                        result = client.execute(index);
+
+                        if(result.isSucceeded())
+                        {
+                            result.getId();
+                        } else {
+                            Log.i("Error", "Elasticsearch was not able to add the restriction");
+                        }
                     }
-                }
-                catch (Exception e) {
-                    Log.i("Error", "The application failed to build and send the habitEvents");
-                }
+                    catch (Exception e) {
+                        Log.i("Error", "The application failed to build and send the restrictions");
 
+                        try {
+                            Thread.sleep(SLEEPTIME);
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                } while (result == null);
             }
             return null;
         }
     }
 
+    /**
+     * Search habitEvents matches query
+     * @return habitEvents ArrayList<HabitEvent>
+     * if there is no matches, return an empty ArrayList
+     */
+    public static class GetRestrictionTask extends AsyncTask<Void, Void, ArrayList<Restriction>> {
+        @Override
+        protected ArrayList<Restriction> doInBackground(Void... search_parameters) {
+            verifySettings();
+
+            ArrayList<Restriction> restrictions = new ArrayList<Restriction>();
+
+            String query = "{\n" +
+                    "	\"query\": {\n" +
+                    "		\"term\": {\"_id\":\"" + ID_RESTRICTION + "\"}\n" +
+                    "	}\n" +
+                    "}";
+
+            Search search = new Search.Builder(query).addIndex(INDEX).addType(TYPE_RESTRICTION).build();
+
+            try {
+                SearchResult result = client.execute(search);
+                if (result.isSucceeded())
+                {
+                    List<Restriction> foundRestriction = result.getSourceAsObjectList(Restriction.class);
+                    restrictions.addAll(foundRestriction);
+
+                    return restrictions;
+                } else {
+                    Log.i("Error", "Something went wrong when we tried to communicate with the server.");
+
+                    return null;
+                }
+            }
+            catch (Exception e) {
+                Log.i("Error", "Something went wrong when we tried to communicate with the elasticsearch server!");
+
+                return null;
+            }
+        }
+    }
+
+
+
 
 
     public static void verifySettings() {
         if (client == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
+//            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
+            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("https://5b3c205796b755b5db6f9b28b41fa441.us-east-1.aws.found.io:9243");
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();
@@ -505,5 +566,4 @@ public class ElasticsearchController {
             client = (JestDroidClient) factory.getObject();
         }
     }
-
 }

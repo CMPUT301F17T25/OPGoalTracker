@@ -25,6 +25,7 @@ import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.exception.NoTitleException;
 import ca.ualberta.cs.opgoaltracker.exception.StringTooLongException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 public class HabitAddActivity extends AppCompatActivity {
 
@@ -45,6 +46,7 @@ public class HabitAddActivity extends AppCompatActivity {
     private String owner;
     private Date date;
     private ArrayList<Boolean> period;
+    private Restriction restriction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class HabitAddActivity extends AppCompatActivity {
         setContentView(R.layout.activity_habit_add);
 
         owner = getIntent().getStringExtra("user");
+        restriction = getIntent().getParcelableExtra("restriction");
 
 
         titleBox = (EditText) findViewById(R.id.editTitleAdd);
@@ -97,7 +100,7 @@ public class HabitAddActivity extends AppCompatActivity {
         period.add(checkBoxSat.isChecked());
 
         try {
-            habit = new Habit(title, reason, date, period);
+            habit = new Habit(title, reason, date, period, restriction.getTitleSize(), restriction.getReasonSize());
             habit.setOwner(owner);
         } catch (StringTooLongException exc) {
             Toast.makeText(getApplicationContext(), "Too Many Characters",

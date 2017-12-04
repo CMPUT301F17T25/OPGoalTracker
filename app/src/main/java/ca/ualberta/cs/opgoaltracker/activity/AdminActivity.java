@@ -10,6 +10,7 @@ package ca.ualberta.cs.opgoaltracker.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,8 +23,10 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Admin;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 /**
  * Created by donglin3 on 11/11/17.
@@ -41,10 +44,11 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     private Button logoutButton;
     private ArrayList<Admin> adminList = new ArrayList<Admin>();
     private String currentAdminID;
-    private String newPictureSize = "65536";
-    private String newTitleSize = "20";
-    private String newReasonSize = "30";
-    private String newCommentSize = "20";
+    private int newPictureSize;
+    private int newTitleSize;
+    private int newReasonSize;
+    private int newCommentSize;
+    private Restriction restriction;
 
 
     @Override
@@ -76,21 +80,13 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
 
         Intent adminIntent = getIntent();
         this.currentAdminID = adminIntent.getStringExtra("ADMINID");
-
-        AdminIOGson adminIOGson = new AdminIOGson();
-        String[] jsonFileList = this.fileList();
-        // TODO may need to start i from 1 instead of 0
-        for(int i = 0; i < jsonFileList.length; i++) {
-            if(jsonFileList[i].startsWith("admin")) {
-                this.adminList.add(adminIOGson.loadAdminFromFile(jsonFileList[i].replace(".json", ""), this));
-            }
-        }
+        restriction = adminIntent.getParcelableExtra("Restriction for Admin");
 
         // Reset EditTexts in case the restrictions were updated.
-        pictureSizeEdittext.setText(String.valueOf(this.adminList.get(0).getPicSize()), TextView.BufferType.EDITABLE);
-        titleSizeEdittext.setText(String.valueOf(this.adminList.get(0).getTitleLength()), TextView.BufferType.EDITABLE);
-        reasonSizeEdittext.setText(String.valueOf(this.adminList.get(0).getReasonLength()), TextView.BufferType.EDITABLE);
-        commentSizeEdittext.setText(String.valueOf(this.adminList.get(0).getCommentLength()), TextView.BufferType.EDITABLE);
+        pictureSizeEdittext.setText(String.valueOf(restriction.getPictureSize()));
+        titleSizeEdittext.setText(String.valueOf(restriction.getTitleSize()));
+        reasonSizeEdittext.setText(String.valueOf(restriction.getReasonSize()));
+        commentSizeEdittext.setText(String.valueOf(restriction.getCommentSize()));
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -129,48 +125,59 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
     }
 
     /**
-     * if current admin edit its restrictions, save to its account and save to json
-     * if current admin wants to edit restrictions (change pic size ), updated it for all admins, save to json
+     * save restriction changes to Elasticsearch
      * @author donglin
      * @see MainActivity
      * @since 2.0
      */
     public void saveChanges() {
-        this.newPictureSize = pictureSizeEdittext.getText().toString();
-        this.newTitleSize = titleSizeEdittext.getText().toString();
-        this.newReasonSize = reasonSizeEdittext.getText().toString();
-        this.newCommentSize = commentSizeEdittext.getText().toString();
+        this.newPictureSize = Integer.parseInt(pictureSizeEdittext.getText().toString());
+        this.newTitleSize = Integer.parseInt(titleSizeEdittext.getText().toString());
+        this.newReasonSize = Integer.parseInt(reasonSizeEdittext.getText().toString());
+        this.newCommentSize = Integer.parseInt(commentSizeEdittext.getText().toString());
 
-        AdminIOGson adminIOGson = new AdminIOGson();
-        // TODO may need to start i from 1 instead of 0
-        for(int i = 0; i < this.adminList.size(); i++) {
-            this.adminList.get(i).setPicSize(Integer.parseInt(newPictureSize));
-            this.adminList.get(i).setTitleLength(Integer.parseInt(newTitleSize));
-            this.adminList.get(i).setReasonLength(Integer.parseInt(newReasonSize));
-            this.adminList.get(i).setCommentLength(Integer.parseInt(newCommentSize));
-            adminIOGson.saveAdminInFile(this.adminList.get(i), this);
-        }
+        restriction = new Restriction(newPictureSize, newTitleSize, newReasonSize, newCommentSize);
+
+        // update restriction
+        ElasticsearchController.AddRestrictionTask updateRestrictionTask = new ElasticsearchController.AddRestrictionTask();
+        updateRestrictionTask.execute(restriction);
     }
 
     /**
-     * if current admin wants to create another admin, check validity of name(repeated) save to new file with corresponding  json file name
+     * add new admin to Elasticsearch
      * @author donglin
      * @since 2.0
      */
     public void addNewAdmin() {
         String newAdminName = idEdittext.getText().toString();
-        if(isAdminExistent(newAdminName)) {
-            Toast.makeText(AdminActivity.this, "This Admin already exists", Toast.LENGTH_SHORT).show();
-        } else{
-            Admin newAdmin = new Admin(newAdminName);
-            newAdmin.setPicSize(Integer.parseInt(newPictureSize));
-            newAdmin.setTitleLength(Integer.parseInt(newTitleSize));
-            newAdmin.setReasonLength(Integer.parseInt(newReasonSize));
-            newAdmin.setCommentLength(Integer.parseInt(newCommentSize));
-            this.adminList.add(newAdmin);
-            AdminIOGson adminIOGson = new AdminIOGson();
-            adminIOGson.saveAdminInFile(newAdmin, this);
+
+        // query server if username exists
+        String query = "{\n" +
+                "	\"query\": {\n" +
+                "		\"term\": {\"_id\":\"" + newAdminName + "\"}\n" +
+                "	}\n" +
+                "}";
+        // query server in type "admin"
+        ElasticsearchController.GetAdminsTask getAdminsTask = new ElasticsearchController.GetAdminsTask();
+        getAdminsTask.execute(query);
+        // query server in type "participant"
+        ElasticsearchController.GetParticipantsTask getParticipantsTask = new ElasticsearchController.GetParticipantsTask();
+        getParticipantsTask.execute(query);
+
+        try {
+            if (getAdminsTask.get() == null || getParticipantsTask.get() == null) { // check if connected to server
+                Toast.makeText(AdminActivity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
+            } else if (getAdminsTask.get().isEmpty() && getParticipantsTask.get().isEmpty()) { // if username not exists
+                Admin newAdmin = new Admin(newAdminName);
+                ElasticsearchController.AddAdminsTask addAdminsTask = new ElasticsearchController.AddAdminsTask();
+                addAdminsTask.execute(newAdmin);
+            } else {
+                Toast.makeText(AdminActivity.this, "Username already existed.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+                Log.i("Error", "Failed to get the participant from the asyc object");
         }
+
     }
 
     /**
@@ -179,33 +186,13 @@ public class AdminActivity extends AppCompatActivity implements View.OnClickList
      * @since 2.0
      */
     public void deleteCurrentAdmin() {
-        if(this.adminList.size() == 1) {
-            Toast.makeText(AdminActivity.this, "The last Admin should not be deleted", Toast.LENGTH_SHORT).show();
-        } else {
-            AdminIOGson adminIOGson = new AdminIOGson();
-            adminIOGson.deleteFile(this.currentAdminID, this);
-            finish();
-        }
-    }
-
-    /**
-     * check if the admin id is the same with corresponding json file name
-     * @author donglin
-     * @since 2.0
-     * @param newAdminID
-     * @return
-     */
-    public boolean isAdminExistent(String newAdminID) {
-        String[] jsonFileList = this.fileList();
-
-        // TODO may need to start i from 1 instead of 0
-        for(int i = 0; i < jsonFileList.length; i++) {
-            if(newAdminID.equals(jsonFileList[i].replace(".json", ""))) {
-                return true;
-            }
-        }
-
-        return false;
+        String query = "{\n" +
+                "	\"query\": {\n" +
+                "		\"term\": {\"_id\":\"" + currentAdminID + "\"}\n" +
+                "	}\n" +
+                "}";
+        ElasticsearchController.DeleteAdminsTask deleteAdminsTask = new ElasticsearchController.DeleteAdminsTask();
+        deleteAdminsTask.execute(query);
     }
 
 }

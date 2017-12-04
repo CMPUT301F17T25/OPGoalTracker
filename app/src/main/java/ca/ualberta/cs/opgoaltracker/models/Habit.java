@@ -37,7 +37,6 @@ public class Habit implements Parcelable, Comparable<Habit> {
     private Date createDate;
     private ArrayList<Boolean> period;
     private ArrayList<HabitEvent> eventList;
-    Admin admin = new Admin("admin");
 
     /**
      * Basic Habit Constructor, allows user to create a Habit object by defining habit name ( habit type), date, reason ,starttime and intervaltime.<br>
@@ -46,17 +45,19 @@ public class Habit implements Parcelable, Comparable<Habit> {
      * @param reason : String
      * @param date : Date
      * @param period : ArrayList<Boolean>
+     * @param titleSize : int
+     * @param reasonSize : int
      * @throws StringTooLongException
      * @throws NoTitleException
      */
-    public Habit(String habitType, String reason, Date date, ArrayList<Boolean> period) throws StringTooLongException, NoTitleException {
-        if (habitType.length()>admin.getTitleLength()){
+    public Habit(String habitType, String reason, Date date, ArrayList<Boolean> period, int titleSize, int reasonSize) throws StringTooLongException, NoTitleException {
+        if (habitType.length() > titleSize){
             throw new StringTooLongException();
         }
         if(habitType.equals("")){
             throw new NoTitleException();
         }
-        if (reason.length()>admin.getReasonLength()){
+        if (reason.length() > titleSize){
             throw new StringTooLongException();
         }
 
@@ -185,12 +186,13 @@ public class Habit implements Parcelable, Comparable<Habit> {
 
     /**
      * Basic HabitType setter
-     * @param habitType String
+     * @param habitType: String
+     * @param titleSize: String
      * @throws StringTooLongException
      * @throws NoTitleException
      */
-    public void setHabitType(String habitType) throws StringTooLongException,NoTitleException {
-        if (habitType.length()>admin.getTitleLength()){
+    public void setHabitType(String habitType, int titleSize) throws StringTooLongException,NoTitleException {
+        if (habitType.length() > titleSize){
             throw new StringTooLongException();
         }
         if(habitType.equals("")){
@@ -201,11 +203,12 @@ public class Habit implements Parcelable, Comparable<Habit> {
 
     /**
      * Basic Reason Setter
-     * @param reason String
+     * @param reason: String
+     * @param reasonSize: String
      * @throws StringTooLongException
      */
-    public void setReason(String reason) throws StringTooLongException{
-        if (reason.length()>admin.getReasonLength()){
+    public void setReason(String reason, int reasonSize) throws StringTooLongException{
+        if (reason.length() > reasonSize){
             throw new StringTooLongException();
         }
         this.reason = reason;

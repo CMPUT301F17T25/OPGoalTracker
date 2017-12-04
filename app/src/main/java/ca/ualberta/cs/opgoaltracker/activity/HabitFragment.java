@@ -32,6 +32,7 @@ import ca.ualberta.cs.opgoaltracker.exception.UndefinedException;
 import ca.ualberta.cs.opgoaltracker.models.Habit;
 import ca.ualberta.cs.opgoaltracker.models.HabitList;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 
 import static android.R.id.summary;
 import static android.app.Activity.RESULT_OK;
@@ -48,6 +49,7 @@ public class HabitFragment extends Fragment {
 
     // variables for Habit ListView
     private Participant currentUser;
+    private Restriction restriction;
     private HabitList habitList;
     private ListView lvHabit;
     private HabitAdapter adapter;
@@ -113,6 +115,7 @@ public class HabitFragment extends Fragment {
                 .setActionBarTitle("Habit");
         Bundle arg = getArguments();
         currentUser = arg.getParcelable("CURRENTUSER");
+        restriction = arg.getParcelable("RESTRICTION");
 
         // create Habit ListView
         // TODO: change this part to fit the variable passed from MainActivity
@@ -136,6 +139,7 @@ public class HabitFragment extends Fragment {
                 // Click action
                 Intent intent = new Intent(getActivity(), HabitAddActivity.class);
                 intent.putExtra("user",currentUser.getId());
+                intent.putExtra("restriction", restriction);
                 startActivityForResult(intent,REQUEST_CODE_ONE);
             }
         });
@@ -163,6 +167,7 @@ public class HabitFragment extends Fragment {
                 intent.putParcelableArrayListExtra("HabitList", habitList.getArrayList());
                 intent.putExtra("position", position);
                 intent.putExtra("user",currentUser.getId());
+                intent.putExtra("restriction", restriction);
                 startActivityForResult(intent, REQUEST_CODE_TWO);
             }
         });

@@ -19,6 +19,7 @@ import ca.ualberta.cs.opgoaltracker.Controller.ElasticsearchController;
 import ca.ualberta.cs.opgoaltracker.R;
 import ca.ualberta.cs.opgoaltracker.models.Admin;
 import ca.ualberta.cs.opgoaltracker.models.Participant;
+import ca.ualberta.cs.opgoaltracker.models.Restriction;
 import ca.ualberta.cs.opgoaltracker.models.User;
 
 
@@ -93,10 +94,23 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
             if (getAdminsTask.get() == null || getParticipantsTask.get() == null) { // check if connected to server
                 Toast.makeText(Register_activity.this, "Can Not Connect to Server", Toast.LENGTH_SHORT).show();
             } else if (getAdminsTask.get().isEmpty() && getParticipantsTask.get().isEmpty()) { // if username not exists
-                Participant newParticipant = new Participant(username);
-                ElasticsearchController.AddParticipantsTask addUsersTask = new ElasticsearchController.AddParticipantsTask();
-                addUsersTask.execute(newParticipant);
-                finish();
+                if (username.equals("admin")) { // if new username is "admin", add it as Admin
+                    Admin newAdmin = new Admin(username);
+                    ElasticsearchController.AddAdminsTask addAdminsTask = new ElasticsearchController.AddAdminsTask();
+                    addAdminsTask.execute(newAdmin);
+
+                    // add a new restriction
+                    Restriction defaultRestriction = new Restriction(65535, 20, 30, 20);
+                    ElasticsearchController.AddRestrictionTask addRestrictionTask = new ElasticsearchController.AddRestrictionTask();
+                    addRestrictionTask.execute(defaultRestriction);
+
+                    finish();
+                } else { // else add as a Participant
+                    Participant newParticipant = new Participant(username);
+                    ElasticsearchController.AddParticipantsTask addParticipantsTask = new ElasticsearchController.AddParticipantsTask();
+                    addParticipantsTask.execute(newParticipant);
+                    finish();
+                }
             } else {
                 Toast.makeText(Register_activity.this, "Username already existed.", Toast.LENGTH_SHORT).show();
             }
@@ -104,17 +118,4 @@ public class Register_activity extends AppCompatActivity implements View.OnClick
             Log.i("Error", "Failed to get the participant from the asyc object");
         }
     }
-
-    /**
-     * With Gson, connect data to add adminuser, save in json
-     * @param username
-     * @see AdminIOGson
-     * @see AdminActivity
-     */
-    public void addAdminUser(String username) {
-        // TODO sign up the first admin user via this register page, later admin users should be created by an existing admin
-        AdminIOGson adminIOGson = new AdminIOGson();
-        adminIOGson.saveAdminInFile(new Admin(username), this);
-    }
-
 }
