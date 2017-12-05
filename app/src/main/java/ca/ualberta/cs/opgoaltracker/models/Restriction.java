@@ -21,6 +21,13 @@ public class Restriction implements Parcelable {
     int reasonSize;
     int commentSize;
 
+    /**
+     * Create a restriction object, input with 4 restriction for size.
+     * @param pictureSize
+     * @param titleSize
+     * @param reasonSize
+     * @param commentSize
+     */
     public Restriction(int pictureSize, int titleSize, int reasonSize, int commentSize) {
         this.pictureSize = pictureSize;
         this.titleSize = titleSize;
@@ -28,18 +35,34 @@ public class Restriction implements Parcelable {
         this.commentSize = commentSize;
     }
 
+    /**
+     * Basic getter for pictureSize
+     * @return
+     */
     public int getPictureSize() {
         return pictureSize;
     }
 
+    /**
+     * Basic getter for titleSize
+     * @return
+     */
     public int getTitleSize() {
         return titleSize;
     }
 
+    /**
+     * Basic gtter for reasonSize
+     * @return
+     */
     public int getReasonSize() {
         return reasonSize;
     }
 
+    /**
+     * Basic gtter for commentSize
+     * @return
+     */
     public int getCommentSize() {
         return commentSize;
     }
