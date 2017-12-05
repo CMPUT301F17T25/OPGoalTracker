@@ -30,7 +30,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -40,21 +39,25 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 /**
- * This test is for testing adding habit and change habit detail complying restrictions.
+ * This test is for testing Habit List order is correct.
  */
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class HabitTest {
+public class HabitOrderTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void habitTest() {
+    public void habitOrderTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.userID), isDisplayed()));
-        appCompatEditText.perform(replaceText("112"), closeSoftKeyboard());
+        appCompatEditText.perform(click());
+
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.userID), isDisplayed()));
+        appCompatEditText2.perform(replaceText("113"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.signin), withText("Sign In"), isDisplayed()));
@@ -64,7 +67,11 @@ public class HabitTest {
                 allOf(withId(R.id.add_habit), isDisplayed()));
         floatingActionButton.perform(click());
 
-        // pressBack();
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.editTitleAdd),
+                        withParent(allOf(withId(R.id.constraintLayout),
+                                withParent(withId(R.id.habitAddScrollView))))));
+        appCompatEditText3.perform(scrollTo(), replaceText("not for today 1"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.buttonCreate), withText("Create"),
@@ -72,19 +79,51 @@ public class HabitTest {
                                 withParent(withId(R.id.habitAddScrollView))))));
         appCompatButton2.perform(scrollTo(), click());
 
-        ViewInteraction appCompatEditText2 = onView(
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.tv_title), withText("not for today 1"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.list_habit),
+                                        0),
+                                1),
+                        isDisplayed()));
+        textView.check(matches(withText("not for today 1")));
+
+        ViewInteraction floatingActionButton2 = onView(
+                allOf(withId(R.id.add_habit), isDisplayed()));
+        floatingActionButton2.perform(click());
+
+        ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.editTitleAdd),
                         withParent(allOf(withId(R.id.constraintLayout),
                                 withParent(withId(R.id.habitAddScrollView))))));
-        appCompatEditText2.perform(scrollTo(), replaceText("Test title"), closeSoftKeyboard());
+        appCompatEditText4.perform(scrollTo(), replaceText("not for today 2"), closeSoftKeyboard());
 
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.editReasonAdd),
+        ViewInteraction appCompatButton3 = onView(
+                allOf(withId(R.id.buttonCreate), withText("Create"),
                         withParent(allOf(withId(R.id.constraintLayout),
                                 withParent(withId(R.id.habitAddScrollView))))));
-        appCompatEditText3.perform(scrollTo(), replaceText("Test reason"), closeSoftKeyboard());
+        appCompatButton3.perform(scrollTo(), click());
 
-        // pressBack();
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.tv_title), withText("not for today 2"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.list_habit),
+                                        1),
+                                1),
+                        isDisplayed()));
+        textView2.check(matches(withText("not for today 2")));
+
+        ViewInteraction floatingActionButton4 = onView(
+                allOf(withId(R.id.add_habit), isDisplayed()));
+        floatingActionButton4.perform(click());
+
+        ViewInteraction appCompatEditText5 = onView(
+                allOf(withId(R.id.editTitleAdd),
+                        withParent(allOf(withId(R.id.constraintLayout),
+                                withParent(withId(R.id.habitAddScrollView))))));
+        appCompatEditText5.perform(scrollTo(), replaceText("todo"), closeSoftKeyboard());
 
         ViewInteraction appCompatCheckBox = onView(
                 allOf(withId(R.id.checkBoxMonAdd),
@@ -98,31 +137,51 @@ public class HabitTest {
                                 withParent(withId(R.id.habitAddScrollView))))));
         appCompatCheckBox2.perform(scrollTo(), click());
 
-        ViewInteraction appCompatButton3 = onView(
+        ViewInteraction appCompatCheckBox3 = onView(
+                allOf(withId(R.id.checkBoxWedAdd),
+                        withParent(allOf(withId(R.id.constraintLayout),
+                                withParent(withId(R.id.habitAddScrollView))))));
+        appCompatCheckBox3.perform(scrollTo(), click());
+
+        ViewInteraction appCompatCheckBox4 = onView(
+                allOf(withId(R.id.checkBoxThurAdd),
+                        withParent(allOf(withId(R.id.constraintLayout),
+                                withParent(withId(R.id.habitAddScrollView))))));
+        appCompatCheckBox4.perform(scrollTo(), click());
+
+        ViewInteraction appCompatCheckBox5 = onView(
+                allOf(withId(R.id.checkBoxFriAdd),
+                        withParent(allOf(withId(R.id.constraintLayout),
+                                withParent(withId(R.id.habitAddScrollView))))));
+        appCompatCheckBox5.perform(scrollTo(), click());
+
+        ViewInteraction appCompatCheckBox6 = onView(
+                allOf(withId(R.id.checkBoxSatAdd),
+                        withParent(allOf(withId(R.id.constraintLayout),
+                                withParent(withId(R.id.habitAddScrollView))))));
+        appCompatCheckBox6.perform(scrollTo(), click());
+
+        ViewInteraction appCompatCheckBox7 = onView(
+                allOf(withId(R.id.checkBoxSunAdd),
+                        withParent(allOf(withId(R.id.constraintLayout),
+                                withParent(withId(R.id.habitAddScrollView))))));
+        appCompatCheckBox7.perform(scrollTo(), click());
+
+        ViewInteraction appCompatButton4 = onView(
                 allOf(withId(R.id.buttonCreate), withText("Create"),
                         withParent(allOf(withId(R.id.constraintLayout),
                                 withParent(withId(R.id.habitAddScrollView))))));
-        appCompatButton3.perform(scrollTo(), click());
+        appCompatButton4.perform(scrollTo(), click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.tv_title), withText("Test title"),
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.tv_title), withText("todo"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.list_habit),
                                         0),
                                 1),
                         isDisplayed()));
-        textView.check(matches(withText("Test title")));
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.tv_reason), withText("Test reason"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.list_habit),
-                                        0),
-                                2),
-                        isDisplayed()));
-        textView2.check(matches(withText("Test reason")));
+        textView3.check(matches(withText("todo")));
 
         ViewInteraction linearLayout = onView(
                 allOf(childAtPosition(
@@ -131,67 +190,9 @@ public class HabitTest {
                         isDisplayed()));
         linearLayout.perform(click());
 
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.editTitleDetail), withText("Test title"),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatEditText4.perform(scrollTo(), click());
-
-        ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.editTitleDetail),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatEditText5.perform(scrollTo(), replaceText("Test title 1"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText6 = onView(
-                allOf(withId(R.id.editReasonDetail),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatEditText6.perform(scrollTo(), replaceText("Test reason 2"), closeSoftKeyboard());
-
-        // pressBack();
-
-        ViewInteraction appCompatCheckBox3 = onView(
-                allOf(withId(R.id.checkBoxMonDetail),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatCheckBox3.perform(scrollTo(), click());
-
-        ViewInteraction appCompatCheckBox4 = onView(
-                allOf(withId(R.id.checkBoxTueDetail),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatCheckBox4.perform(scrollTo(), click());
-
-        ViewInteraction appCompatCheckBox5 = onView(
-                allOf(withId(R.id.checkBoxSatDetail),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatCheckBox5.perform(scrollTo(), click());
-
-        ViewInteraction appCompatCheckBox6 = onView(
-                allOf(withId(R.id.checkBoxSunDetail),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatCheckBox6.perform(scrollTo(), click());
-
-        ViewInteraction appCompatButton4 = onView(
-                allOf(withId(R.id.buttonSave), withText("Save"),
-                        withParent(withId(R.id.constraintLayout))));
-        appCompatButton4.perform(scrollTo(), click());
-
-        ViewInteraction textView3 = onView(
-                allOf(withId(R.id.tv_title), withText("Test title 1"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.list_habit),
-                                        0),
-                                1),
-                        isDisplayed()));
-        textView3.check(matches(withText("Test title 1")));
-
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.tv_reason), withText("Test reason 2"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.list_habit),
-                                        0),
-                                2),
-                        isDisplayed()));
-        textView4.check(matches(withText("Test reason 2")));
+        ViewInteraction actionMenuItemView = onView(
+                allOf(withId(R.id.habit_detail_delete), withContentDescription("Delete"), isDisplayed()));
+        actionMenuItemView.perform(click());
 
         ViewInteraction linearLayout2 = onView(
                 allOf(childAtPosition(
@@ -200,31 +201,20 @@ public class HabitTest {
                         isDisplayed()));
         linearLayout2.perform(click());
 
-        // pressBack();
-
-        ViewInteraction actionMenuItemView = onView(
+        ViewInteraction actionMenuItemView2 = onView(
                 allOf(withId(R.id.habit_detail_delete), withContentDescription("Delete"), isDisplayed()));
-        actionMenuItemView.perform(click());
+        actionMenuItemView2.perform(click());
 
-        ViewInteraction textView5 = onView(
-                allOf(withId(R.id.tv_title), withText("Test title"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.list_habit),
-                                        0),
-                                0),
+        ViewInteraction linearLayout3 = onView(
+                allOf(childAtPosition(
+                        withId(R.id.list_habit),
+                        0),
                         isDisplayed()));
-        textView5.check(doesNotExist());
+        linearLayout3.perform(click());
 
-        ViewInteraction textView6 = onView(
-                allOf(withId(R.id.tv_reason), withText("Test reason"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.list_habit),
-                                        0),
-                                1),
-                        isDisplayed()));
-        textView6.check(doesNotExist());
+        ViewInteraction actionMenuItemView3 = onView(
+                allOf(withId(R.id.habit_detail_delete), withContentDescription("Delete"), isDisplayed()));
+        actionMenuItemView3.perform(click());
 
     }
 
