@@ -23,18 +23,12 @@
             android:title="Friends" />
         <item
             android:id="@+id/social"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/ic_menu_share"
             android:title="Social" />
+        <item
+            android:id="@+id/setting"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Setting" />
     </group>
-
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/setting"
-                android:icon="@drawable/ic_menu_share"
-                android:title="setting" />
-
-        </menu>
-    </item>
 
 </menu>
